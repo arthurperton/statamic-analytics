@@ -1,0 +1,19 @@
+{
+    "name": "arthurperton/analytics",
+    "autoload": {
+        "psr-4": {
+            "Arthurperton\\Analytics\\": "src"
+        }
+    },
+    "extra": {
+        "statamic": {
+            "name": "Analytics",
+            "description": "Analytics addon"
+        },
+        "laravel": {
+            "providers": [
+                "Arthurperton\\Analytics\\ServiceProvider"
+            ]
+        }
+    }
+}
