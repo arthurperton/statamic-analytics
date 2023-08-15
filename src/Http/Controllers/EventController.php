@@ -11,12 +11,12 @@ class EventController extends CpController
     {
         $data = $request->json()->all();
 
-        // \Log::debug($data);
+        \Log::debug($data);
 
-        $object = (object) $data;
+    //     $object = (object) $data;
 
-        \Log::debug($object->type);
-        \Log::debug($object->anonymousId);
-        \Log::debug($object->friedOnions ?? 'no fried onions');
+    //     \Log::debug($object->type);
+    //     \Log::debug($object->anonymousId);
+    //     \Log::debug($object->friedOnions ?? 'no fried onions');
     }
 }

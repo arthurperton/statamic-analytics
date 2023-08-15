@@ -1,14 +1,17 @@
 import Analytics from 'analytics'
+import { getSession } from './session'
 
 /* Initialize analytics */
 const analytics = Analytics({
-    // app: 'Statalytics',
+    app: 'Statamic Analytics',
     // version: 100,
     // plugins: []
 })
 
+const session = getSession()
+
 /* Track a page view */
-analytics.page()
+analytics.page({ session })
 
 // analytics.identify(new Date().toISOString())
 

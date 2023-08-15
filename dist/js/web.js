@@ -371,6 +371,85 @@ function analyticsLib() {
 
 /***/ }),
 
+/***/ "./resources/js/web/session.js":
+/*!*************************************!*\
+  !*** ./resources/js/web/session.js ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   clearSession: () => (/* binding */ clearSession),
+/* harmony export */   getSession: () => (/* binding */ getSession)
+/* harmony export */ });
+/* harmony import */ var analytics_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! analytics-utils */ "./node_modules/analytics-utils/dist/analytics-utils.module.js");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+
+var key = '__session';
+function getSession() {
+  var create = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+  var extend = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+  var ttl = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 30;
+  var value = sessionStorage.getItem(key);
+  var session = parseSession(value, ttl);
+  if (!session) {
+    if (!create) {
+      return undefined;
+    }
+    var fresh = createSession();
+    setSession(fresh);
+    return fresh;
+  }
+  if (!extend) {
+    return session;
+  }
+  var extended = extendSession(session);
+  setSession(extended);
+  return extended;
+}
+function clearSession() {
+  sessionStorage.removeItem(key);
+}
+function setSession(session) {
+  sessionStorage.setItem(key, JSON.stringify(session));
+}
+function parseSession(value, ttl) {
+  if (!value) {
+    return undefined;
+  }
+  try {
+    var session = JSON.parse(value);
+    var expired = unixTimestamp() >= session.modified + ttl * 60;
+    return expired ? undefined : session;
+  } catch (_unused) {
+    return undefined;
+  }
+}
+function createSession() {
+  var timestamp = unixTimestamp();
+  return {
+    id: (0,analytics_utils__WEBPACK_IMPORTED_MODULE_0__.uuid)(),
+    created: timestamp,
+    modified: timestamp
+  };
+}
+function extendSession(session) {
+  return _objectSpread(_objectSpread({}, session), {}, {
+    modified: unixTimestamp()
+  });
+}
+function unixTimestamp() {
+  return Math.floor(Date.now() * 1e-3);
+}
+
+/***/ }),
+
 /***/ "./node_modules/dlv/dist/dlv.umd.js":
 /*!******************************************!*\
   !*** ./node_modules/dlv/dist/dlv.umd.js ***!
@@ -661,22 +740,28 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
 "use strict";
-/*!*****************************!*\
-  !*** ./resources/js/web.js ***!
-  \*****************************/
+/*!**********************************!*\
+  !*** ./resources/js/web/main.js ***!
+  \**********************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var analytics__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! analytics */ "./node_modules/analytics/lib/analytics.browser.es.js");
+/* harmony import */ var analytics__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! analytics */ "./node_modules/analytics/lib/analytics.browser.es.js");
+/* harmony import */ var _session__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./session */ "./resources/js/web/session.js");
+
 
 
 /* Initialize analytics */
-var analytics = (0,analytics__WEBPACK_IMPORTED_MODULE_0__["default"])({
-  // app: 'Statalytics',
+var analytics = (0,analytics__WEBPACK_IMPORTED_MODULE_1__["default"])({
+  app: 'Statamic Analytics'
   // version: 100,
   // plugins: []
 });
 
+var session = (0,_session__WEBPACK_IMPORTED_MODULE_0__.getSession)();
+
 /* Track a page view */
-analytics.page();
+analytics.page({
+  session: session
+});
 
 // analytics.identify(new Date().toISOString())
 
