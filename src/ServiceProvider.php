@@ -1,6 +1,6 @@
 <?php
 
-namespace Arthurperton\Analytics;
+namespace ArthurPerton\Analytics;
 
 use Statamic\Providers\AddonServiceProvider;
 

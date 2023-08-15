@@ -2,7 +2,7 @@
     "name": "arthurperton/analytics",
     "autoload": {
         "psr-4": {
-            "Arthurperton\\Analytics\\": "src"
+            "ArthurPerton\\Analytics\\": "src"
         }
     },
     "extra": {
@@ -12,11 +12,19 @@
         },
         "laravel": {
             "providers": [
-                "Arthurperton\\Analytics\\ServiceProvider"
+                "ArthurPerton\\Analytics\\ServiceProvider"
             ]
         }
     },
+    "require": {
+        "statamic/cms": ">=3.3.48"
+    },
     "require-dev": {
         "laravel/pint": "^1.10"
+    },
+    "config": {
+        "allow-plugins": {
+            "pixelfear/composer-dist-plugin": true
+        }
     }
 }
