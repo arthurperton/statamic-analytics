@@ -15,5 +15,8 @@
                 "Arthurperton\\Analytics\\ServiceProvider"
             ]
         }
+    },
+    "require-dev": {
+        "laravel/pint": "^1.10"
     }
 }
