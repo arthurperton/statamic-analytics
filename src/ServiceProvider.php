@@ -6,8 +6,7 @@ use Statamic\Providers\AddonServiceProvider;
 
 class ServiceProvider extends AddonServiceProvider
 {
-    public function bootAddon()
-    {
-        //
-    }
+    protected $scripts = [
+        __DIR__.'/../dist/js/app.js',
+    ];
 }

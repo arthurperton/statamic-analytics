@@ -1,1 +1,1 @@
-alert('Hello from the Statalytics addon')
+alert('Hello from the Statalytics addon!')
