@@ -9,7 +9,11 @@
     },
     "dependencies": {
         "analytics": "^0.8.9",
-        "d3": "^7.8.5",
-        "laravel-mix": "^6.0.49"
+        "d3": "^7.8.5"
+    },
+    "devDependencies": {
+        "laravel-mix": "^6.0.49",
+        "vue-loader": "^15.10.1",
+        "vue-template-compiler": "^2.7.14"
     }
 }
