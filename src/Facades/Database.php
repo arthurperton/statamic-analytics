@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static bool exists(): bool
  * @method static void create($overwrite = false)
  * @method static void delete()
+ * @method static void query($callback, $retry = true)
  * @method static string connectionName()
  * @method static \Illuminate\Database\ConnectionInterface connection()
  *

@@ -7,12 +7,12 @@ use Illuminate\Database\Schema\Blueprint;
 
 class Database extends SqliteDatabase
 {
-    protected $name = 'whosthere';
+    protected $name = 'analytics';
     protected $wal = true;
 
     public function createTables($schema)
     {
-        $schema->create('sessions', function (Blueprint $table) {
+        $schema->create('ip2geo', function (Blueprint $table) {
             $table->string('ip_begin');
             $table->string('ip_end');
             $table->string('country');

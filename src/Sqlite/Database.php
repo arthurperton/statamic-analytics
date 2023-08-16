@@ -60,11 +60,12 @@ abstract class Database
         File::delete($this->path);
     }
 
-    protected function query(callable $callback, $retry = true)
+    public function query(callable $callback, $retry = true)
     {
         try {
             return $callback($this->connection());
         } catch (QueryException $e) {
+            // TODO re-creating the database should depend on the kind of exception
             Log::error("The '{$this->name}' SQLite database seems to be corrupt and will be re-created now. Original exception: $e");
 
             $this->create(true);
