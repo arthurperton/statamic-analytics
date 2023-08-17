@@ -2,12 +2,21 @@
 
 namespace ArthurPerton\Analytics\Http\Controllers;
 
+use ArthurPerton\Analytics\Data\SessionHelper;
+use Carbon\Carbon;
 use Statamic\Http\Controllers\CP\CpController;
 
 class DashboardController extends CpController
 {
     public function index()
     {
-        return view('analytics::dashboard', ['some' => 'data']);
+        $to = Carbon::now()->startOfDay();
+        $from = $to->clone()->subDays(7);
+
+        $visitors = SessionHelper::uniqueVisitors($from, $to);
+        $visits = SessionHelper::visits($from, $to);
+        $pageviews = SessionHelper::pageviews($from, $to);
+
+        return view('analytics::dashboard', compact('visitors', 'visits', 'pageviews'));
     }
 }
