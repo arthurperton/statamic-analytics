@@ -16,7 +16,9 @@ class DashboardController extends CpController
         $visitors = SessionHelper::uniqueVisitors($from, $to);
         $visits = SessionHelper::visits($from, $to);
         $pageviews = SessionHelper::pageviews($from, $to);
+        $views = SessionHelper::viewsPerVisit($from, $to);
+        $duration = SessionHelper::visitDuration($from, $to);
 
-        return view('analytics::dashboard', compact('visitors', 'visits', 'pageviews'));
+        return view('analytics::dashboard', compact('visitors', 'visits', 'pageviews', 'views', 'duration'));
     }
 }

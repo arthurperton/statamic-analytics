@@ -13,6 +13,8 @@
             Unique Visitors: {{ $visitors }}<br/>
             Total visits: {{ $visits }}<br/>
             Pageviews: {{ $pageviews }}<br/>
+            Views per Visit: {{ number_format($views, 2) }}<br/>
+            Visit Duration: {{ round($duration) }}s<br/>
             
             {{-- <analytics-dashboard>
             </analytics-dashboard> --}}
