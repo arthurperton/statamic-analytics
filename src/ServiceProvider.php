@@ -35,7 +35,11 @@ class ServiceProvider extends AddonServiceProvider
 
     protected function bootNavigation()
     {
-        if (! User::current()->isSuper()) {
+        if (! ($user = User::current())) {
+            return;
+        }
+
+        if (! $user->isSuper()) {
             return;
         }
 
