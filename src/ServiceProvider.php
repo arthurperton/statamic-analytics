@@ -4,6 +4,7 @@ namespace ArthurPerton\Analytics;
 
 use ArthurPerton\Analytics\Facades\Database;
 use Statamic\Facades\CP\Nav;
+use Statamic\Facades\User;
 use Statamic\Providers\AddonServiceProvider;
 
 class ServiceProvider extends AddonServiceProvider
@@ -34,6 +35,10 @@ class ServiceProvider extends AddonServiceProvider
 
     protected function bootNavigation()
     {
+        if (! User::current()->isSuper()) {
+            return;
+        }
+
         Nav::extend(function ($nav) {
             // $nav->create('Dashboard')
             //     ->section('Analytics')
