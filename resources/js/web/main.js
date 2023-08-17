@@ -17,7 +17,7 @@ analytics.page({ session })
 
 analytics.on('page', ({ payload }) => {
     // console.log('page event', event)
-    console.log('payload', JSON.stringify(payload))
+    // console.log('payload', JSON.stringify(payload))
 
     fetch('/!/analytics/event', {
         method: 'POST',

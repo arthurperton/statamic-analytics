@@ -768,7 +768,8 @@ analytics.page({
 analytics.on('page', function (_ref) {
   var payload = _ref.payload;
   // console.log('page event', event)
-  console.log('payload', JSON.stringify(payload));
+  // console.log('payload', JSON.stringify(payload))
+
   fetch('/!/analytics/event', {
     method: 'POST',
     headers: {
