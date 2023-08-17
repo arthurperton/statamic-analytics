@@ -35,14 +35,6 @@ class ServiceProvider extends AddonServiceProvider
 
     protected function bootNavigation()
     {
-        if (! ($user = User::current())) {
-            return;
-        }
-
-        if (! $user->isSuper()) {
-            return;
-        }
-
         Nav::extend(function ($nav) {
             // $nav->create('Dashboard')
             //     ->section('Analytics')
@@ -51,6 +43,7 @@ class ServiceProvider extends AddonServiceProvider
             $nav->create('Analytics')
                 ->section('Tools')
                 ->route('analytics.dashboard.index')
+                ->can('view analytics')
                 ->icon('charts');
         });
     }
