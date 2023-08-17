@@ -2,6 +2,7 @@
 
 namespace ArthurPerton\Analytics\Http\Controllers;
 
+use ArthurPerton\Analytics\Data\GeoHelper;
 use ArthurPerton\Analytics\Facades\Database;
 use Browser;
 use Carbon\Carbon;
@@ -49,7 +50,8 @@ class EventController extends CpController
             ->put('os', Browser::platformFamily())
             ->put('os_version', $this->normalizeVersion(Browser::platformVersion()))
             ->put('browser', Browser::browserFamily())
-            ->put('browser_version', $this->normalizeVersion(Browser::browserVersion()));
+            ->put('browser_version', $this->normalizeVersion(Browser::browserVersion()))
+            ->put('country', GeoHelper::getCountry($_SERVER['REMOTE_ADDR']));
 
         $pageview = $properties
             ->only(['title', 'url', 'path', 'hash', 'search'])

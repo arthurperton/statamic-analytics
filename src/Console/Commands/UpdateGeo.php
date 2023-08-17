@@ -2,6 +2,8 @@
 
 namespace ArthurPerton\Analytics\Console\Commands;
 
+use ArthurPerton\Analytics\Data\GeoHelper;
+use ArthurPerton\Analytics\Facades\Database;
 use Illuminate\Console\Command;
 use Statamic\Facades\File;
 
@@ -9,7 +11,7 @@ class UpdateGeo extends Command
 {
     protected $signature = 'analytics:update-geo';
 
-    protected $description = 'Download the latest IP to geolocation data.';
+    protected $description = 'Download the latest IP to geolocation data.';    
 
     public function __construct()
     {
@@ -38,17 +40,22 @@ class UpdateGeo extends Command
 
         File::put($gzip, '');
 
+        $this->info('Downloading...');
         $this->download($url, $gzip);
 
         // TODO check if download is successful
 
         $csv = str_replace('.gz', '', $gzip);
 
+        $this->info('Extracting...');
         $this->extract($gzip, $csv);
 
         File::delete($gzip);
 
+        $this->info('Importing...');
         $this->import($csv);
+
+        File::delete($csv);
     }
 
     protected function download($url, $path)
@@ -78,6 +85,8 @@ class UpdateGeo extends Command
 
     protected function import($filename)
     {
+        $geo = new GeoHelper();
+
         $file = fopen($filename, "r"); // TODO handle fail
         
         while(! feof($file)) {
@@ -85,13 +94,16 @@ class UpdateGeo extends Command
 
             $parts = explode(',', $line);
             if (count($parts) === 3) {
-                [$from, $to, $code] = $parts;
+                [$from, $to, $country] = $parts;
 
-                echo "$from - $to => $code";
-                // TODO import into database
+                // echo "$from - $to => $country";
+                $geo->insertBatched($from, $to, $country);
             }
         }
-        
+
+        $geo->flushBatched();
+
         fclose($file);
     }
+
 }

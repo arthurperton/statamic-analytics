@@ -13,8 +13,8 @@ class Database extends SqliteDatabase
     public function createTables($schema)
     {
         $schema->create('ip2geo', function (Blueprint $table) {
-            $table->string('ip_begin');
-            $table->string('ip_end');
+            $table->string('ip_from');
+            $table->string('ip_to');
             $table->string('country');
 
             // TODO indices
