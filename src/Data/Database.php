@@ -13,7 +13,7 @@ class Database extends SqliteDatabase
     public function createTables($schema)
     {
         // TODO versioning / migrations
-        
+
         $schema->create('ip2geo', function (Blueprint $table) {
             $table->string('ip_from');
             $table->string('ip_to');
@@ -27,7 +27,7 @@ class Database extends SqliteDatabase
 
             $table->string('anonymous_id');
 
-            $table->string('referrer');
+            $table->string('referrer')->nullable(); // TODO move /copy to page?
 
             $table->string('browser');
             $table->string('browser_version');
@@ -51,12 +51,12 @@ class Database extends SqliteDatabase
             $table->string('session_id');
             $table->foreign('session_id')->references('id')->on('sessions');
 
-            $table->string('title');
+            $table->string('title')->nullable();
 
-            $table->string('url');
+            $table->string('url')->nullable();
             $table->string('path');
-            $table->string('hash')->nullable();
-            $table->string('search')->nullable();
+            // $table->string('hash')->nullable();
+            // $table->string('search')->nullable();
 
             $table->unsignedInteger('created');
 

@@ -10,7 +10,7 @@ class DashboardController extends CpController
 {
     public function index()
     {
-        $to = Carbon::now()->startOfDay();
+        $to = Carbon::now();//->startOfDay();
         $from = $to->clone()->subDays(7);
 
         $visitors = StatsHelper::uniqueVisitors($from, $to);

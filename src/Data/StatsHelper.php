@@ -80,6 +80,7 @@ class StatsHelper
             ->table('sessions')
             ->distinct('anonymous_id')
             ->selectRaw('country, COUNT(*) as visitors')
+            ->whereNotNull('country')
             ->groupBy('day')
             ->get();
     }

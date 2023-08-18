@@ -13,9 +13,9 @@ class EventsHelper
 
         return Database::connection()
             ->table('sessions')
-            ->selectOne()
+            ->select()
             ->where('anonymous_id', $anonymousId)
             ->where('modified', '>', $now - 30 * 60)
-            ->get();
+            ->first();
     }
 }

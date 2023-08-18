@@ -1,16 +1,12 @@
-import Analytics from 'analytics'
-import { getSession } from './session'
 
-const analytics = Analytics({
-    app: 'Statamic Analytics',
-})
-
-analytics.page({
-    session: getSession(),
-    referrer: document.referrer,
-})
-
-analytics.on('page', ({ payload }) => {
+window.addEventListener('load', () => {
+    const payload = {
+        type: 'load',
+        title: document.title,
+        url: document.location.href,
+        // path: document.location.pathname,
+        referrer: document.referrer,
+    }
     fetch('/!/analytics/event', {
         method: 'POST',
         headers: {

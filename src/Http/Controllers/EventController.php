@@ -32,7 +32,7 @@ class EventController extends CpController
         // });
     }
 
-    protected function prepareData()
+    protected function prepareData($data)
     {
         // TODO handle fails
 
@@ -42,14 +42,14 @@ class EventController extends CpController
 
         // TODO Check if there is an active session for this anonymous id.
         $activeSession = EventsHelper::activeSession($anonymousId);
-        $sessionId = $activeSession ? $activeSession->id : $uniqid;
+        $sessionId = $activeSession ? $activeSession->id : uniqid();
 
         $session = [
             'id' => $sessionId,
             'created' => $now,
             'modified' => $now,
             'anonymous_id' => $anonymousId,
-            'referrer' => Request::server('HTTP_REFERER'),
+            'referrer' => $data['referrer'] ?? null,
             'device' => Browser::deviceType(),
             'os' => Browser::platformFamily(),
             'os_version' => $this->normalizeVersion(Browser::platformVersion()),
@@ -58,14 +58,19 @@ class EventController extends CpController
             'country' => GeoHelper::getCountry(),
         ];
 
-        $pageview = $properties
-            ->only(['title', 'url', 'path', 'hash', 'search'])
-            ->put('session_id', $session->get('id'))
-            ->put('id', $data->get('meta')['rid'])
-            ->put('created', $now);
-        // ->put('client_timestamp', floor($data->get('meta')['ts'] * 1e-3));
+        // TODO multi-site
+        $path = parse_url($data['url'], PHP_URL_PATH);
+        
+        $pageview = [
+            'title' => $data['title'] ?? null,
+            // 'url' => Request::url,
+            'path' => $path,
+            'session_id' => $sessionId,
+            'id' => uniqid(),
+            'created' => $now,
+        ];
 
-        return [$session, $pageview->all()];
+        return [$session, $pageview];
     }
 
     protected function createAnonymousId()
