@@ -15,7 +15,6 @@ class ServiceProvider extends AddonServiceProvider
 
     protected $scripts = [
         __DIR__.'/../dist/js/cp.js',
-        __DIR__.'/../dist/js/web.js',
     ];
 
     protected $routes = [
@@ -25,6 +24,8 @@ class ServiceProvider extends AddonServiceProvider
 
     public function bootAddon()
     {
+        $this->publishables[__DIR__.'/../dist/js/web.js'] = public_path('vendor/analytics/js/web.js');
+
         $this->bootDatabase();
         $this->bootNavigation();
     }
