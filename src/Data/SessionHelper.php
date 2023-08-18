@@ -74,4 +74,24 @@ class SessionHelper
         //     ', [$from->getTimestamp(), $to->getTimestamp()])->value;
     }
 
+    public static function locations(Carbon $from, Carbon $to)
+    {
+        return Database::connection()
+            ->table('sessions')
+            ->distinct('anonymous_id')
+            ->selectRaw('country, COUNT(*) as visitors')
+            ->groupBy('day')
+            ->get();
+    }
+
+    public static function pages(Carbon $from, Carbon $to)
+    {
+        // return Database::connection()
+        //     ->table('sessions')
+        //     ->distinct('anonymous_id')
+        //     ->selectRaw('country, COUNT(*) as visitors')
+        //     ->groupBy('day')
+        //     ->get();
+    }
+
 }
