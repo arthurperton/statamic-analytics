@@ -46,6 +46,7 @@ class EventController extends CpController
             ->put('created', $now)
             ->put('modified', $now)
             ->put('anonymous_id', $data->get('anonymousId'))
+            ->put('referrer', $properties->get('referrer'))
             ->put('device', Browser::deviceType())
             ->put('os', Browser::platformFamily())
             ->put('os_version', $this->normalizeVersion(Browser::platformVersion()))

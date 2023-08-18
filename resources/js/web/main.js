@@ -1,24 +1,16 @@
 import Analytics from 'analytics'
 import { getSession } from './session'
 
-/* Initialize analytics */
 const analytics = Analytics({
     app: 'Statamic Analytics',
-    // version: 100,
-    // plugins: []
 })
 
-const session = getSession()
-
-/* Track a page view */
-analytics.page({ session })
-
-// analytics.identify(new Date().toISOString())
+analytics.page({
+    session: getSession(),
+    referrer: document.referrer,
+})
 
 analytics.on('page', ({ payload }) => {
-    // console.log('page event', event)
-    // console.log('payload', JSON.stringify(payload))
-
     fetch('/!/analytics/event', {
         method: 'POST',
         headers: {
@@ -26,5 +18,4 @@ analytics.on('page', ({ payload }) => {
         },
         body: JSON.stringify(payload),
     });
-
 })

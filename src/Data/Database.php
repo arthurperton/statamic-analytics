@@ -12,6 +12,8 @@ class Database extends SqliteDatabase
 
     public function createTables($schema)
     {
+        // TODO versioning / migrations
+        
         $schema->create('ip2geo', function (Blueprint $table) {
             $table->string('ip_from');
             $table->string('ip_to');
@@ -24,6 +26,8 @@ class Database extends SqliteDatabase
             $table->string('id')->primary();
 
             $table->string('anonymous_id');
+
+            $table->string('referrer');
 
             $table->string('browser');
             $table->string('browser_version');
