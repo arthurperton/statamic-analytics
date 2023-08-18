@@ -27,7 +27,7 @@ class Database extends SqliteDatabase
 
             $table->string('anonymous_id');
 
-            $table->string('referrer')->nullable(); // TODO move /copy to page?
+            $table->string('source')->nullable(); // TODO move /copy to page?
 
             $table->string('browser');
             $table->string('browser_version');
@@ -55,6 +55,7 @@ class Database extends SqliteDatabase
 
             $table->string('url')->nullable();
             $table->string('path');
+            $table->string('referrer_path')->nullable();
             // $table->string('hash')->nullable();
             // $table->string('search')->nullable();
 

@@ -18,8 +18,12 @@ class DashboardController extends CpController
         $pageviews = StatsHelper::pageviews($from, $to);
         $views = StatsHelper::viewsPerVisit($from, $to);
         $duration = StatsHelper::visitDuration($from, $to);
+        $sources = StatsHelper::sources($from, $to);
+        $pages = StatsHelper::pages($from, $to);
         $locations = StatsHelper::locations($from, $to);
 
-        return view('analytics::dashboard', compact('visitors', 'visits', 'pageviews', 'views', 'duration', 'locations'));
+        return view('analytics::dashboard', compact(
+            'visitors', 'visits', 'pageviews', 'views', 'duration', 'sources', 'pages', 'locations',
+        ));
     }
 }

@@ -74,6 +74,27 @@ class StatsHelper
         //     ', [$from->getTimestamp(), $to->getTimestamp()])->value;
     }
 
+    public static function sources(Carbon $from, Carbon $to)
+    {
+        return Database::connection()
+            ->table('sessions')
+            ->distinct('anonymous_id')
+            ->selectRaw('source, COUNT(*) as visitors')
+            ->groupBy('source')
+            ->get();
+    }
+
+    public static function pages(Carbon $from, Carbon $to)
+    {
+        return Database::connection()
+            ->table('sessions')
+            ->join('pageviews', 'sessions.id', '=', 'pageviews.session_id')
+            ->distinct('anonymous_id')
+            ->selectRaw('path, COUNT(DISTINCT anonymous_id) as visitors')
+            ->groupBy('path')
+            ->get();
+    }
+
     public static function locations(Carbon $from, Carbon $to)
     {
         return Database::connection()
@@ -81,18 +102,8 @@ class StatsHelper
             ->distinct('anonymous_id')
             ->selectRaw('country, COUNT(*) as visitors')
             ->whereNotNull('country')
-            ->groupBy('day')
+            ->groupBy('country')
             ->get();
-    }
-
-    public static function pages(Carbon $from, Carbon $to)
-    {
-        // return Database::connection()
-        //     ->table('sessions')
-        //     ->distinct('anonymous_id')
-        //     ->selectRaw('country, COUNT(*) as visitors')
-        //     ->groupBy('day')
-        //     ->get();
     }
 
 }
