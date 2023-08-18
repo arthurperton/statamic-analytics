@@ -2,16 +2,18 @@
 
 namespace ArthurPerton\Analytics\Http\Controllers;
 
+use ArthurPerton\Analytics\Data\EventsHelper;
 use ArthurPerton\Analytics\Data\GeoHelper;
 use ArthurPerton\Analytics\Facades\Database;
 use Browser;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Request;
 use Statamic\Http\Controllers\CP\CpController;
 
 class EventController extends CpController
 {
-    public function store(Request $request)
+    public function store(\Illuminate\Http\Request $request)
     {
         $data = $request->json()->all();
 
@@ -30,29 +32,31 @@ class EventController extends CpController
         // });
     }
 
-    protected function prepareData(array $data)
+    protected function prepareData()
     {
-        // TODO handle fail
+        // TODO handle fails
+
         $now = Carbon::now()->timestamp;
 
-        if (is_array($data)) {
-            $data = collect($data);
-        }
+        $anonymousId = $this->createAnonymousId();
 
-        $properties = collect($data->get('properties'));
+        // TODO Check if there is an active session for this anonymous id.
+        $activeSession = EventsHelper::activeSession($anonymousId);
+        $sessionId = $activeSession ? $activeSession->id : $uniqid;
 
-        $session = collect($properties->get('session'))
-            ->only(['id'])//, 'created', 'modified']) // TODO or convert client time to server time
-            ->put('created', $now)
-            ->put('modified', $now)
-            ->put('anonymous_id', $data->get('anonymousId'))
-            ->put('referrer', $properties->get('referrer'))
-            ->put('device', Browser::deviceType())
-            ->put('os', Browser::platformFamily())
-            ->put('os_version', $this->normalizeVersion(Browser::platformVersion()))
-            ->put('browser', Browser::browserFamily())
-            ->put('browser_version', $this->normalizeVersion(Browser::browserVersion()))
-            ->put('country', GeoHelper::getCountry($_SERVER['REMOTE_ADDR']));
+        $session = [
+            'id' => $sessionId,
+            'created' => $now,
+            'modified' => $now,
+            'anonymous_id' => $anonymousId,
+            'referrer' => Request::server('HTTP_REFERER'),
+            'device' => Browser::deviceType(),
+            'os' => Browser::platformFamily(),
+            'os_version' => $this->normalizeVersion(Browser::platformVersion()),
+            'browser' => Browser::browserFamily(),
+            'browser_version' => $this->normalizeVersion(Browser::browserVersion()),
+            'country' => GeoHelper::getCountry(),
+        ];
 
         $pageview = $properties
             ->only(['title', 'url', 'path', 'hash', 'search'])
@@ -61,7 +65,27 @@ class EventController extends CpController
             ->put('created', $now);
         // ->put('client_timestamp', floor($data->get('meta')['ts'] * 1e-3));
 
-        return [$session->all(), $pageview->all()];
+        return [$session, $pageview->all()];
+    }
+
+    protected function createAnonymousId()
+    {
+        // See https://plausible.io/data-policy#how-we-count-unique-users-without-cookies
+        $salt = $this->dailySalt();
+        $domain = Request::getHost();
+        $ip = Request::ip();
+        $userAgent = Request::userAgent();
+
+        return hash('sha256', $salt.$domain.$ip.$userAgent);
+    }
+
+    protected function dailySalt()
+    {
+        $seconds = Carbon::now()->secondsUntilEndOfDay();
+
+        return Cache::remember('statamic-analytics-salt', $seconds, function () {
+            return uniqid();
+        });
     }
 
     protected function normalizeVersion($version)

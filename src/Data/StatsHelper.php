@@ -5,7 +5,7 @@ namespace ArthurPerton\Analytics\Data;
 use ArthurPerton\Analytics\Facades\Database;
 use Carbon\Carbon;
 
-class SessionHelper
+class StatsHelper
 {
     public static function uniqueVisitors(Carbon $from, Carbon $to)
     {

@@ -3,6 +3,7 @@
 namespace ArthurPerton\Analytics\Data;
 
 use ArthurPerton\Analytics\Facades\Database;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 
@@ -19,8 +20,10 @@ class GeoHelper
         $this->batch = collect();
     }
 
-    public static function getCountry($ip)
+    public static function getCountry($ip = null)
     {
+        $ip = $ip ?? Request::ip();
+
         // TODO support ipv6
         if (Str::contains($ip, ':')) {
             return null;
