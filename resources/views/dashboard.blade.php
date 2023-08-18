@@ -18,10 +18,17 @@
             Views per Visit: {{ number_format($views, 2) }}<br/>
             Visit Duration: {{ round($duration) }}s<br/>
 
+            <h3 class="mt-4 font-bold">Chart (for Unique Visitors)</h3>
+            <ul>
+                @foreach ($chart as $point)
+                    <li>{{ $point->day }}: {{ $point->visitors }}</li>
+                @endforeach
+            </ul>
+
             <h3 class="mt-4 font-bold">Top Sources</h3>
             <ul>
             @foreach ($sources as $source)
-                <li>{{ $source->source ?? 'Direct' }}: {{ $source->visitors }}</li>
+                <li>{{ $source->source ?? 'Direct / None' }}: {{ $source->visitors }}</li>
             @endforeach
             </ul>
 
@@ -38,6 +45,27 @@
                 <li>{{ $location->country }}: {{ $location->visitors }}</li>
             @endforeach
             </ul>
+
+            <h3 class="mt-4 font-bold">Browser</h3>
+            <ul>
+            @foreach ($browsers as $browser)
+                <li>{{ $browser->browser }}: {{ $browser->visitors }}</li>
+            @endforeach
+            </ul>
+
+            <h3 class="mt-4 font-bold">OS</h3>
+            <ul>
+            @foreach ($operatingSystems as $operatingSystem)
+                <li>{{ $operatingSystem->os }}: {{ $operatingSystem->visitors }}</li>
+            @endforeach
+            </ul>
+
+            <h3 class="mt-4 font-bold">Size</h3>
+            <ul>
+            @foreach ($devices as $device)
+                <li>{{ $device->device }}: {{ $device->visitors }}</li>
+            @endforeach
+            </ul>            
 
             {{-- <analytics-dashboard>
             </analytics-dashboard> --}}

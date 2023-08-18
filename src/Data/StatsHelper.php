@@ -17,6 +17,18 @@ class StatsHelper
             ->count();
     }
 
+    public static function uniqueVisitorsChart(Carbon $from, Carbon $to)
+    {
+        return Database::connection()
+            ->table('sessions')
+            ->selectRaw('DATE(created, \'unixepoch\') as day, COUNT(DISTINCT anonymous_id) as visitors')
+            ->where('created', '>=', $from->getTimestamp())
+            ->where('created', '<=', $to->getTimestamp())
+            ->groupBy('day')
+            ->get();
+        
+    }
+
     public static function visits(Carbon $from, Carbon $to)
     {
         return Database::connection()
@@ -105,5 +117,40 @@ class StatsHelper
             ->groupBy('country')
             ->get();
     }
+
+    public static function browsers(Carbon $from, Carbon $to)
+    {
+        return Database::connection()
+            ->table('sessions')
+            ->distinct('anonymous_id')
+            ->selectRaw('browser, COUNT(*) as visitors')
+            ->whereNotNull('browser')
+            ->groupBy('browser')
+            ->get();
+    }
+
+    public static function operatingSystems(Carbon $from, Carbon $to)
+    {
+        return Database::connection()
+            ->table('sessions')
+            ->distinct('anonymous_id')
+            ->selectRaw('os, COUNT(*) as visitors')
+            ->whereNotNull('os')
+            ->groupBy('os')
+            ->get();
+    }
+
+    public static function devices(Carbon $from, Carbon $to)
+    {
+        return Database::connection()
+            ->table('sessions')
+            ->distinct('anonymous_id')
+            ->selectRaw('device, COUNT(*) as visitors')
+            ->whereNotNull('device')
+            ->groupBy('device')
+            ->get();
+    }
+
+
 
 }
