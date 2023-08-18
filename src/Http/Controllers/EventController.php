@@ -72,7 +72,7 @@ class EventController extends CpController
     {
         // See https://plausible.io/data-policy#how-we-count-unique-users-without-cookies
         $salt = $this->dailySalt();
-        $domain = Request::getHost();
+        $domain = ''; // Request::getHost();
         $ip = Request::ip();
         $userAgent = Request::userAgent();
 
@@ -83,6 +83,7 @@ class EventController extends CpController
     {
         $seconds = Carbon::now()->secondsUntilEndOfDay();
 
+        // TODO use storage; cache might get cleared
         return Cache::remember('statamic-analytics-salt', $seconds, function () {
             return uniqid();
         });
