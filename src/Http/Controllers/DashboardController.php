@@ -4,6 +4,7 @@ namespace ArthurPerton\Analytics\Http\Controllers;
 
 use ArthurPerton\Analytics\Data\StatsHelper;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Statamic\Http\Controllers\CP\CpController;
 
 class DashboardController extends CpController
@@ -31,5 +32,28 @@ class DashboardController extends CpController
             'visitors', 'visits', 'pageviews', 'views', 'duration', 'sources',
             'pages', 'locations', 'browsers', 'operatingSystems', 'devices',
         ));
+    }
+
+    public function stats(Request $request)
+    {
+        $data = $request->json()->all();
+
+        $method = $data['type'];
+        $period = $data['period'];
+
+        if ($period === 'all time') {
+            $to = Carbon::now();
+            $from = Carbon::createFromTimestamp(0);
+        } elseif (preg_match('/last (\d+) days?/', $period, $matches)) {
+            $days = $matches[1];
+            $to = Carbon::now(); //->startOfDay();
+            $from = $to->clone()->subDays($days);
+        } else {
+            return response('', 400);
+        }
+
+        return response()->json([
+            'data' => StatsHelper::$method($from, $to),
+        ]);
     }
 }
