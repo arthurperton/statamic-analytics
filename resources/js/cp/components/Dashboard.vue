@@ -7,8 +7,6 @@
             <option value="all time">All time</option>
         </select>
 
-        <top-pages :period="period"></top-pages>
-
         <!-- <h3 class="mt-4 font-bold">General</h3>
         Unique Visitors: {{ $visitors }}<br/>
         Total visits: {{ $visits }}<br/>
@@ -21,28 +19,18 @@
             @foreach ($chart as $point)
                 <li>{{ $point->day }}: {{ $point->visitors }}</li>
             @endforeach
-        </ul>
+        </ul> -->
+        
+        <div class="mt-8 grid gap-8 grid-cols-2" style="gap: 2rem; grid-template-columns: repeat(2, minmax(0, 1fr));">
+            <sources :period="period"></sources>
+            <pages :period="period"></pages>
+            <locations :period="period"></locations>
+            <devices :period="period"></devices>
+        </div>
 
-        <h3 class="mt-4 font-bold">Top Sources</h3>
-        <ul>
-        @foreach ($sources as $source)
-            <li>{{ $source->source ?? 'Direct / None' }}: {{ $source->visitors }}</li>
-        @endforeach
-        </ul>
 
-        <h3 class="mt-4 font-bold">Top Pages</h3>
-        <ul>
-        @foreach ($pages as $page)
-            <li>{{ $page->path }}: {{ $page->visitors }}</li>
-        @endforeach
-        </ul>
 
-        <h3 class="mt-4 font-bold">Locations</h3>
-        <ul>
-        @foreach ($locations as $location)
-            <li>{{ $location->country }}: {{ $location->visitors }}</li>
-        @endforeach
-        </ul>
+       <!--
 
         <h3 class="mt-4 font-bold">Browser</h3>
         <ul>
@@ -68,11 +56,17 @@
 </template>
 
 <script>
-import TopPages from './TopPages.vue';
+import Sources from './widget/Sources.vue'
+import Pages from './widget/Pages.vue'
+import Locations from './widget/Locations.vue'
+import Devices from './widget/Devices.vue'
 
 export default {
     components: {
-        TopPages,
+        Sources,
+        Pages,
+        Locations,
+        Devices,
     },
 
     data() {

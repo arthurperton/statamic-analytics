@@ -92,7 +92,10 @@ class StatsHelper
             ->table('sessions')
             ->distinct('anonymous_id')
             ->selectRaw('source, COUNT(*) as visitors')
+            ->where('created', '>=', $from->getTimestamp())
+            ->where('created', '<=', $to->getTimestamp())
             ->groupBy('source')
+            ->orderBy('visitors', 'desc')
             ->get();
     }
 
@@ -103,7 +106,10 @@ class StatsHelper
             ->join('pageviews', 'sessions.id', '=', 'pageviews.session_id')
             ->distinct('anonymous_id')
             ->selectRaw('path, COUNT(DISTINCT anonymous_id) as visitors')
+            ->where('pageviews.created', '>=', $from->getTimestamp())
+            ->where('pageviews.created', '<=', $to->getTimestamp())
             ->groupBy('path')
+            ->orderBy('visitors', 'desc')
             ->get();
     }
 
@@ -114,6 +120,8 @@ class StatsHelper
             ->distinct('anonymous_id')
             ->selectRaw('country, COUNT(*) as visitors')
             ->whereNotNull('country')
+            ->where('created', '>=', $from->getTimestamp())
+            ->where('created', '<=', $to->getTimestamp())
             ->groupBy('country')
             ->get();
     }
@@ -125,6 +133,8 @@ class StatsHelper
             ->distinct('anonymous_id')
             ->selectRaw('browser, COUNT(*) as visitors')
             ->whereNotNull('browser')
+            ->where('created', '>=', $from->getTimestamp())
+            ->where('created', '<=', $to->getTimestamp())
             ->groupBy('browser')
             ->get();
     }
@@ -136,6 +146,8 @@ class StatsHelper
             ->distinct('anonymous_id')
             ->selectRaw('os, COUNT(*) as visitors')
             ->whereNotNull('os')
+            ->where('created', '>=', $from->getTimestamp())
+            ->where('created', '<=', $to->getTimestamp())
             ->groupBy('os')
             ->get();
     }
@@ -147,6 +159,8 @@ class StatsHelper
             ->distinct('anonymous_id')
             ->selectRaw('device, COUNT(*) as visitors')
             ->whereNotNull('device')
+            ->where('created', '>=', $from->getTimestamp())
+            ->where('created', '<=', $to->getTimestamp())
             ->groupBy('device')
             ->get();
     }
