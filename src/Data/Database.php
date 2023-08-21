@@ -14,6 +14,10 @@ class Database extends SqliteDatabase
     {
         // TODO versioning / migrations
 
+        $schema->create('dummy', function (Blueprint $table) {
+            $table->id('id');
+        });
+
         $schema->create('ip2geo', function (Blueprint $table) {
             $table->string('ip_from');
             $table->string('ip_to');
@@ -63,5 +67,6 @@ class Database extends SqliteDatabase
 
             // TODO indices
         });
+       
     }
 }

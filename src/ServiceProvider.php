@@ -4,12 +4,12 @@ namespace ArthurPerton\Analytics;
 
 use ArthurPerton\Analytics\Facades\Database;
 use Statamic\Facades\CP\Nav;
-use Statamic\Facades\User;
 use Statamic\Providers\AddonServiceProvider;
 
 class ServiceProvider extends AddonServiceProvider
 {
     protected $commands = [
+        Console\Commands\FakeEvents::class,
         Console\Commands\UpdateGeo::class,
     ];
 
