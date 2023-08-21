@@ -2,11 +2,26 @@
     <div>
       <h3 class="mt-4 font-bold">General</h3>
         <div v-if="data" class="flex justify-between">
-            <div>Unique Visitors<br/>{{ data['uniqueVisitors'] }}</div>
-            <div>Total visits<br/>{{data['visits'] }}</div>
-            <div>Pageviews<br/>{{data['pageviews'] }}</div>
-            <div>Views per Visit<br/>{{ data['viewsPerVisit'].toFixed(1) }}</div>
-            <div>Visit Duration<br/>{{ visitDuration }}</div>
+            <div>
+                <div class="text-sm uppercase">Unique Visitors</div>
+                <div class="text-lg font-bold">{{ data['uniqueVisitors'] }}</div>
+            </div>
+            <div>
+                <div class="text-sm uppercase">Total visits</div>
+                <div class="text-lg font-bold">{{data['visits'] }}</div>
+            </div>
+            <div>
+                <div class="text-sm uppercase">Pageviews</div>
+                <div class="text-lg font-bold">{{data['pageviews'] }}</div>
+            </div>
+            <div>
+                <div class="text-sm uppercase">Views per Visit</div>
+                <div class="text-lg font-bold">{{ data['viewsPerVisit'].toFixed(1) }}</div>
+            </div>
+            <div>
+                <div class="text-sm uppercase">Visit Duration</div>
+                <div class="text-lg font-bold">{{ visitDuration }}</div>
+            </div>
         </div>
     </div>
 </template>

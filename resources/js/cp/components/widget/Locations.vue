@@ -1,21 +1,21 @@
 <template>
     <div class="">
         <h3 class="font-bold">Locations</h3>
-        <div 
-            class="flex justify-between"
-            v-for="location in locations" 
-            :key="location.country"
-        >
-            <div class="flex-grow">{{ location.country }}</div> 
-            <div class="text-right">{{ location.visitors }}</div>
-        </div>
+         <list :items="items">
+            <template v-slot:header1>Country</template>
+        </list>
     </div>
 </template>
 
 <script>
 import widget from './widget'
+import List from './List.vue'
 
 export default {
+    components: {
+        List,
+    },
+
     mixins: [widget],
 
     data() {
@@ -25,8 +25,11 @@ export default {
     },
 
     computed: {
-        locations() {
-            return this.data ?? []
+        items() {
+            return (this.data || []).map(item => [
+                item.country, 
+                item.visitors,
+            ])
         }
     },
 }

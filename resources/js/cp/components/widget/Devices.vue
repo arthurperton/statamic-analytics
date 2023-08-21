@@ -1,28 +1,29 @@
 <template>
     <div class="">
-        <div class="flex justify-between">
+        <div class="flex justify-between mb-1">
             <h3 class="font-bold">Devices</h3>
-            <div class="flex gap-2" style="gap: 0.5rem;">
-                <button @click="setType('browsers')">Browser</button>
-                <button @click="setType('operatingSystems')">OS</button>
-                <button @click="setType('devices')">Size</button>
+            <div class="flex gap-2">
+                <button :class="{ 'text-blue-600': type === 'browsers' }" @click="setType('browsers')">Browser</button>
+                <button :class="{ 'text-blue-600': type === 'operatingSystems' }" @click="setType('operatingSystems')">OS</button>
+                <button :class="{ 'text-blue-600': type === 'devices' }" @click="setType('devices')">Size</button>
             </div>
         </div>
-        <div 
-            class="flex justify-between"
-            v-for="item in items" 
-            :key="item[key]"
-        >
-              <div class="flex-grow">{{ item[key] }}</div> 
-            <div class="text-right">{{ item.visitors }}</div>
-        </div>
+
+         <list :items="items">
+            <template v-slot:header1>{{ title }}</template>
+        </list>
     </div>
 </template>
 
 <script>
-import widget from './widget'
+import widget from './/widget'
+import List from './List.vue'
 
 export default {
+    components: {
+        List,
+    },
+
     mixins: [widget],
 
     data() {
@@ -33,7 +34,10 @@ export default {
 
     computed: {
         items() {
-            return this.data ?? []
+            return (this.data || []).map(item => [
+                item[this.key], 
+                item.visitors,
+            ])
         },
 
         key() {
@@ -41,6 +45,14 @@ export default {
                 browsers: 'browser',
                 operatingSystems: 'os',
                 devices: 'device',
+            }[this.type]
+        },
+
+        title() {
+            return {
+                browsers: 'Browser',
+                operatingSystems: 'OS',
+                devices: 'Size',
             }[this.type]
         }
     },

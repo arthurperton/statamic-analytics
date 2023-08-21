@@ -16,7 +16,7 @@
             @endforeach
         </ul> -->
         
-        <div class="mt-8 grid gap-8 grid-cols-2" style="gap: 2rem; grid-template-columns: repeat(2, minmax(0, 1fr));">
+        <div class="mt-8 grid gap-12 grid-cols-2">
             <sources :period="period"></sources>
             <pages :period="period"></pages>
             <locations :period="period"></locations>

@@ -13,6 +13,10 @@ class ServiceProvider extends AddonServiceProvider
         Console\Commands\UpdateGeo::class,
     ];
 
+    protected $stylesheets = [
+        __DIR__.'/../dist/css/cp.css',
+    ];
+
     protected $scripts = [
         __DIR__.'/../dist/js/cp.js',
     ];

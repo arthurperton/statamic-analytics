@@ -1,21 +1,21 @@
 <template>
     <div class="">
         <h3 class="font-bold">Top Pages</h3>
-        <div 
-            class="flex justify-between"
-            v-for="page in pages" 
-            :key="page.path"
-        >
-              <div class="flex-grow">{{ page.path }}</div> 
-            <div class="text-right">{{ page.visitors }}</div>
-        </div>
+        <list :items="items">
+            <template v-slot:header1>Page</template>
+        </list>
     </div>
 </template>
 
 <script>
 import widget from './widget'
+import List from './List.vue'
 
 export default {
+    components: {
+        List,
+    },
+
     mixins: [widget],
 
     data() {
@@ -25,8 +25,11 @@ export default {
     },
 
     computed: {
-        pages() {
-            return this.data ?? []
+       items() {
+            return (this.data || []).map(item => [
+                item.path, 
+                item.visitors,
+            ])
         }
     },
 }
