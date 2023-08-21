@@ -7,12 +7,7 @@
             <option value="all time">All time</option>
         </select>
 
-        <!-- <h3 class="mt-4 font-bold">General</h3>
-        Unique Visitors: {{ $visitors }}<br/>
-        Total visits: {{ $visits }}<br/>
-        Pageviews: {{ $pageviews }}<br/>
-        Views per Visit: {{ number_format($views, 2) }}<br/>
-        Visit Duration: {{ round($duration) }}s<br/> -->
+        <general :period="period"></general>
 
         <!-- <h3 class="mt-4 font-bold">Chart (for Unique Visitors)</h3>
         <ul>
@@ -56,6 +51,7 @@
 </template>
 
 <script>
+import General from './widget/General.vue'
 import Sources from './widget/Sources.vue'
 import Pages from './widget/Pages.vue'
 import Locations from './widget/Locations.vue'
@@ -63,6 +59,7 @@ import Devices from './widget/Devices.vue'
 
 export default {
     components: {
+        General,
         Sources,
         Pages,
         Locations,

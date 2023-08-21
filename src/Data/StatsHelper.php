@@ -7,6 +7,21 @@ use Carbon\Carbon;
 
 class StatsHelper
 {
+    public static function general(Carbon $from, Carbon $to)
+    {
+        return collect([
+            'uniqueVisitors',
+            'visits',
+            'pageviews',
+            'viewsPerVisit',
+            'visitDuration',
+        ])
+        ->mapWithKeys(function($type) use ($from, $to) {
+            return [$type => static::$type($from, $to)];
+        })
+        ->all();
+    }
+
     public static function uniqueVisitors(Carbon $from, Carbon $to)
     {
         return Database::connection()
