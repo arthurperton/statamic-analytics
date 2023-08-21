@@ -1,6 +1,6 @@
 <template>
     <div class="">
-        <h3 class="font-bold">Locations</h3>
+        <h3 class="font-bold mb-1">Locations</h3>
          <list :items="items">
             <template v-slot:header1>Country</template>
         </list>
