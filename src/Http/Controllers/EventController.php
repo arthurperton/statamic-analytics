@@ -4,6 +4,7 @@ namespace ArthurPerton\Analytics\Http\Controllers;
 
 use ArthurPerton\Analytics\Data\EventsHelper;
 use ArthurPerton\Analytics\Data\GeoHelper;
+use ArthurPerton\Analytics\Data\GeoUpdater;
 use ArthurPerton\Analytics\Facades\Database;
 use Browser;
 use Carbon\Carbon;
@@ -15,6 +16,11 @@ class EventController extends CpController
 {
     public function store(\Illuminate\Http\Request $request)
     {
+        // TODO Do this somewhere else? 
+        $updater = new GeoUpdater();
+        $updater->update();
+
+
         $data = $request->json()->all();
 
         [$session, $pageview] = $this->prepareData($data);

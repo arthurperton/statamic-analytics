@@ -40,6 +40,11 @@ class GeoHelper
         return $country;
     }
 
+    public function truncate()
+    {
+        Database::connection()->table('ip2geo')->truncate();
+    }
+
     public function insertBatched($from, $to, $country)
     {
         // TODO support ipv6
