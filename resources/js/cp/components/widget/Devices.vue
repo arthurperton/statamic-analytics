@@ -2,7 +2,7 @@
     <div class="card content w-full h-full">
         <div class="flex justify-between">
             <h3 class="font-bold mb-2">Devices</h3>
-            <div class="flex gap-2">
+            <div class="flex gap-3">
                 <button :class="{ 'text-blue-600': type === 'browsers' }" @click="setType('browsers')">Browser</button>
                 <button :class="{ 'text-blue-600': type === 'operatingSystems' }" @click="setType('operatingSystems')">OS</button>
                 <button :class="{ 'text-blue-600': type === 'devices' }" @click="setType('devices')">Size</button>

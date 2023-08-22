@@ -25,16 +25,16 @@
             </ul> -->
             
             <!-- <div class="mt-8 grid gap-12 grid-cols-2"> -->
-            <div class="widget w-1/2 mb-4 px-2">
+            <div class="widget w-full md:w-1/2 mb-4 px-2">
                 <sources :period="period"></sources>
             </div>
-            <div class="widget w-1/2 mb-4 px-2">
+            <div class="widget w-full md:w-1/2 mb-4 px-2">
                 <pages :period="period"></pages>
             </div>
-            <div class="widget w-1/2 mb-4 px-2">
+            <div class="widget w-full md:w-1/2 mb-4 px-2">
                 <locations :period="period"></locations>
             </div>
-            <div class="widget w-1/2 mb-4 px-2">
+            <div class="widget w-full md:w-1/2 mb-4 px-2">
                 <devices :period="period"></devices>
             </div>
             <!-- </div> -->

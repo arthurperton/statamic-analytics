@@ -1,6 +1,6 @@
 <template>
     <div class="card content">
-        <div v-if="data" class="flex justify-start divide-x">
+        <div v-if="data" class="flex justify-start divide-x flex-wrap">
             <div class="pr-8">
                 <div class="text-sm uppercase">Unique Visitors</div>
                 <div class="text-lg font-bold">{{ data['uniqueVisitors'] }}</div>
