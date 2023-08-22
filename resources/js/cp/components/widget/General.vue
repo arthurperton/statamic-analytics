@@ -63,7 +63,7 @@ export default {
                     period: this.period,
                 })
                 .then((result) => {
-                    this.chartData = result.data.data.map(d => [d.day, d.visitors])
+                    this.chartData = result.data.data.map(d => [new Date(d.day * 1000), d.visitors])
                     console.log(this.chartData)
                 });
         }

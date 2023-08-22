@@ -295,7 +295,7 @@ __webpack_require__.r(__webpack_exports__);
         period: this.period
       }).then(function (result) {
         _this.chartData = result.data.data.map(function (d) {
-          return [d.day, d.visitors];
+          return [new Date(d.day * 1000), d.visitors];
         });
         console.log(_this.chartData);
       });

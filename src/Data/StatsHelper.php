@@ -41,8 +41,12 @@ class StatsHelper
             ->where('created', '>=', $from->getTimestamp())
             ->where('created', '<=', $to->getTimestamp())
             ->groupBy('day')
-            ->get();
-        
+            ->get()
+            ->map(function ($record) {
+                $record->day = Carbon::parse($record->day)->getTimestamp();
+                
+                return $record;
+            });
     }
 
     public static function visits(Carbon $from, Carbon $to)
