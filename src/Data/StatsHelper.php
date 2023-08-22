@@ -138,6 +138,7 @@ class StatsHelper
             ->where('created', '>=', $from->getTimestamp())
             ->where('created', '<=', $to->getTimestamp())
             ->groupBy('country')
+            ->orderBy('visitors', 'desc')
             ->get();
     }
 
@@ -151,6 +152,7 @@ class StatsHelper
             ->where('created', '>=', $from->getTimestamp())
             ->where('created', '<=', $to->getTimestamp())
             ->groupBy('browser')
+            ->orderBy('visitors', 'desc')
             ->get();
     }
 
@@ -164,6 +166,7 @@ class StatsHelper
             ->where('created', '>=', $from->getTimestamp())
             ->where('created', '<=', $to->getTimestamp())
             ->groupBy('os')
+            ->orderBy('visitors', 'desc')
             ->get();
     }
 
@@ -177,6 +180,7 @@ class StatsHelper
             ->where('created', '>=', $from->getTimestamp())
             ->where('created', '<=', $to->getTimestamp())
             ->groupBy('device')
+            ->orderBy('visitors', 'desc')
             ->get();
     }
 
