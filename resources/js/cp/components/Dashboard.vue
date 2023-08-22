@@ -1,52 +1,46 @@
 <template>
-    <div class="card p-4 mb-5">
-         <select v-model="period">
-            <option value="last 1 day">Today</option>
-            <option value="last 7 days">Last 7 days</option>
-            <option value="last 30 days">Last 30 days</option>
-            <option value="all time">All time</option>
-        </select>
-
-        <general :period="period"></general>
-
-        <!-- <h3 class="mt-4 font-bold">Chart (for Unique Visitors)</h3>
-        <ul>
-            @foreach ($chart as $point)
-                <li>{{ $point->day }}: {{ $point->visitors }}</li>
-            @endforeach
-        </ul> -->
+    <div>
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="text-lg font-bold ml-4">Analytics</h1>
+            <div class="card p-2">
+                <select v-model="period">
+                    <option value="last 1 day">Today</option>
+                    <option value="last 7 days">Last 7 days</option>
+                    <option value="last 30 days">Last 30 days</option>
+                    <option value="all time">All time</option>
+                </select>
+            </div>
+        </div>
         
-        <div class="mt-8 grid gap-12 grid-cols-2">
-            <sources :period="period"></sources>
-            <pages :period="period"></pages>
-            <locations :period="period"></locations>
-            <devices :period="period"></devices>
+        <div class="widgets flex flex-wrap -mx-2 py-1">
+
+            <div class="widget w-full mb-4 px-2">
+                <general :period="period"></general>
+            </div>
+            <!-- <h3 class="mt-4 font-bold">Chart (for Unique Visitors)</h3>
+            <ul>
+                @foreach ($chart as $point)
+                    <li>{{ $point->day }}: {{ $point->visitors }}</li>
+                @endforeach
+            </ul> -->
+            
+            <!-- <div class="mt-8 grid gap-12 grid-cols-2"> -->
+            <div class="widget w-1/2 mb-4 px-2">
+                <sources :period="period"></sources>
+            </div>
+            <div class="widget w-1/2 mb-4 px-2">
+                <pages :period="period"></pages>
+            </div>
+            <div class="widget w-1/2 mb-4 px-2">
+                <locations :period="period"></locations>
+            </div>
+            <div class="widget w-1/2 mb-4 px-2">
+                <devices :period="period"></devices>
+            </div>
+            <!-- </div> -->
+
         </div>
 
-
-
-       <!--
-
-        <h3 class="mt-4 font-bold">Browser</h3>
-        <ul>
-        @foreach ($browsers as $browser)
-            <li>{{ $browser->browser }}: {{ $browser->visitors }}</li>
-        @endforeach
-        </ul>
-
-        <h3 class="mt-4 font-bold">OS</h3>
-        <ul>
-        @foreach ($operatingSystems as $operatingSystem)
-            <li>{{ $operatingSystem->os }}: {{ $operatingSystem->visitors }}</li>
-        @endforeach
-        </ul>
-
-        <h3 class="mt-4 font-bold">Size</h3>
-        <ul>
-        @foreach ($devices as $device)
-            <li>{{ $device->device }}: {{ $device->visitors }}</li>
-        @endforeach
-        </ul>        -->
     </div>
 </template>
 

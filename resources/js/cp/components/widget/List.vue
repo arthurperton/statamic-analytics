@@ -5,11 +5,11 @@
             <div class="text-right">Visitors</div>
         </div>
         <div 
-            class="flex justify-between"
+            class="flex justify-between gap-8"
             v-for="item in items" 
             :key="item[0]"
         >
-            <div class="flex-grow pl-0">{{ item[0] }}</div> 
+            <div class="flex-grow pl-0 truncate">{{ item[0] }}</div> 
             <div class="text-right">{{ item[1] }}</div>
         </div>
     </div>

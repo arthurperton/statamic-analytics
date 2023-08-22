@@ -1,6 +1,6 @@
 <template>
-    <div class="">
-        <h3 class="font-bold mb-1">Locations</h3>
+    <div class="card content w-full h-full">
+        <h3 class="font-bold mb-2">Locations</h3>
          <list :items="items">
             <template v-slot:header1>Country</template>
         </list>

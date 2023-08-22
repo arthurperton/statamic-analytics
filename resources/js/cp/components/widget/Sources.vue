@@ -1,6 +1,6 @@
 <template>
-    <div class="">
-        <h3 class="font-bold mb-1">Top Sources</h3>
+    <div class="card content w-full h-full">
+        <h3 class="font-bold mb-2">Top Sources</h3>
         <list :items="items">
             <template v-slot:header1>Source</template>
         </list>
@@ -27,7 +27,7 @@ export default {
     computed: {
         items() {
             return (this.data || []).map(item => [
-                item.source  || 'Direct / None', 
+                item.source || 'Direct / None', 
                 item.visitors,
             ])
         }

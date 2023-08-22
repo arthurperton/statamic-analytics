@@ -4,15 +4,7 @@
 
 @section('content')
 
-    <div>
-        <header class="mb-3">
-            <h1>@yield('title')</h1>
-        </header>
-             
-
-        <analytics-dashboard>
-        </analytics-dashboard>
-        
-    </div>
+    <analytics-dashboard>
+    </analytics-dashboard>
 
 @endsection

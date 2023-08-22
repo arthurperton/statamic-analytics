@@ -1,8 +1,8 @@
 <template>
     <div class="card content w-full h-full">
-        <h3 class="font-bold mb-2">Top Pages</h3>
+        <h3 class="font-bold mb-1">Top Sources</h3>
         <list :items="items">
-            <template v-slot:header1>Page</template>
+            <template v-slot:header1>Source</template>
         </list>
     </div>
 </template>
@@ -15,19 +15,19 @@ export default {
     components: {
         List,
     },
-
+    
     mixins: [widget],
 
     data() {
         return {
-            type: 'pages',
+            type: 'sources',
         }
     },
 
     computed: {
-       items() {
+        items() {
             return (this.data || []).map(item => [
-                item.path, 
+                item.source || 'Direct / None', 
                 item.visitors,
             ])
         }

@@ -1,7 +1,7 @@
 <template>
-    <div class="">
-        <div class="flex justify-between mb-1">
-            <h3 class="font-bold">Devices</h3>
+    <div class="card content w-full h-full">
+        <div class="flex justify-between">
+            <h3 class="font-bold mb-2">Devices</h3>
             <div class="flex gap-2">
                 <button :class="{ 'text-blue-600': type === 'browsers' }" @click="setType('browsers')">Browser</button>
                 <button :class="{ 'text-blue-600': type === 'operatingSystems' }" @click="setType('operatingSystems')">OS</button>
