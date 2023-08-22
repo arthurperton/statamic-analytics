@@ -35,18 +35,23 @@ class StatsHelper
 
     public static function uniqueVisitorsChart(Carbon $from, Carbon $to)
     {
-        return Database::connection()
+        $query = Database::connection()
             ->table('sessions')
-            ->selectRaw('DATE(created, \'unixepoch\') as day, COUNT(DISTINCT anonymous_id) as visitors')
             ->where('created', '>=', $from->getTimestamp())
             ->where('created', '<=', $to->getTimestamp())
-            ->groupBy('day')
-            ->get()
-            ->map(function ($record) {
-                $record->day = Carbon::parse($record->day)->getTimestamp();
-                
-                return $record;
-            });
+            ->select('created');
+        
+        if ($from->diff($to)->days <= 1) {
+            $query
+                ->selectRaw('STRFTIME(\'%Y-%m-%d %H\',created, \'unixepoch\') as hour, COUNT(DISTINCT anonymous_id) as visitors')
+                ->groupBy('hour');
+        } else {
+            $query
+                ->selectRaw('DATE(created, \'unixepoch\') as day, COUNT(DISTINCT anonymous_id) as visitors')
+                ->groupBy('day');
+        }
+            
+        return $query->get();
     }
 
     public static function visits(Carbon $from, Carbon $to)

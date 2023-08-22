@@ -39,7 +39,7 @@ export default {
         },
         height: {
             type: Number,
-            default: 400,
+            default: 360,
         },
     },
 
@@ -48,7 +48,7 @@ export default {
             marginTop: 30,
             marginRight: 30,
             marginBottom: 40,
-            marginLeft: 40,
+            marginLeft: 50,
             // data: [],
         };
     },
@@ -114,6 +114,14 @@ export default {
         // this.data = data;
     },
 
+    watch: {
+        data: {
+            immediate: true,
+            handler() {
+                this.draw()
+            },
+        }
+    },
 
     methods: {
         onSize(size) {
@@ -165,15 +173,14 @@ export default {
                 .call((g) =>
                     g.selectAll('line').style('stroke', 'hsl(210, 30%, 95%)'),
                 ) // grey-30
-                .call((g) => g.select('.domain').remove());
+                .call((g) => g.select('.domain').remove())
         },
 
         drawLine(svg) {
             const xScale = this.xScale;
             const yScale = this.yScale;
 
-            const line = d3
-                .line()
+            const line = d3.line()
                 .x(function (d) {
                     return xScale(d[0]);
                 })
@@ -182,12 +189,27 @@ export default {
                 });
             // .curve(d3.curveCardinal);
 
+            // Fill the area below the line:
+            const area = d3.area()
+                .x(function (d) {
+                    return xScale(d[0])
+                })
+                .y0(this.boundsHeight)
+                .y1(function (d) {
+                    return yScale(d[1])
+                })
+
+            svg.append('path')
+                .attr('fill', 'lightsteelblue')
+                .attr('fill-opacity', .2)
+                .attr('d', area(this.data));
+
             svg.append('path')
                 .attr('fill', 'none')
                 .attr('stroke', 'steelblue')
                 .attr('stroke-linejoin', 'round')
                 .attr('stroke-width', 2.5)
-                .attr('d', line(this.data));
+                .attr('d', line(this.data))
         },
     },
 }
