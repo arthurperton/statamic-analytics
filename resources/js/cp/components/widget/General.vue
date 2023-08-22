@@ -22,15 +22,21 @@
                 <div class="text-lg font-bold">{{ visitDuration }}</div>
             </div>
         </div>
+        <line-chart></line-chart>
     </div>
 </template>
 
 <script>
 import widget from './widget'
+import LineChart from './chart/LineChart.vue'
 
 export default {
+    components: {
+        LineChart,
+    },
+    
     mixins: [widget],
-
+    
     data() {
         return {
             type: 'general',
