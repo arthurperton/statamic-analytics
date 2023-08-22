@@ -17,6 +17,7 @@ export default {
             handler() {
                 // console.log(this.period)
                 this.loadData()
+                this.loadMoreData()
             },
         },
     },
@@ -32,6 +33,10 @@ export default {
                     // console.log(result.data.data)
                     this.data = result.data.data
                 });
+        },
+
+        loadMoreData() {
+
         },
     }
 }

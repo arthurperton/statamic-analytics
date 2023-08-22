@@ -29,6 +29,10 @@ import * as d3 from 'd3';
 
 export default {
     props: {
+        data: {
+            type: Array,
+            default: [],
+        },
         width: {
             type: Number,
             default: 800,
@@ -45,7 +49,7 @@ export default {
             marginRight: 30,
             marginBottom: 40,
             marginLeft: 40,
-            data: [],
+            // data: [],
         };
     },
 
@@ -94,20 +98,20 @@ export default {
     },
 
     created() {
-        const date = new Date();
-        date.setHours(0, 0, 0);
+        // const date = new Date();
+        // date.setHours(0, 0, 0);
 
-        const data = [];
-        for (let days = 0; days < 7; days++) {
-            data.push([
-                new Date(date.getTime()),
-                0 + Math.floor(Math.random() * 20),
-            ]);
+        // const data = [];
+        // for (let days = 0; days < 7; days++) {
+        //     data.push([
+        //         new Date(date.getTime()),
+        //         0 + Math.floor(Math.random() * 20),
+        //     ]);
 
-            date.setDate(date.getDate() - 1);
-        }
+        //     date.setDate(date.getDate() - 1);
+        // }
 
-        this.data = data;
+        // this.data = data;
     },
 
 

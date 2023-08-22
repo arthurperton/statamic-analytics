@@ -22,7 +22,7 @@
                 <div class="text-lg font-bold">{{ visitDuration }}</div>
             </div>
         </div>
-        <line-chart></line-chart>
+        <line-chart :data="chartData"></line-chart>
     </div>
 </template>
 
@@ -36,10 +36,12 @@ export default {
     },
     
     mixins: [widget],
-    
+
     data() {
         return {
             type: 'general',
+            selectedType: 'uniqueVisitors',
+            chartData: [],
         }
     },
 
@@ -50,6 +52,20 @@ export default {
             const minutes = (duration - seconds) / 60
 
             return minutes ? `${minutes}m ${seconds}s` : `${seconds}s`
+        }
+    },
+
+    methods: {
+        loadMoreData() {
+            this.$axios
+                .post('/cp/analytics/dashboard/stats', {
+                    type: `${this.selectedType}Chart`,
+                    period: this.period,
+                })
+                .then((result) => {
+                    this.chartData = result.data.data.map(d => [d.day, d.visitors])
+                    console.log(this.chartData)
+                });
         }
     },
 }

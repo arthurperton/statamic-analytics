@@ -274,7 +274,9 @@ __webpack_require__.r(__webpack_exports__);
   mixins: [_widget__WEBPACK_IMPORTED_MODULE_0__["default"]],
   data: function data() {
     return {
-      type: 'general'
+      type: 'general',
+      selectedType: 'uniqueVisitors',
+      chartData: []
     };
   },
   computed: {
@@ -283,6 +285,20 @@ __webpack_require__.r(__webpack_exports__);
       var seconds = duration % 60;
       var minutes = (duration - seconds) / 60;
       return minutes ? "".concat(minutes, "m ").concat(seconds, "s") : "".concat(seconds, "s");
+    }
+  },
+  methods: {
+    loadMoreData: function loadMoreData() {
+      var _this = this;
+      this.$axios.post('/cp/analytics/dashboard/stats', {
+        type: "".concat(this.selectedType, "Chart"),
+        period: this.period
+      }).then(function (result) {
+        _this.chartData = result.data.data.map(function (d) {
+          return [d.day, d.visitors];
+        });
+        console.log(_this.chartData);
+      });
     }
   }
 });
@@ -508,6 +524,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
+    data: {
+      type: Array,
+      "default": []
+    },
     width: {
       type: Number,
       "default": 800
@@ -522,10 +542,11 @@ __webpack_require__.r(__webpack_exports__);
       marginTop: 30,
       marginRight: 30,
       marginBottom: 40,
-      marginLeft: 40,
-      data: []
+      marginLeft: 40
+      // data: [],
     };
   },
+
   computed: {
     boundsWidth: function boundsWidth() {
       return this.width - this.marginLeft - this.marginRight;
@@ -556,14 +577,20 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    var date = new Date();
-    date.setHours(0, 0, 0);
-    var data = [];
-    for (var days = 0; days < 7; days++) {
-      data.push([new Date(date.getTime()), 0 + Math.floor(Math.random() * 20)]);
-      date.setDate(date.getDate() - 1);
-    }
-    this.data = data;
+    // const date = new Date();
+    // date.setHours(0, 0, 0);
+
+    // const data = [];
+    // for (let days = 0; days < 7; days++) {
+    //     data.push([
+    //         new Date(date.getTime()),
+    //         0 + Math.floor(Math.random() * 20),
+    //     ]);
+
+    //     date.setDate(date.getDate() - 1);
+    // }
+
+    // this.data = data;
   },
   methods: {
     onSize: function onSize(size) {
@@ -650,6 +677,7 @@ __webpack_require__.r(__webpack_exports__);
       handler: function handler() {
         // console.log(this.period)
         this.loadData();
+        this.loadMoreData();
       }
     }
   },
@@ -663,7 +691,8 @@ __webpack_require__.r(__webpack_exports__);
         // console.log(result.data.data)
         _this.data = result.data.data;
       });
-    }
+    },
+    loadMoreData: function loadMoreData() {}
   }
 });
 
@@ -1576,7 +1605,7 @@ var render = function () {
           ])
         : _vm._e(),
       _vm._v(" "),
-      _c("line-chart"),
+      _c("line-chart", { attrs: { data: _vm.chartData } }),
     ],
     1
   )
