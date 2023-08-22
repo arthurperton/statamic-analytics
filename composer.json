@@ -17,7 +17,7 @@
         }
     },
     "require": {
-        "statamic/cms": ">=3.3.48",
+        "statamic/cms": "^4.0",
         "hisorange/browser-detect": "^4.5"
     },
     "require-dev": {
