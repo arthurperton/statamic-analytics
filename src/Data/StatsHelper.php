@@ -4,6 +4,7 @@ namespace ArthurPerton\Analytics\Data;
 
 use ArthurPerton\Analytics\Facades\Database;
 use Carbon\Carbon;
+use Locale;
 
 class StatsHelper
 {
@@ -139,7 +140,14 @@ class StatsHelper
             ->where('created', '<=', $to->getTimestamp())
             ->groupBy('country')
             ->orderBy('visitors', 'desc')
-            ->get();
+            ->get()
+            ->map(function ($record) {
+                // \Log::debug('['.$record->country.']');
+                $record->country = (trim($record->country) == 'ZZ')
+                    ? 'Unknown'
+                    : Locale::getDisplayRegion('-'.$record->country, 'en');
+                return $record;
+            });
     }
 
     public static function browsers(Carbon $from, Carbon $to)

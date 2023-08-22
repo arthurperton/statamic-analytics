@@ -100,7 +100,7 @@ class GeoUpdater
                 [$from, $to, $country] = $parts;
 
                 // echo "$from - $to => $country";
-                $geo->insertBatched($from, $to, $country);
+                $geo->insertBatched($from, $to, trim($country));
             }
         }
 
