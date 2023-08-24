@@ -17,10 +17,10 @@ class StatsHelper
             'viewsPerVisit',
             'visitDuration',
         ])
-        ->mapWithKeys(function($type) use ($from, $to) {
-            return [$type => static::$type($from, $to)];
-        })
-        ->all();
+            ->mapWithKeys(function ($type) use ($from, $to) {
+                return [$type => static::$type($from, $to)];
+            })
+            ->all();
     }
 
     public static function uniqueVisitors(Carbon $from, Carbon $to)
@@ -34,22 +34,31 @@ class StatsHelper
 
     public static function uniqueVisitorsChart(Carbon $from, Carbon $to)
     {
-        $query = Database::connection()->table('sessions')
-            ->where('created', '>=', $from->getTimestamp())
-            ->where('created', '<=', $to->getTimestamp());
-        
-        $start = $from->getTimestamp();
-        if ($from->diff($to)->days <= 1) {
-            $query->selectRaw("created - MOD(created - {$start}, 3600) AS timestamp");
-        } else {
-            $query->selectRaw("created - MOD(created - {$start}, 86400) AS timestamp");
-        }
- 
-        $query
-            ->selectRaw('COUNT(DISTINCT anonymous_id) as visitors')
-            ->groupBy('timestamp');
+        $fromSeconds = $from->getTimestamp();
+        $toSeconds = $to->getTimestamp();
 
-        return $query->get();
+        $interval = $from->diff($to)->days <= 1 ? 3600 : 86400;
+
+        $records = Database::connection()->table('sessions')
+            ->where('created', '>=', $from->getTimestamp())
+            ->where('created', '<', $to->getTimestamp())
+            ->selectRaw("created - MOD(created - {$fromSeconds}, {$interval}) AS timestamp")
+            ->selectRaw('COUNT(DISTINCT anonymous_id) as visitors')
+            ->groupBy('timestamp')
+            ->orderBy('timestamp')
+            ->get();
+
+        $series = collect();
+        for ($timestamp = $fromSeconds; $timestamp < $toSeconds; $timestamp += $interval) {
+            $series->put($timestamp, (object) ['timestamp' => $timestamp, 'visitors' => 0]);
+        }
+
+        $records->each(function ($record) use ($series) {
+            $series->put($record->timestamp, $record);
+        });
+
+        return $series->values();
+
     }
 
     public static function visits(Carbon $from, Carbon $to)
@@ -149,6 +158,7 @@ class StatsHelper
                 $record->country = (trim($record->country) == 'ZZ')
                     ? 'Unknown'
                     : Locale::getDisplayRegion('-'.$record->country, 'en');
+
                 return $record;
             });
     }
@@ -191,7 +201,4 @@ class StatsHelper
             ->orderBy('visitors', 'desc')
             ->get();
     }
-
-
-
 }
