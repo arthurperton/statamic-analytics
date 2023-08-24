@@ -38,10 +38,11 @@ class StatsHelper
             ->where('created', '>=', $from->getTimestamp())
             ->where('created', '<=', $to->getTimestamp());
         
+        $start = $from->getTimestamp();
         if ($from->diff($to)->days <= 1) {
-            $query->selectRaw("STRFTIME('%s', STRFTIME('%Y-%m-%d %H:00:00', created, 'unixepoch')) as timestamp");
+            $query->selectRaw("created - MOD(created - {$start}, 3600) AS timestamp");
         } else {
-            $query->selectRaw("STRFTIME('%s', STRFTIME('%Y-%m-%d', created, 'unixepoch')) as timestamp");
+            $query->selectRaw("created - MOD(created - {$start}, 86400) AS timestamp");
         }
  
         $query

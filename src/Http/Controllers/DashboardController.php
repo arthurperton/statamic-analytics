@@ -46,7 +46,7 @@ class DashboardController extends CpController
             $from = Carbon::createFromTimestamp(0);
         } elseif (preg_match('/last (\d+) days?/', $period, $matches)) {
             $days = $matches[1];
-            $to = Carbon::now(); //->startOfDay();
+            $to = Carbon::now()->startOfDay()->addDay();
             $from = $to->clone()->subDays($days);
         } else {
             return response('', 400);
