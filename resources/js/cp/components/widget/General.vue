@@ -63,7 +63,12 @@ export default {
                     period: this.period,
                 })
                 .then((result) => {
-                    this.chartData = result.data.data.map(d => [new Date(d.created * 1e3), d.visitors])
+                    console.log(result.data.data)
+                    this.chartData = result.data.data.map((d) => {
+                        const localDate = new Date(d.timestamp * 1e3);
+                        const date = new Date((parseInt(d.timestamp) + localDate.getTimezoneOffset() * 60) * 1e3)
+                        return [date, d.visitors]
+                    })
                     console.log(this.chartData)
                 });
         }

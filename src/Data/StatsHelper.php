@@ -25,8 +25,7 @@ class StatsHelper
 
     public static function uniqueVisitors(Carbon $from, Carbon $to)
     {
-        return Database::connection()
-            ->table('sessions')
+        return Database::connection()->table('sessions')
             ->distinct('anonymous_id')
             ->where('created', '>=', $from->getTimestamp())
             ->where('created', '<=', $to->getTimestamp())
@@ -35,29 +34,26 @@ class StatsHelper
 
     public static function uniqueVisitorsChart(Carbon $from, Carbon $to)
     {
-        $query = Database::connection()
-            ->table('sessions')
+        $query = Database::connection()->table('sessions')
             ->where('created', '>=', $from->getTimestamp())
-            ->where('created', '<=', $to->getTimestamp())
-            ->select('created');
+            ->where('created', '<=', $to->getTimestamp());
         
         if ($from->diff($to)->days <= 1) {
-            $query
-                ->selectRaw('STRFTIME(\'%Y-%m-%d %H\',created, \'unixepoch\') as hour, COUNT(DISTINCT anonymous_id) as visitors')
-                ->groupBy('hour');
+            $query->selectRaw("STRFTIME('%s', STRFTIME('%Y-%m-%d %H:00:00', created, 'unixepoch')) as timestamp");
         } else {
-            $query
-                ->selectRaw('DATE(created, \'unixepoch\') as day, COUNT(DISTINCT anonymous_id) as visitors')
-                ->groupBy('day');
+            $query->selectRaw("STRFTIME('%s', STRFTIME('%Y-%m-%d', created, 'unixepoch')) as timestamp");
         }
-            
+ 
+        $query
+            ->selectRaw('COUNT(DISTINCT anonymous_id) as visitors')
+            ->groupBy('timestamp');
+
         return $query->get();
     }
 
     public static function visits(Carbon $from, Carbon $to)
     {
-        return Database::connection()
-            ->table('sessions')
+        return Database::connection()->table('sessions')
             ->where('created', '>=', $from->getTimestamp())
             ->where('created', '<=', $to->getTimestamp())
             ->count();
@@ -65,8 +61,7 @@ class StatsHelper
 
     public static function pageviews(Carbon $from, Carbon $to)
     {
-        return Database::connection()
-            ->table('pageviews')
+        return Database::connection()->table('pageviews')
             ->where('created', '>=', $from->getTimestamp())
             ->where('created', '<=', $to->getTimestamp())
             ->count();
@@ -126,8 +121,7 @@ class StatsHelper
 
     public static function pages(Carbon $from, Carbon $to)
     {
-        return Database::connection()
-            ->table('sessions')
+        return Database::connection()->table('sessions')
             ->join('pageviews', 'sessions.id', '=', 'pageviews.session_id')
             ->distinct('anonymous_id')
             ->selectRaw('path, COUNT(DISTINCT anonymous_id) as visitors')
@@ -140,8 +134,7 @@ class StatsHelper
 
     public static function locations(Carbon $from, Carbon $to)
     {
-        return Database::connection()
-            ->table('sessions')
+        return Database::connection()->table('sessions')
             ->distinct('anonymous_id')
             ->selectRaw('country, COUNT(*) as visitors')
             ->whereNotNull('country')
@@ -161,8 +154,7 @@ class StatsHelper
 
     public static function browsers(Carbon $from, Carbon $to)
     {
-        return Database::connection()
-            ->table('sessions')
+        return Database::connection()->table('sessions')
             ->distinct('anonymous_id')
             ->selectRaw('browser, COUNT(*) as visitors')
             ->whereNotNull('browser')
@@ -175,8 +167,7 @@ class StatsHelper
 
     public static function operatingSystems(Carbon $from, Carbon $to)
     {
-        return Database::connection()
-            ->table('sessions')
+        return Database::connection()->table('sessions')
             ->distinct('anonymous_id')
             ->selectRaw('os, COUNT(*) as visitors')
             ->whereNotNull('os')
@@ -189,8 +180,7 @@ class StatsHelper
 
     public static function devices(Carbon $from, Carbon $to)
     {
-        return Database::connection()
-            ->table('sessions')
+        return Database::connection()->table('sessions')
             ->distinct('anonymous_id')
             ->selectRaw('device, COUNT(*) as visitors')
             ->whereNotNull('device')
