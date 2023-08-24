@@ -5,7 +5,7 @@ namespace ArthurPerton\Analytics\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static string function path()
+ * @method static string path()
  * @method static bool exists(): bool
  * @method static void create($overwrite = false)
  * @method static void delete()
