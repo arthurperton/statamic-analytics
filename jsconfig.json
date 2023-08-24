@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "allowJs": true
+    },
+    "vueCompilerOptions": {
+      "target": 2.7
+    },
+    "include": ["resources/**/*.vue", "resources/**/*.js"]
+}

@@ -22,18 +22,26 @@
                 <div class="text-lg font-bold">{{ visitDuration }}</div>
             </div>
         </div>
+        <line-chart :data="chartData"></line-chart>
     </div>
 </template>
 
 <script>
 import widget from './widget'
+import LineChart from './chart/LineChart.vue'
 
 export default {
+    components: {
+        LineChart,
+    },
+    
     mixins: [widget],
 
     data() {
         return {
             type: 'general',
+            selectedType: 'uniqueVisitors',
+            chartData: [],
         }
     },
 
@@ -44,6 +52,20 @@ export default {
             const minutes = (duration - seconds) / 60
 
             return minutes ? `${minutes}m ${seconds}s` : `${seconds}s`
+        }
+    },
+
+    methods: {
+        loadMoreData() {
+            this.$axios
+                .post('/cp/analytics/dashboard/stats', {
+                    type: `${this.selectedType}Chart`,
+                    period: this.period,
+                })
+                .then((result) => {
+                    this.chartData = result.data.data.map(d => [new Date(d.created * 1e3), d.visitors])
+                    console.log(this.chartData)
+                });
         }
     },
 }

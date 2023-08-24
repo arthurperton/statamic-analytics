@@ -4,6 +4,7 @@ namespace ArthurPerton\Analytics\Data;
 
 use ArthurPerton\Analytics\Facades\Database;
 use Carbon\Carbon;
+use Locale;
 
 class StatsHelper
 {
@@ -34,14 +35,23 @@ class StatsHelper
 
     public static function uniqueVisitorsChart(Carbon $from, Carbon $to)
     {
-        return Database::connection()
+        $query = Database::connection()
             ->table('sessions')
-            ->selectRaw('DATE(created, \'unixepoch\') as day, COUNT(DISTINCT anonymous_id) as visitors')
             ->where('created', '>=', $from->getTimestamp())
             ->where('created', '<=', $to->getTimestamp())
-            ->groupBy('day')
-            ->get();
+            ->select('created');
         
+        if ($from->diff($to)->days <= 1) {
+            $query
+                ->selectRaw('STRFTIME(\'%Y-%m-%d %H\',created, \'unixepoch\') as hour, COUNT(DISTINCT anonymous_id) as visitors')
+                ->groupBy('hour');
+        } else {
+            $query
+                ->selectRaw('DATE(created, \'unixepoch\') as day, COUNT(DISTINCT anonymous_id) as visitors')
+                ->groupBy('day');
+        }
+            
+        return $query->get();
     }
 
     public static function visits(Carbon $from, Carbon $to)
@@ -139,7 +149,14 @@ class StatsHelper
             ->where('created', '<=', $to->getTimestamp())
             ->groupBy('country')
             ->orderBy('visitors', 'desc')
-            ->get();
+            ->get()
+            ->map(function ($record) {
+                // \Log::debug('['.$record->country.']');
+                $record->country = (trim($record->country) == 'ZZ')
+                    ? 'Unknown'
+                    : Locale::getDisplayRegion('-'.$record->country, 'en');
+                return $record;
+            });
     }
 
     public static function browsers(Carbon $from, Carbon $to)
