@@ -32,11 +32,15 @@ class FakeEvents extends Fake
         $endTime = Carbon::parse($this->argument('end'))->timestamp;
         $count = (int) $this->argument('count');
 
+        $sessions = collect();
+        $pageviews = collect();
+
         $start = microtime(true);
         for ($i = 0; $i < $count; $i++) {
             $session = $this->createSession($startTime, $endTime);
 
-            Database::connection()->table('sessions')->insert($session);
+            // Database::connection()->table('sessions')->insert($session);
+            $sessions->add($session);
             
             $numberOfPageviews = $this->randomInt(1, 6);
             for ($j = 0; $j < $numberOfPageviews; $j++) {
@@ -44,9 +48,17 @@ class FakeEvents extends Fake
 
                 $pageview['session_id'] = $session['id'];
 
-                Database::connection()->table('pageviews')->insert($pageview);
+                // Database::connection()->table('pageviews')->insert($pageview);
+                $pageviews->add($pageview);
             }
 
+            if ($pageviews->count() > 50000 || $i == $count - 1) {
+                Database::connection()->table('sessions')->insert($sessions->all());
+                Database::connection()->table('pageviews')->insert($pageviews->all());
+
+                $sessions = collect();
+                $pageviews = collect();
+            }
         }
         $this->info(microtime(true) - $start);
 
