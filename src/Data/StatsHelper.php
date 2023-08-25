@@ -126,6 +126,7 @@ class StatsHelper
             ->where('created', '<=', $to->getTimestamp())
             ->groupBy('source')
             ->orderBy('visitors', 'desc')
+            ->orderBy('source', 'asc')
             ->get();
     }
 
@@ -139,6 +140,7 @@ class StatsHelper
             ->where('pageviews.created', '<=', $to->getTimestamp())
             ->groupBy('path')
             ->orderBy('visitors', 'desc')
+            ->orderBy('path', 'asc')
             ->get();
     }
 
@@ -146,16 +148,24 @@ class StatsHelper
     {
         return Database::connection()->table('sessions')
             ->distinct('anonymous_id')
-            ->selectRaw('country, COUNT(*) as visitors')
-            ->whereNotNull('country')
+            ->selectRaw("
+                CASE country 
+                    WHEN NULL THEN 'ZZ'
+                    ELSE TRIM(country, CHAR(10))
+                END country, 
+                COUNT(*) AS visitors
+            ")
+            // ->whereNotNull('country')
             ->where('created', '>=', $from->getTimestamp())
             ->where('created', '<=', $to->getTimestamp())
             ->groupBy('country')
             ->orderBy('visitors', 'desc')
+            ->orderBy('country', 'asc')
             ->get()
             ->map(function ($record) {
                 // \Log::debug('['.$record->country.']');
-                $record->country = (trim($record->country) == 'ZZ')
+                // $record->country = trim($record->country);
+                $record->country = $record->country == 'ZZ'
                     ? 'Unknown'
                     : Locale::getDisplayRegion('-'.$record->country, 'en');
 
@@ -173,6 +183,7 @@ class StatsHelper
             ->where('created', '<=', $to->getTimestamp())
             ->groupBy('browser')
             ->orderBy('visitors', 'desc')
+            ->orderBy('browser', 'asc')
             ->get();
     }
 
@@ -186,6 +197,7 @@ class StatsHelper
             ->where('created', '<=', $to->getTimestamp())
             ->groupBy('os')
             ->orderBy('visitors', 'desc')
+            ->orderBy('os', 'asc')
             ->get();
     }
 
@@ -199,6 +211,14 @@ class StatsHelper
             ->where('created', '<=', $to->getTimestamp())
             ->groupBy('device')
             ->orderBy('visitors', 'desc')
+            ->orderBy('device', 'asc')
             ->get();
+    }
+
+    public static function getStartDate()
+    {
+        $seconds = Database::connection()->table('sessions')->min('created');
+
+        return $seconds ? Carbon::createFromTimestamp($seconds) : null;
     }
 }
