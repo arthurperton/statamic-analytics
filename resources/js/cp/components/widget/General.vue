@@ -7,15 +7,19 @@
             </div>
             <div class="px-8">
                 <div class="text-sm uppercase">Total visits</div>
-                <div class="text-lg font-bold">{{data['visits'] }}</div>
+                <div class="text-lg font-bold">{{ data['visits'] }}</div>
             </div>
             <div class="px-8">
                 <div class="text-sm uppercase">Pageviews</div>
-                <div class="text-lg font-bold">{{data['pageviews'] }}</div>
+                <div class="text-lg font-bold">{{ data['pageviews'] }}</div>
             </div>
             <div class="px-8">
                 <div class="text-sm uppercase">Views per Visit</div>
                 <div class="text-lg font-bold">{{ data['viewsPerVisit'].toFixed(1) }}</div>
+            </div>
+            <div class="px-8">
+                <div class="text-sm uppercase">Bounce Rate</div>
+                <div class="text-lg font-bold">{{ data['bounceRate'] }}%</div>
             </div>
             <div class="pl-8">
                 <div class="text-sm uppercase">Visit Duration</div>

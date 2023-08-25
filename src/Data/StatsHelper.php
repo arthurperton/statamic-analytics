@@ -15,6 +15,7 @@ class StatsHelper
             'visits',
             'pageviews',
             'viewsPerVisit',
+            'bounceRate',
             'visitDuration',
         ])
             ->mapWithKeys(function ($type) use ($from, $to) {
@@ -28,7 +29,7 @@ class StatsHelper
         return Database::connection()->table('sessions')
             ->distinct('anonymous_id')
             ->where('created', '>=', $from->getTimestamp())
-            ->where('created', '<=', $to->getTimestamp())
+            ->where('created', '<', $to->getTimestamp())
             ->count();
     }
 
@@ -65,7 +66,7 @@ class StatsHelper
     {
         return Database::connection()->table('sessions')
             ->where('created', '>=', $from->getTimestamp())
-            ->where('created', '<=', $to->getTimestamp())
+            ->where('created', '<', $to->getTimestamp())
             ->count();
     }
 
@@ -73,7 +74,7 @@ class StatsHelper
     {
         return Database::connection()->table('pageviews')
             ->where('created', '>=', $from->getTimestamp())
-            ->where('created', '<=', $to->getTimestamp())
+            ->where('created', '<', $to->getTimestamp())
             ->count();
     }
 
@@ -87,7 +88,7 @@ class StatsHelper
                     LEFT JOIN   pageviews
                     ON          sessions.id = pageviews.session_id
                     WHERE       sessions.created >= ?
-                    AND         sessions.created <= ?
+                    AND         sessions.created < ?
                     GROUP BY    session_id
                 )
                 SELECT AVG(pageview_count) AS value FROM counts
@@ -101,19 +102,27 @@ class StatsHelper
                 SELECT  AVG(modified - created) AS value
                 FROM    sessions
                 WHERE   sessions.created >= ?
-                AND     sessions.created <= ?
+                AND     sessions.created < ?
             ', [$from->getTimestamp(), $to->getTimestamp()])->value;
     }
 
     public static function bounceRate(Carbon $from, Carbon $to)
     {
-        // return Database::connection()
-        //     ->selectOne('
-        //         SELECT  COUNT AS value
-        //         FROM    sessions
-        //         WHERE   sessions.created >= ?
-        //         AND     sessions.created <= ?
-        //     ', [$from->getTimestamp(), $to->getTimestamp()])->value;
+        return Database::connection()
+            ->selectOne('
+                WITH pages_per_session AS (
+                    SELECT      session_id, COUNT(pageviews.id) as pages
+                    FROM        sessions
+                    LEFT JOIN   pageviews
+                    ON          sessions.id = pageviews.session_id
+                    WHERE       sessions.created >= ?
+                    AND         sessions.created < ?
+                    GROUP BY    session_id
+                )
+                SELECT
+                    100 * (SELECT COUNT(*) FROM pages_per_session WHERE pages = 1) /
+                    (SELECT COUNT(*) FROM pages_per_session) AS value
+            ', [$from->getTimestamp(), $to->getTimestamp()])->value;
     }
 
     public static function sources(Carbon $from, Carbon $to)
@@ -123,7 +132,7 @@ class StatsHelper
             ->distinct('anonymous_id')
             ->selectRaw('source, COUNT(*) as visitors')
             ->where('created', '>=', $from->getTimestamp())
-            ->where('created', '<=', $to->getTimestamp())
+            ->where('created', '<', $to->getTimestamp())
             ->groupBy('source')
             ->orderBy('visitors', 'desc')
             ->orderBy('source', 'asc')
@@ -137,7 +146,7 @@ class StatsHelper
             ->distinct('anonymous_id')
             ->selectRaw('path, COUNT(DISTINCT anonymous_id) as visitors')
             ->where('pageviews.created', '>=', $from->getTimestamp())
-            ->where('pageviews.created', '<=', $to->getTimestamp())
+            ->where('pageviews.created', '<', $to->getTimestamp())
             ->groupBy('path')
             ->orderBy('visitors', 'desc')
             ->orderBy('path', 'asc')
@@ -157,7 +166,7 @@ class StatsHelper
             ")
             // ->whereNotNull('country')
             ->where('created', '>=', $from->getTimestamp())
-            ->where('created', '<=', $to->getTimestamp())
+            ->where('created', '<', $to->getTimestamp())
             ->groupBy('country')
             ->orderBy('visitors', 'desc')
             ->orderBy('country', 'asc')
@@ -180,7 +189,7 @@ class StatsHelper
             ->selectRaw('browser, COUNT(*) as visitors')
             ->whereNotNull('browser')
             ->where('created', '>=', $from->getTimestamp())
-            ->where('created', '<=', $to->getTimestamp())
+            ->where('created', '<', $to->getTimestamp())
             ->groupBy('browser')
             ->orderBy('visitors', 'desc')
             ->orderBy('browser', 'asc')
@@ -194,7 +203,7 @@ class StatsHelper
             ->selectRaw('os, COUNT(*) as visitors')
             ->whereNotNull('os')
             ->where('created', '>=', $from->getTimestamp())
-            ->where('created', '<=', $to->getTimestamp())
+            ->where('created', '<', $to->getTimestamp())
             ->groupBy('os')
             ->orderBy('visitors', 'desc')
             ->orderBy('os', 'asc')
@@ -208,7 +217,7 @@ class StatsHelper
             ->selectRaw('device, COUNT(*) as visitors')
             ->whereNotNull('device')
             ->where('created', '>=', $from->getTimestamp())
-            ->where('created', '<=', $to->getTimestamp())
+            ->where('created', '<', $to->getTimestamp())
             ->groupBy('device')
             ->orderBy('visitors', 'desc')
             ->orderBy('device', 'asc')
