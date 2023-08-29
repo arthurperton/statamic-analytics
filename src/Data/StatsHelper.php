@@ -24,27 +24,29 @@ class StatsHelper
             ->all();
     }
 
-    public static function uniqueVisitors(Carbon $from, Carbon $to)
+    protected static function uniqueVisitorsQuery(Carbon $from, Carbon $to)
     {
         return Database::connection()->table('sessions')
             ->distinct('anonymous_id')
             ->where('created', '>=', $from->getTimestamp())
-            ->where('created', '<', $to->getTimestamp())
-            ->count();
+            ->where('created', '<', $to->getTimestamp());
     }
 
-    public static function uniqueVisitorsChart(Carbon $from, Carbon $to)
+    public static function uniqueVisitors(Carbon $from, Carbon $to)
+    {
+        return static::uniqueVisitorsQuery($from, $to)->count();
+    }
+
+    protected static function chart(\Illuminate\Database\Query\Builder $query, Carbon $from, Carbon $to)
     {
         $fromSeconds = $from->getTimestamp();
         $toSeconds = $to->getTimestamp();
 
         $interval = $from->diff($to)->days <= 1 ? 3600 : 86400;
 
-        $records = Database::connection()->table('sessions')
-            ->where('created', '>=', $from->getTimestamp())
-            ->where('created', '<', $to->getTimestamp())
+        $records = $query
             ->selectRaw("created - MOD(created - {$fromSeconds}, {$interval}) AS timestamp")
-            ->selectRaw('COUNT(DISTINCT anonymous_id) as visitors')
+            ->selectRaw('COUNT(*) as visitors')
             ->groupBy('timestamp')
             ->orderBy('timestamp')
             ->get();
@@ -59,23 +61,45 @@ class StatsHelper
         });
 
         return $series->values();
+    }
 
+    public static function uniqueVisitorsChart(Carbon $from, Carbon $to)
+    {
+        return static::chart(static::uniqueVisitorsQuery($from, $to), $from, $to);
+    }
+
+    protected static function visitsQuery(Carbon $from, Carbon $to)
+    {
+        return Database::connection()->table('sessions')
+            ->where('created', '>=', $from->getTimestamp())
+            ->where('created', '<', $to->getTimestamp());
     }
 
     public static function visits(Carbon $from, Carbon $to)
     {
-        return Database::connection()->table('sessions')
+        return static::visitsQuery($from, $to)->count();
+    }
+
+    public static function visitsChart(Carbon $from, Carbon $to)
+    {
+        return static::chart(static::visitsQuery($from, $to), $from, $to);
+    }
+
+    public static function pageviewsQuery(Carbon $from, Carbon $to)
+    {
+        return Database::connection()->table('pageviews')
             ->where('created', '>=', $from->getTimestamp())
-            ->where('created', '<', $to->getTimestamp())
-            ->count();
+            ->where('created', '<', $to->getTimestamp());
     }
 
     public static function pageviews(Carbon $from, Carbon $to)
     {
-        return Database::connection()->table('pageviews')
-            ->where('created', '>=', $from->getTimestamp())
-            ->where('created', '<', $to->getTimestamp())
-            ->count();
+        return static::pageviewsQuery($from, $to)->count();
+    }
+
+    public static function pageviewsChart(Carbon $from, Carbon $to)
+    {
+        return static::chart(static::pageviewsQuery($from, $to), $from, $to);
     }
 
     public static function viewsPerVisit(Carbon $from, Carbon $to)

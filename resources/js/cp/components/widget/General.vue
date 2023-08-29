@@ -17,7 +17,7 @@
             </div>
             <div class="group cursor-pointer mb-4 pr-8 pl-8 max-xl:w-1/2 xl:border-r" @click="select('viewsPerVisit')">
                 <div class="text-sm uppercase group-hover:text-blue-600" :class="{ 'text-blue-600': selectedType == 'viewsPerVisit' }">Views per Visit</div>
-                <div class="text-lg font-bold">{{ data['viewsPerVisit'].toFixed(1) }}</div>
+                <div class="text-lg font-bold">{{ data['viewsPerVisit'].toFixed(2) }}</div>
             </div>
 
             <div class="group cursor-pointer mb-4 pr-8 xl:pl-8 max-xl:w-1/2 border-r" @click="select('bounceRate')">
@@ -65,6 +65,10 @@ export default {
 
     methods: {
         loadMoreData() {
+            this.loadChartData()
+        },
+
+        loadChartData() {
             this.$axios
                 .post('/cp/analytics/dashboard/stats', {
                     type: `${this.selectedType}Chart`,
@@ -84,7 +88,7 @@ export default {
         select(type) {
             console.log(`select(${type})`)
             this.selectedType = type
-            this.loadData()
+            this.loadChartData()
         },
     },
 }
