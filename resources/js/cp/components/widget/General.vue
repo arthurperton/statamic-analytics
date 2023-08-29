@@ -1,30 +1,34 @@
 <template>
     <div class="card content">
-        <div v-if="data" class="flex justify-start divide-x flex-wrap">
-            <div class="pr-8">
-                <div class="text-sm uppercase">Unique Visitors</div>
+        <div v-if="data" class="flex justify-start flex-wrap">
+
+            <div class="group cursor-pointer mb-4 pr-8 max-xl:w-1/2 border-r" @click="select('uniqueVisitors')">
+                <div class="text-sm uppercase group-hover:text-blue-600" :class="{ 'text-blue-600': selectedType == 'uniqueVisitors' }">Unique Visitors</div>
                 <div class="text-lg font-bold">{{ data['uniqueVisitors'] }}</div>
             </div>
-            <div class="px-8">
-                <div class="text-sm uppercase">Total visits</div>
+            <div class="group cursor-pointer mb-4 pr-8 pl-8 max-xl:w-1/2 xl:border-r" @click="select('visits')">
+                <div class="text-sm uppercase group-hover:text-blue-600":class="{ 'text-blue-600': selectedType == 'visits' }">Total visits</div>
                 <div class="text-lg font-bold">{{ data['visits'] }}</div>
             </div>
-            <div class="px-8">
-                <div class="text-sm uppercase">Pageviews</div>
+
+            <div class="group cursor-pointer mb-4 pr-8 xl:pl-8 max-xl:w-1/2 border-r" @click="select('pageviews')">
+                <div class="text-sm uppercase group-hover:text-blue-600" :class="{ 'text-blue-600': selectedType == 'pageviews' }">Pageviews</div>
                 <div class="text-lg font-bold">{{ data['pageviews'] }}</div>
             </div>
-            <div class="px-8">
-                <div class="text-sm uppercase">Views per Visit</div>
+            <div class="group cursor-pointer mb-4 pr-8 pl-8 max-xl:w-1/2 xl:border-r" @click="select('viewsPerVisit')">
+                <div class="text-sm uppercase group-hover:text-blue-600" :class="{ 'text-blue-600': selectedType == 'viewsPerVisit' }">Views per Visit</div>
                 <div class="text-lg font-bold">{{ data['viewsPerVisit'].toFixed(1) }}</div>
             </div>
-            <div class="px-8">
-                <div class="text-sm uppercase">Bounce Rate</div>
+
+            <div class="group cursor-pointer mb-4 pr-8 xl:pl-8 max-xl:w-1/2 border-r" @click="select('bounceRate')">
+                <div class="text-sm uppercase group-hover:text-blue-600" :class="{ 'text-blue-600': selectedType == 'bounceRate' }">Bounce Rate</div>
                 <div class="text-lg font-bold">{{ data['bounceRate'] }}%</div>
             </div>
-            <div class="pl-8">
-                <div class="text-sm uppercase">Visit Duration</div>
+            <div class="group cursor-pointer mb-4 pl-8 xl:pl-8 max-xl:w-1/2" @click="select('visitDuration')">
+                <div class="text-sm uppercase group-hover:text-blue-600" :class="{ 'text-blue-600': selectedType == 'visitDuration' }">Visit Duration</div>
                 <div class="text-lg font-bold">{{ visitDuration }}</div>
             </div>
+
         </div>
         <line-chart :data="chartData"></line-chart>
     </div>
@@ -75,7 +79,13 @@ export default {
                     })
                     console.log(this.chartData)
                 });
-        }
+        },
+
+        select(type) {
+            console.log(`select(${type})`)
+            this.selectedType = type
+            this.loadData()
+        },
     },
 }
 </script>
