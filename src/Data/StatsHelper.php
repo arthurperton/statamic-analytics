@@ -45,7 +45,7 @@ class StatsHelper
         $interval = $from->diff($to)->days <= 1 ? 3600 : 86400;
 
         $records = $query
-            ->selectRaw("created - MOD(created - {$fromSeconds}, {$interval}) AS timestamp")
+            ->selectRaw("created - ((created - {$fromSeconds}) % {$interval}) AS timestamp")
             ->selectRaw('COUNT(*) as visitors')
             ->groupBy('timestamp')
             ->orderBy('timestamp')
