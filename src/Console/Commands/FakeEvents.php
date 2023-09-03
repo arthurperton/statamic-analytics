@@ -32,12 +32,18 @@ class FakeEvents extends Fake
         $endTime = Carbon::parse($this->argument('end'))->timestamp;
         $count = (int) $this->argument('count');
 
+        $anonymousIds = [];
+        $anonymousIdsCount = floor($count / 5);//($this->randomFloat(1, 5)));
+        for ($i = 0; $i < $anonymousIdsCount; $i++) {
+            $anonymousIds[] = uniqid();
+        }
+
         $sessions = collect();
         $pageviews = collect();
 
         $start = microtime(true);
         for ($i = 0; $i < $count; $i++) {
-            $session = $this->createSession($startTime, $endTime);
+            $session = $this->createSession($startTime, $endTime, $this->randomItem($anonymousIds));
 
             // Database::connection()->table('sessions')->insert($session);
             $sessions->add($session);
@@ -65,11 +71,12 @@ class FakeEvents extends Fake
         return 0;
     }
 
-    public function createSession(int $startTime, int $endTime)
+    public function createSession(int $startTime, int $endTime, string $anonymousId = null)
     {
+        $anonymousId = $anonymousId ?? uniqid();
+
         $fields = [
             'id' => ['id'],
-            'anonymous_id' => ['id'],
             'source' => ['item', ['', 'google.com', 'facebook.com', 'domain1.nl', 'domain2.eu']],
             'browser' => ['item', ['Chrome', 'Edge', 'Firefox', 'Safari']],
             'browser_version' => ['int', 10, 20],
@@ -80,7 +87,9 @@ class FakeEvents extends Fake
             'created' => ['int', $startTime, $endTime],
         ];
 
-        $session = [];
+        $session = [
+            'anonymous_id' => $anonymousId,
+        ];
 
         foreach ($fields as $field => $config) {
             $session[$field] = $this->randomValue($config);
