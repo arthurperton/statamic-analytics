@@ -71,6 +71,7 @@ class StatsHelper
     protected static function visitsQuery(Carbon $from, Carbon $to)
     {
         return Database::connection()->table('sessions')
+            ->distinct('id')
             ->where('created', '>=', $from->getTimestamp())
             ->where('created', '<', $to->getTimestamp());
     }
