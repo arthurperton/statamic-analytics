@@ -7,7 +7,7 @@
                 <div class="text-lg font-bold">{{ data['uniqueVisitors'] }}</div>
             </div>
             <div class="group cursor-pointer mb-4 pr-8 pl-8 max-xl:w-1/2 xl:border-r" @click="select('visits')">
-                <div class="text-sm uppercase group-hover:text-blue-600":class="{ 'text-blue-600': selectedType == 'visits' }">Total visits</div>
+                <div class="text-sm uppercase group-hover:text-blue-600" :class="{ 'text-blue-600': selectedType == 'visits' }">Total visits</div>
                 <div class="text-lg font-bold">{{ data['visits'] }}</div>
             </div>
 
