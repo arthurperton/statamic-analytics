@@ -53,7 +53,7 @@ abstract class Database
         }
     }
 
-    abstract public function createTables($schema);
+    abstract public function createTables(\Illuminate\Database\Schema\Builder $schema);
 
     public function delete()
     {

@@ -79,7 +79,7 @@ export default {
                     this.chartData = result.data.data.map((d) => {
                         const localDate = new Date(d.timestamp * 1e3);
                         const date = new Date((parseInt(d.timestamp) + localDate.getTimezoneOffset() * 60) * 1e3)
-                        return [date, d.visitors]
+                        return [date, d.value]
                     })
                     console.log(this.chartData)
                 });
