@@ -46,14 +46,14 @@ abstract class Database
 
         File::put($this->path, '');
 
-        $this->createTables(Schema::connection($this->name));
+        $this->createTables();
 
         if ($this->wal) {
             $this->connection()->statement('PRAGMA journal_mode=WAL;');
         }
     }
 
-    abstract public function createTables(\Illuminate\Database\Schema\Builder $schema);
+    abstract public function createTables();
 
     public function delete()
     {
@@ -84,5 +84,10 @@ abstract class Database
     public function connection(): ConnectionInterface
     {
         return DB::connection($this->name);
+    }
+
+    public function schema(): \Illuminate\Database\Schema\Builder
+    {
+        return Schema::connection($this->name);
     }
 }

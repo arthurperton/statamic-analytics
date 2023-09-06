@@ -5,6 +5,7 @@ namespace ArthurPerton\Analytics;
 use ArthurPerton\Analytics\Facades\Database;
 use Statamic\Facades\CP\Nav;
 use Statamic\Providers\AddonServiceProvider;
+use Statamic\Statamic;
 
 class ServiceProvider extends AddonServiceProvider
 {
@@ -32,6 +33,10 @@ class ServiceProvider extends AddonServiceProvider
 
         $this->bootDatabase();
         $this->bootNavigation();
+
+        Statamic::afterInstalled(function ($command) {
+            Database::createTables();
+        });
     }
 
     protected function bootDatabase()

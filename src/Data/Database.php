@@ -3,7 +3,6 @@
 namespace ArthurPerton\Analytics\Data;
 
 use ArthurPerton\Analytics\Sqlite\Database as SqliteDatabase;
-use GraphQL\Type\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 
@@ -12,10 +11,10 @@ class Database extends SqliteDatabase
     protected $name = 'analytics';
     protected $wal = true;
 
-    public function createTables(\Illuminate\Database\Schema\Builder $schema)
+    public function createTables()
     {
-        // TODO versioning / migrations
-
+        $schema = $this->schema();
+        
         if (! $schema->hasTable('dummy')) {
             $schema->create('dummy', function (Blueprint $table) {
                 $table->id('id');
@@ -28,7 +27,7 @@ class Database extends SqliteDatabase
                 $table->string('ip_to');
                 $table->string('country');
 
-                // TODO indices
+                $table->unique(['ip_from', 'ip_to']);
             });
         }
 
@@ -44,7 +43,7 @@ class Database extends SqliteDatabase
                 $table->string('browser_version');
                 $table->string('os');
                 $table->string('os_version');
-                $table->string('device'); // desktop, mobile
+                $table->string('device');
 
                 $table->string('country')->nullable();
                 $table->string('region')->nullable();
@@ -53,7 +52,7 @@ class Database extends SqliteDatabase
                 $table->unsignedInteger('created');
                 $table->unsignedInteger('modified');
 
-                // TODO indices
+                // TODO indices?
             });
         }
 
@@ -74,12 +73,12 @@ class Database extends SqliteDatabase
 
                 $table->unsignedInteger('created');
 
-                // TODO indices
+                // TODO indices?
             });
         }
 
         if (! $schema->hasTable('v_sessions_pageviews')) {
-            DB::statement("
+            DB::statement('
                 CREATE VIEW v_sessions_pageviews
                 AS
                 SELECT      session_id,
@@ -90,9 +89,7 @@ class Database extends SqliteDatabase
                 ON          sessions.id = pageviews.session_id
                 GROUP BY    session_id
                 ORDER BY    session_id
-            ");
+            ');
         }
-        
-       
     }
 }
