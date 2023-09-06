@@ -2,7 +2,6 @@
 
 namespace ArthurPerton\Analytics;
 
-use ArthurPerton\Analytics\Facades\Database;
 use Statamic\Facades\CP\Nav;
 use Statamic\Providers\AddonServiceProvider;
 use Statamic\Statamic;
@@ -10,6 +9,7 @@ use Statamic\Statamic;
 class ServiceProvider extends AddonServiceProvider
 {
     protected $commands = [
+        Console\Commands\CreateDatabase::class,
         Console\Commands\FakeEvents::class,
         Console\Commands\UpdateGeo::class,
     ];
@@ -29,19 +29,19 @@ class ServiceProvider extends AddonServiceProvider
 
     public function bootAddon()
     {
-        $this->publishables[__DIR__.'/../dist/js/web.js'] = public_path('vendor/analytics/js/web.js');
-
-        $this->bootDatabase();
+        $this->addPublishables();
+        
         $this->bootNavigation();
 
         Statamic::afterInstalled(function ($command) {
-            Database::createTables();
+            $command->call('analytics:create-database');
+            $command->call('analytics:update-geo');
         });
     }
 
-    protected function bootDatabase()
+    protected function addPublishables()
     {
-        Database::create();
+        $this->publishables[__DIR__.'/../dist/js/web.js'] = public_path('vendor/analytics/js/web.js');
     }
 
     protected function bootNavigation()
