@@ -38,31 +38,6 @@ class StatsHelper
         return static::uniqueVisitorsQuery($from, $to)->value('value');
     }
 
-    protected static function chart(\Illuminate\Database\Query\Builder $query, Carbon $from, Carbon $to)
-    {
-        $fromSeconds = $from->getTimestamp();
-        $toSeconds = $to->getTimestamp();
-
-        $interval = $from->diff($to)->days <= 1 ? 3600 : 86400;
-
-        $records = $query
-            ->selectRaw("created - ((created - {$fromSeconds}) % {$interval}) AS timestamp")
-            ->groupBy('timestamp')
-            ->orderBy('timestamp')
-            ->get();
-
-        $series = collect();
-        for ($timestamp = $fromSeconds; $timestamp < $toSeconds; $timestamp += $interval) {
-            $series->put($timestamp, (object) ['timestamp' => $timestamp, 'value' => 0]);
-        }
-
-        $records->each(function ($record) use ($series) {
-            $series->put($record->timestamp, $record);
-        });
-
-        return $series->values();
-    }
-
     public static function uniqueVisitorsChart(Carbon $from, Carbon $to)
     {
         return static::chart(static::uniqueVisitorsQuery($from, $to), $from, $to);
@@ -86,59 +61,6 @@ class StatsHelper
     {
         return static::chart(static::visitsQuery($from, $to), $from, $to);
     }
-
-    // public static function visits(Carbon|int $from, Carbon|int $to)
-    // {
-    //     if ($from instanceof Carbon) {
-    //         $from = $from->getTimestamp();
-    //     }
-    //     if ($to instanceof Carbon) {
-    //         $to = $to->getTimestamp();
-    //     }
-
-    //     return Database::connection()
-    //         ->selectOne("
-    //             SELECT      COUNT(*) as value 
-    //             FROM        sessions
-    //             WHERE       created >= :from
-    //             AND         created <= :to
-    //         ", ['from' => $from, 'to' => $to])
-    //         ->value;
-    // }
-
-    // public static function visitsChart(Carbon|int $from, Carbon|int $to)
-    // {
-    //     if ($from instanceof Carbon) {
-    //         $from = $from->getTimestamp();
-    //     }
-    //     if ($to instanceof Carbon) {
-    //         $to = $to->getTimestamp();
-    //     }
-
-    //     $interval = $to - $from <= 86400 ? 3600 : 86400;
-        
-    //     $records = Database::connection()
-    //         ->select("
-    //             SELECT      COUNT(*) as value,
-    //                         created - ((created - 0) % 86400) AS timestamp
-    //             FROM        sessions
-    //             WHERE       created >= :from
-    //             AND         created <= :to
-    //             GROUP BY    timestamp
-    //             ORDER BY    timestamp
-    //         ", ['from' => $from, 'to' => $to]);
-
-    //     $series = collect();
-    //     for ($timestamp = $from; $timestamp < $to; $timestamp += $interval) {
-    //         $series->put($timestamp, (object) ['timestamp' => $timestamp, 'visitors' => 0]);
-    //     }
-
-    //     collect($records)->each(function ($record) use ($series) {
-    //         $series->put($record->timestamp, $record);
-    //     });
-
-    //     return $series->values();
-    // }
 
     protected static function pageviewsQuery(Carbon $from, Carbon $to)
     {
@@ -197,31 +119,48 @@ class StatsHelper
         return static::chart(static::visitDurationQuery($from, $to), $from, $to);
     }
 
-    // protected static function bounceRateQuery(Carbon $from, Carbon $to)
-    // {
-    //     return Database::connection()
-    //     ->table('v_sessions_pageviews')
-    //     ->selectRaw('100 * (SELECT count(*) FROM pages_per_session WHERE pages = 1) /
-    //     (SELECT COUNT(*) FROM pages_per_session) AS value
-    // }
+    protected static function bounceRateQuery(Carbon $from, Carbon $to)
+    {
+        return Database::connection()
+            ->table('v_sessions_pageviews')
+            ->selectRaw('100.0 * sum(CASE WHEN pageview_count = 1 THEN 1 ELSE 0 END) / count(*) AS value')
+            ->where('created', '>=', $from->getTimestamp())
+            ->where('created', '<', $to->getTimestamp());
+    }
 
     public static function bounceRate(Carbon $from, Carbon $to)
     {
-        return Database::connection()
-            ->selectOne('
-                WITH pages_per_session AS (
-                    SELECT      session_id, COUNT(pageviews.id) as pages
-                    FROM        sessions
-                    LEFT JOIN   pageviews
-                    ON          sessions.id = pageviews.session_id
-                    WHERE       sessions.created >= ?
-                    AND         sessions.created < ?
-                    GROUP BY    session_id
-                )
-                SELECT
-                    100 * (SELECT COUNT(*) FROM pages_per_session WHERE pages = 1) /
-                    (SELECT COUNT(*) FROM pages_per_session) AS value
-            ', [$from->getTimestamp(), $to->getTimestamp()])->value;
+        return static::bounceRateQuery($from, $to)->value('value');
+    }
+
+    public static function bounceRateChart(Carbon $from, Carbon $to)
+    {
+        return static::chart(static::bounceRateQuery($from, $to), $from, $to);
+    }
+
+    protected static function chart(\Illuminate\Database\Query\Builder $query, Carbon $from, Carbon $to)
+    {
+        $fromSeconds = $from->getTimestamp();
+        $toSeconds = $to->getTimestamp();
+
+        $interval = $from->diff($to)->days <= 1 ? 3600 : 86400;
+
+        $records = $query
+            ->selectRaw("created - ((created - {$fromSeconds}) % {$interval}) AS timestamp")
+            ->groupBy('timestamp')
+            ->orderBy('timestamp')
+            ->get();
+
+        $series = collect();
+        for ($timestamp = $fromSeconds; $timestamp < $toSeconds; $timestamp += $interval) {
+            $series->put($timestamp, (object) ['timestamp' => $timestamp, 'value' => 0]);
+        }
+
+        $records->each(function ($record) use ($series) {
+            $series->put($record->timestamp, $record);
+        });
+
+        return $series->values();
     }
 
     public static function sources(Carbon $from, Carbon $to)

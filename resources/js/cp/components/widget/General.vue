@@ -22,7 +22,7 @@
 
             <div class="group cursor-pointer mb-4 pr-8 xl:pl-8 max-xl:w-1/2 border-r" @click="select('bounceRate')">
                 <div class="text-sm uppercase group-hover:text-blue-600" :class="{ 'text-blue-600': selectedType == 'bounceRate' }">Bounce Rate</div>
-                <div class="text-lg font-bold">{{ data['bounceRate'] }}%</div>
+                <div class="text-lg font-bold">{{ data['bounceRate'].toFixed() }}%</div>
             </div>
             <div class="group cursor-pointer mb-4 pl-8 xl:pl-8 max-xl:w-1/2" @click="select('visitDuration')">
                 <div class="text-sm uppercase group-hover:text-blue-600" :class="{ 'text-blue-600': selectedType == 'visitDuration' }">Visit Duration</div>
