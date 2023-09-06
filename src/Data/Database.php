@@ -4,7 +4,6 @@ namespace ArthurPerton\Analytics\Data;
 
 use ArthurPerton\Analytics\Sqlite\Database as SqliteDatabase;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 
 class Database extends SqliteDatabase
 {
@@ -14,7 +13,7 @@ class Database extends SqliteDatabase
     public function createTables()
     {
         $schema = $this->schema();
-        
+
         if (! $schema->hasTable('dummy')) {
             $schema->create('dummy', function (Blueprint $table) {
                 $table->id('id');
@@ -77,19 +76,24 @@ class Database extends SqliteDatabase
             });
         }
 
-        if (! $schema->hasTable('v_sessions_pageviews')) {
-            DB::statement('
-                CREATE VIEW v_sessions_pageviews
-                AS
-                SELECT      session_id,
-                            sessions.created, 
-                            count(*) AS pageview_count
-                FROM        sessions
-                LEFT JOIN   pageviews
-                ON          sessions.id = pageviews.session_id
-                GROUP BY    session_id
-                ORDER BY    session_id
-            ');
-        }
+        $this->createViews();
+    }
+
+    protected function createViews()
+    {
+        $this->schema()->dropAllViews();
+
+        $this->connection()->statement('
+            CREATE VIEW v_sessions_pageviews
+            AS
+            SELECT      session_id,
+                        sessions.created, 
+                        count(*) AS pageview_count
+            FROM        sessions
+            LEFT JOIN   pageviews
+            ON          sessions.id = pageviews.session_id
+            GROUP BY    session_id
+            ORDER BY    session_id
+        ');
     }
 }
