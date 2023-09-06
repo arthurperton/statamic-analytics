@@ -41,6 +41,9 @@ abstract class Database
         $this->connection()->disconnect();
 
         if ($overwrite || ! $this->exists()) {
+            File::delete($this->path);
+            File::delete($this->path.'-journal');
+            File::delete($this->path.'-shm');
             File::put($this->path, '');
         }
 

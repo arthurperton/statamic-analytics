@@ -20,9 +20,15 @@ class CreateDatabase extends Command
 
     public function handle(): int
     {
-        $this->info('Creating SQLite database...');
+        $overwrite = (bool) $this->option('overwrite');
+
+        if ($overwrite) {
+            $this->info('Creating SQLite database, overwriting it when it already exists...');
+        } else {
+            $this->info('Creating SQLite database or updating it when it already exists...');
+        }
         
-        Database::create((bool) $this->option('overwrite'));
+        Database::create($overwrite);
 
         $this->line('Database created.');
 

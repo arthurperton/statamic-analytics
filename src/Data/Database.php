@@ -12,6 +12,12 @@ class Database extends SqliteDatabase
 
     public function createTables()
     {
+        $this->createTablesStep1();
+        $this->createTablesStep2();
+    }
+
+    protected function createTablesStep1()
+    {
         $schema = $this->schema();
 
         if (! $schema->hasTable('dummy')) {
@@ -36,7 +42,7 @@ class Database extends SqliteDatabase
 
                 $table->string('anonymous_id');
 
-                $table->string('source')->nullable(); // TODO move /copy to page?
+                $table->string('source')->nullable();
 
                 $table->string('browser');
                 $table->string('browser_version');
@@ -51,7 +57,7 @@ class Database extends SqliteDatabase
                 $table->unsignedInteger('created');
                 $table->unsignedInteger('modified');
 
-                // TODO indices?
+                $table->index('created');
             });
         }
 
@@ -67,20 +73,13 @@ class Database extends SqliteDatabase
                 $table->string('url')->nullable();
                 $table->string('path');
                 $table->string('referrer_path')->nullable();
-                // $table->string('hash')->nullable();
-                // $table->string('search')->nullable();
 
                 $table->unsignedInteger('created');
 
-                // TODO indices?
+                $table->index('created');
             });
         }
 
-        $this->createViews();
-    }
-
-    protected function createViews()
-    {
         $this->schema()->dropAllViews();
 
         $this->connection()->statement('
@@ -95,5 +94,10 @@ class Database extends SqliteDatabase
             GROUP BY    session_id
             ORDER BY    session_id
         ');
+    }
+
+    protected function createTablesStep2()
+    {
+        // Add changes to the existing database here.
     }
 }
