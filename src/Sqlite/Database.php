@@ -38,19 +38,15 @@ abstract class Database
 
     public function create($overwrite = false)
     {
-        if (! $overwrite && $this->exists()) {
-            return;
-        }
-
         $this->connection()->disconnect();
 
-        File::put($this->path, '');
+        if ($overwrite || ! $this->exists()) {
+            File::put($this->path, '');
+        }
 
         $this->createTables();
 
-        if ($this->wal) {
-            $this->connection()->statement('PRAGMA journal_mode=WAL;');
-        }
+        $this->connection()->statement('PRAGMA journal_mode='.($this->wal ? 'WAL' : 'DELETE').';');
     }
 
     abstract public function createTables();
