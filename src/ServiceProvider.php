@@ -39,6 +39,11 @@ class ServiceProvider extends AddonServiceProvider
         });
     }
 
+    protected function schedule($schedule)
+    {
+        $schedule->command('analytics:update-geo')->daily();
+    }
+
     protected function addPublishables()
     {
         $this->publishables[__DIR__.'/../dist/js/web.js'] = public_path('vendor/analytics/js/web.js');
