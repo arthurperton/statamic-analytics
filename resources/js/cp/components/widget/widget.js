@@ -30,6 +30,7 @@ export default {
                 })
                 .then((result) => {
                     // console.log(result.data.data)
+                    console.log(result.data.meta)
                     this.data = result.data.data
                 });
 

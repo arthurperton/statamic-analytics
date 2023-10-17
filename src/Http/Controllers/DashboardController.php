@@ -30,9 +30,18 @@ class DashboardController extends CpController
         } else {
             return response('', 400);
         }
+        
+        $start = microtime(true);
+        $data = StatsHelper::$method($from, $to);
+        $duration = round(1E3 * (microtime(true) - $start));
 
         return response()->json([
-            'data' => StatsHelper::$method($from, $to),
+            'data' => $data,
+            'meta' => [
+                'type' => $method,
+                'period' => $period,
+                'queryDuration' => $duration,
+            ]
         ]);
     }
 }

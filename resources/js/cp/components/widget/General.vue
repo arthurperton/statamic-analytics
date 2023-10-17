@@ -75,18 +75,19 @@ export default {
                     period: this.period,
                 })
                 .then((result) => {
-                    console.log(result.data.data)
+                    // console.log(result.data.data)
+                    console.log(result.data.meta)
                     this.chartData = result.data.data.map((d) => {
                         const localDate = new Date(d.timestamp * 1e3);
                         const date = new Date((parseInt(d.timestamp) + localDate.getTimezoneOffset() * 60) * 1e3)
                         return [date, d.value]
                     })
-                    console.log(this.chartData)
+                    // console.log(this.chartData)
                 });
         },
 
         select(type) {
-            console.log(`select(${type})`)
+            // console.log(`select(${type})`)
             this.selectedType = type
             this.loadChartData()
         },
