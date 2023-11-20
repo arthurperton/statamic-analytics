@@ -11,7 +11,7 @@ class DashboardController extends CpController
 {
     public function index()
     {
-        return view('analytics::dashboard');
+        return view('analytics::iframecontent');
     }
 
     public function stats(Request $request)
