@@ -11,6 +11,11 @@ class DashboardController extends CpController
 {
     public function index()
     {
+        return view('analytics::dashboard');
+    }
+
+    public function iframecontent()
+    {
         return view('analytics::iframecontent');
     }
 

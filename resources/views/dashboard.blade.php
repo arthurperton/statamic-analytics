@@ -4,7 +4,6 @@
 
 @section('content')
 
-    <analytics-dashboard>
-    </analytics-dashboard>
+    <iframe src="/cp/analytics/iframecontent" width="100%" height="100%"></iframe>
 
 @endsection
