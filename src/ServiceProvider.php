@@ -2,6 +2,7 @@
 
 namespace ArthurPerton\Analytics;
 
+use ArthurPerton\Analytics\Http\Livewire\Chart;
 use ArthurPerton\Analytics\Http\Livewire\Counter;
 use Livewire\Livewire;
 use Statamic\Facades\CP\Nav;
@@ -41,6 +42,7 @@ class ServiceProvider extends AddonServiceProvider
         });
 
         Livewire::component('counter', Counter::class);
+        Livewire::component('chart', Chart::class);
     }
 
     protected function schedule($schedule)
