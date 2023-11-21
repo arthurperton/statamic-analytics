@@ -2,6 +2,8 @@
 
 namespace ArthurPerton\Analytics;
 
+use ArthurPerton\Analytics\Http\Livewire\Counter;
+use Livewire\Livewire;
 use Statamic\Facades\CP\Nav;
 use Statamic\Providers\AddonServiceProvider;
 use Statamic\Statamic;
@@ -37,6 +39,8 @@ class ServiceProvider extends AddonServiceProvider
             $command->call('analytics:create-database');
             $command->call('analytics:update-geo');
         });
+
+        Livewire::component('counter', Counter::class);
     }
 
     protected function schedule($schedule)

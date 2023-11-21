@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* These styles make it possible to use an iframe on the Analytics Dashboard */
+
+#statamic { 
+    @apply h-screen;
+}
+
+.analytics-main { 
+    @apply w-full h-full;
+}
+
+.analytics-page-wrapper { 
+    @apply w-full h-full p-0 max-w-none;
+}

@@ -18,7 +18,8 @@
     },
     "require": {
         "statamic/cms": "^4.0",
-        "hisorange/browser-detect": "^4.5"
+        "hisorange/browser-detect": "^4.5",
+        "livewire/livewire": "^3.2"
     },
     "require-dev": {
         "laravel/pint": "^1.10"
