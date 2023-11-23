@@ -7,6 +7,7 @@ use ArthurPerton\Analytics\Http\Livewire\Chart;
 use ArthurPerton\Analytics\Http\Livewire\Counter;
 use ArthurPerton\Analytics\Http\Livewire\Dashboard;
 use ArthurPerton\Analytics\Http\Livewire\PeriodSelector;
+use ArthurPerton\Analytics\Http\Livewire\TrendChart;
 use ArthurPerton\Analytics\Http\Livewire\UniqueVisitors;
 use Livewire\Livewire;
 use Statamic\Facades\CP\Nav;
@@ -50,6 +51,7 @@ class ServiceProvider extends AddonServiceProvider
         Livewire::component('counter', Counter::class);
         Livewire::component('dashboard', Dashboard::class);
         Livewire::component('period-selector', PeriodSelector::class);
+        Livewire::component('trend-chart', TrendChart::class);
     }
 
     protected function schedule($schedule)
