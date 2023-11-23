@@ -21,16 +21,27 @@ class TrendChart extends Component
         return view('analytics::livewire.trend-chart');
     }
 
-    public function boot()
+    // public function dehydrate()
+    // {
+    //     $this->sendData();
+    // }
+
+    // public function updated($property)
+    // { 
+    //     if ($property === 'period') {
+    //         $this->sendData();
+    //     }
+    // }
+
+    public function updated()
     {
-        $this->sendData();
+        $this->dispatch('updated');
     }
 
-    public function updated($property)
-    { 
-        if ($property === 'period') {
-            $this->sendData();
-        }
+    public function rendered()
+    {
+        // $this->dispatch('rendered');
+        $this->sendData();
     }
 
     protected function sendData()
@@ -38,8 +49,7 @@ class TrendChart extends Component
         $this->dispatch('data', $this->data());
     }
 
-
-    #[Computed]
+    // #[Computed]
     public function data()
     {
         $to = Carbon::today();
