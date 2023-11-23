@@ -11,9 +11,11 @@
     
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 </head>
-<body class="p-12">
+<body class="px-12 py-6 text-slate-600">
 
-    <div class="shadow-md bg-white rounded-xl p-6">
+    <livewire:dashboard />
+
+    {{-- <div class="shadow-md bg-white rounded-xl p-6">
         <h1>Inline Frame Contents</h1>
 
         <livewire:counter />
@@ -22,7 +24,7 @@
         
         <livewire:chart />
 
-    </div>
+    </div> --}}
 
     @livewireScripts
 </body>

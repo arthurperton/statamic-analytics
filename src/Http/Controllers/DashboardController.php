@@ -14,9 +14,9 @@ class DashboardController extends CpController
         return view('analytics::dashboard');
     }
 
-    public function iframecontent()
+    public function content()
     {
-        return view('analytics::iframecontent');
+        return view('analytics::dashboard-content');
     }
 
     public function stats(Request $request)

@@ -2,8 +2,12 @@
 
 namespace ArthurPerton\Analytics;
 
+use ArthurPerton\Analytics\Http\Livewire\Aggregate;
 use ArthurPerton\Analytics\Http\Livewire\Chart;
 use ArthurPerton\Analytics\Http\Livewire\Counter;
+use ArthurPerton\Analytics\Http\Livewire\Dashboard;
+use ArthurPerton\Analytics\Http\Livewire\PeriodSelector;
+use ArthurPerton\Analytics\Http\Livewire\UniqueVisitors;
 use Livewire\Livewire;
 use Statamic\Facades\CP\Nav;
 use Statamic\Providers\AddonServiceProvider;
@@ -41,8 +45,11 @@ class ServiceProvider extends AddonServiceProvider
             $command->call('analytics:update-geo');
         });
 
-        Livewire::component('counter', Counter::class);
+        Livewire::component('aggregate', Aggregate::class);
         Livewire::component('chart', Chart::class);
+        Livewire::component('counter', Counter::class);
+        Livewire::component('dashboard', Dashboard::class);
+        Livewire::component('period-selector', PeriodSelector::class);
     }
 
     protected function schedule($schedule)

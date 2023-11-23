@@ -5,6 +5,6 @@
 
 @section('content')
 
-    <iframe src="/cp/analytics/iframecontent" class="w-full h-full"></iframe>
+    <iframe src="/cp/analytics/dashboard-content" class="w-full h-full"></iframe>
 
 @endsection
