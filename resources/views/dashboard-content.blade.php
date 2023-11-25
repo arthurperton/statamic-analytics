@@ -11,7 +11,7 @@
     
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 </head>
-<body class="px-12 py-6 text-slate-600">
+<body class="m-0 p-0 text-slate-600">
 
     <livewire:dashboard />
 

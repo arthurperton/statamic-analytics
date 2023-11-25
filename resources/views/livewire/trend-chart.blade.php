@@ -1,6 +1,6 @@
 <div class="shadow-md bg-white rounded-xl px-4 pt-4">
-    {{-- <h2 class="text-slate-500 mb-1">Unique Visitors</h2> --}}
-    <div id="chart" class="w-full h-96"></div>
+
+    <div wire:ignore id="chart" class="w-full h-96 transition-all duration-150" wire:loading.class="opacity-0 -translate-y-1"></div>
 
     @script
     <script type="text/javascript">
@@ -37,20 +37,17 @@
         //     { timestamp: 'C', value: 3 },
         // ]
 
+        const chart = echarts.init(document.getElementById('chart'));
+        window.addEventListener('resize', function() {
+            chart.resize();
+        });
+
         function createChart(data) {
-            console.log('createChart')
-            // const data = await $wire.data()
-            // console.log(document.getElementById('chart'))
-            const chart = echarts.init(document.getElementById('chart'));
-            // console.log('chart', chart)
-            window.addEventListener('resize', function() {
-                chart.resize();
-            });
-            // console.log(data)
+            
             option.title = { text: 'Unique Visitors' }
             option.xAxis.data = data.map(d => d.timestamp)
             option.series[0].data = data.map(d => d.value)
-            // console.log(option)
+
             chart.setOption(option);
         }
 

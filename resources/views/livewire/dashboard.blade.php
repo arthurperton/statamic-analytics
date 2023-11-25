@@ -1,11 +1,11 @@
-<div class="mx-auto max-w-7xl flex flex-col gap-6">
+<div class="mx-auto max-w-7xl px-6 py-6 flex flex-col gap-4">
     
     <div class="flex flex-col">
         <h1 class="text-xl mb-6 text-slate-700">Anayltics Dashboard</h1>
         <livewire:period-selector wire:model.change="period" />
     </div>
     
-    <div class="w-full grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-6">
+    <div class="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
         <livewire:aggregate title="Unique Visitors" query="UniqueVisitors" :period="$period" />
         <livewire:aggregate title="Total Visits" query="Visits" :period="$period" />
         <livewire:aggregate title="Pageviews" query="Pageviews" :period="$period" />
