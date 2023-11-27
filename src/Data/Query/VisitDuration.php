@@ -3,16 +3,20 @@
 namespace ArthurPerton\Analytics\Data\Query;
 
 use ArthurPerton\Analytics\Facades\Database;
-use Carbon\Carbon;
 
-class VisitDuration implements Query
+class VisitDuration extends AbstractQuery
 {
-    public function query(Carbon $from, Carbon $to)
+    public function query()
     {
         return Database::connection()
             ->table('sessions')
             ->selectRaw('AVG(modified - created) AS value')
-            ->where('created', '>=', $from->getTimestamp())
-            ->where('created', '<', $to->getTimestamp());
+            ->where('created', '>=', $this->from->getTimestamp())
+            ->where('created', '<', $this->to->getTimestamp());
+    }
+
+    public function data()
+    {
+        return $this->query()->value('value');
     }
 }

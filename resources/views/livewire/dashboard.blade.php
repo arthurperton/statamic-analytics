@@ -16,4 +16,9 @@
     
     <livewire:trend-chart query="UniqueVisitors" :period="$period" />
 
+    <div class="flex gap-4">
+        <livewire:top-list title="Top Sources" query="TopSources" :period="$period" />
+        <livewire:top-list title="Top Pages" query="TopPages" :period="$period" />
+    </div>
+
 </div>

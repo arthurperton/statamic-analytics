@@ -6,31 +6,32 @@ use Carbon\Carbon;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Reactive;
 use Livewire\Component;
- 
-class Aggregate extends Component
+
+class TopList extends Component
 {
     #[Reactive]
     public $period;
-    
+
     public $title;
-    
+
     public $query;
 
-    public $decimals = 0;
-
-    public $unit;
-
     #[Computed]
-    public function value()
+    public function items()
     {
-        // return "THE PERIOD IS ".$this->period;
         $to = Carbon::today();
         $from = $to->clone()->subDays($this->period);
         return (new ('\\ArthurPerton\\Analytics\\Data\\Query\\'.$this->query)($from, $to))->data();
     }
 
+    #[Computed]
+    public function columns()
+    {
+        return ('\\ArthurPerton\\Analytics\\Data\\Query\\'.$this->query)::columns();
+    }
+
     public function render()
     {
-        return view('analytics::livewire.aggregate');
+        return view('analytics::livewire.top-list');
     }
 }

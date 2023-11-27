@@ -3,7 +3,6 @@
 namespace ArthurPerton\Analytics\Http\Livewire;
 
 use Carbon\Carbon;
-use Livewire\Attributes\Computed;
 use Livewire\Attributes\Reactive;
 use Livewire\Component;
 
@@ -21,18 +20,6 @@ class TrendChart extends Component
         return view('analytics::livewire.trend-chart');
     }
 
-    // public function dehydrate()
-    // {
-    //     $this->sendData();
-    // }
-
-    // public function updated($property)
-    // { 
-    //     if ($property === 'period') {
-    //         $this->sendData();
-    //     }
-    // }
-
     public function updated()
     {
         $this->dispatch('updated');
@@ -40,7 +27,6 @@ class TrendChart extends Component
 
     public function rendered()
     {
-        // $this->dispatch('rendered');
         $this->sendData();
     }
 
@@ -49,7 +35,6 @@ class TrendChart extends Component
         $this->dispatch('data', $this->data());
     }
 
-    // #[Computed]
     public function data()
     {
         $to = Carbon::today();
@@ -60,7 +45,7 @@ class TrendChart extends Component
 
         $interval = $from->diff($to)->days <= 1 ? 3600 : 86400;
 
-        $records = (new ('\\ArthurPerton\\Analytics\\Data\\Query\\'.$this->query))->query($from, $to)
+        $records = (new ('\\ArthurPerton\\Analytics\\Data\\Query\\'.$this->query)($from, $to))->query()
             ->selectRaw("created - ((created - {$fromSeconds}) % {$interval}) AS timestamp")
             ->groupBy('timestamp')
             ->orderBy('timestamp')
@@ -74,10 +59,6 @@ class TrendChart extends Component
         $records->each(function ($record) use ($series) {
             $series->put($record->timestamp, $record);
         });
-
-        // $series->each(function ($record) {
-        //     $record->timestamp = date('Y-M-d)
-        // });
 
         return $series->values();
     }
