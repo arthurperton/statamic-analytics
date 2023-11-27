@@ -7,6 +7,12 @@
         const option = {
             animation: false,
             // animationDuration: 200,
+            grid: {
+                top: 64,
+                bottom: 64,
+                left: 64,
+                right: 64,
+            },
             tooltip: {
                 trigger: 'axis'
             },
