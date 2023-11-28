@@ -1,4 +1,4 @@
-<div class="flex-1 shadow-md bg-white rounded-xl px-4 py-3">
+<div class="flex-1 h-96 shadow-md bg-white rounded-xl px-4 py-3">
     
     <div class="w-full flex justify-between">
         <h2 class="text-slate-500 mb-1">{{ $title }}</h2>
@@ -8,15 +8,19 @@
         </ul>
     </div>
 
-    <div class="w-full grid grid-cols-2">
-        @foreach ($this->columns() as $column)
-            <div class="{{ $column->align == 'right' ? 'text-right' : 'text-left' }}">{{ $column->display }}</div>
-        @endforeach
+    <div class="w-full grid grid-cols-[1fr_max-content] gap-1">
+        
+        <div class="">{{ $this->columns->get(0)->display }}</div>
+        <div class="text-right">{{ $this->columns->get(1)->display }}</div>
 
         @foreach ($this->items() as $item)
-            @foreach ($this->columns() as $column)
-                <div class="truncate {{ $column->align == 'right' ? 'text-right' : 'text-left' }}">{{ $item->{$column->name} }}</div>
-            @endforeach
+        <div class="relative px-2 py-1 font-light text-sm truncate">
+            <div class="absolute top-0 left-0 h-full bg-analytics-blue/5" style="width: {{ 100 * $item->visitors / $this->items->get(0)->visitors }}%;"></div>
+            <div class="relative">{{ $item->{$this->columns->get(0)->name} }}</div>
+        </div>
+        <div class="text-right">
+            {{ $item->{$this->columns->get(1)->name} }}
+        </div>
         @endforeach
     </div>
 
