@@ -8,27 +8,16 @@
         </ul>
     </div>
 
-    <table class="w-full">
-        <thead>
-            <tr>
-                @foreach ($this->columns() as $column)
-                    <th class="{{ $column->align == 'right' ? 'text-right' : 'text-left' }}">{{ $column->display }} ({{ $column->name }})</th>
-                @endforeach
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($this->items() as $item)
-                <tr>
-                    @foreach ($this->columns() as $column)
-                        <td class="{{ $column->align == 'right' ? 'text-right' : 'text-left' }}">{{ $item->{$column->name} }}</td>
-                    @endforeach
-        {{-- <div class="flex justify-between gap-8">
-            <div class="flex-grow pl-0 truncate">{{ $item[0] }}</div> 
-            <div class="text-right">{{ $item[1] }}</div>
-        </div> --}}
-                </tr>
+    <div class="w-full grid grid-cols-2">
+        @foreach ($this->columns() as $column)
+            <div class="{{ $column->align == 'right' ? 'text-right' : 'text-left' }}">{{ $column->display }}</div>
+        @endforeach
+
+        @foreach ($this->items() as $item)
+            @foreach ($this->columns() as $column)
+                <div class="truncate {{ $column->align == 'right' ? 'text-right' : 'text-left' }}">{{ $item->{$column->name} }}</div>
             @endforeach
-        </tbody>
-    </table>
-    
+        @endforeach
+    </div>
+
 </div>
