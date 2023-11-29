@@ -19,17 +19,6 @@
 
     <livewire:dashboard />
 
-    {{-- <div class="shadow-md bg-white rounded-xl p-6">
-        <h1>Inline Frame Contents</h1>
-
-        <livewire:counter />
-
-        <div id="chart" class="w-full h-96" style="aspect-ratio: 3/1;"></div>
-        
-        <livewire:chart />
-
-    </div> --}}
-
     @livewireScripts
 </body>
 </html>
