@@ -11,7 +11,7 @@ class Dashboard extends Component
 
     public $statistic = 'UniqueVisitors';
 
-    public $filters= ['path' => '/'];
+    public $filters = [];//['path' => '/'];
 
     #[On('select-statistic')] 
     public function setStatistic($statistic)
