@@ -10,9 +10,9 @@ class TrendChart extends Component
 {
     #[Reactive]
     public $period;
-    
-    public $title = "Chart";
-    
+
+    public $title = 'Chart';
+
     public $query;
 
     public function render()
@@ -62,5 +62,4 @@ class TrendChart extends Component
 
         return $series->values();
     }
-
 }
