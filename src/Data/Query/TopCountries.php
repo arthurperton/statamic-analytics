@@ -30,11 +30,11 @@ class TopCountries extends AbstractQuery
     {
         return $this->query()->get()
             ->map(function ($record) {
-                // \Log::debug('['.$record->country.']');
-                // $record->country = trim($record->country);
+                $record->icon = $this->flag($record->country);
+
                 $record->country = $record->country == 'ZZ'
                     ? 'Unknown'
-                    : $this->flag($record->country).' '.Locale::getDisplayRegion('-'.$record->country, 'en');
+                    : Locale::getDisplayRegion('-'.$record->country, 'en');
 
                 return $record;
             });
@@ -50,6 +50,7 @@ class TopCountries extends AbstractQuery
 
     private function flag(string $country): string
     {
+        if ($country == 'ZZ') return '&nbsp;';
         if ($country == 'UK') $country = 'GB';
 
         return (string) preg_replace_callback(
