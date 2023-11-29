@@ -8,14 +8,21 @@ abstract class AbstractQuery implements Query
 {
     protected Carbon $from;
     protected Carbon $to;
+    protected $filters;
 
-    public function __construct(Carbon $from, Carbon $to)
+    public function __construct(Carbon $from, Carbon $to, $filters = [])
     {
         $this->from = $from;
         $this->to = $to;
+        $this->filters = collect($filters);
     }
     
     abstract public function query();
+
+    public function finalQuery()
+    {
+        return $this->applyFilters($this->query());
+    }
     
     public function data()
     {
@@ -30,5 +37,14 @@ abstract class AbstractQuery implements Query
     public static function columns()
     {
         return collect();
+    }
+
+    protected function applyFilters($query)
+    {
+        $this->filters->each(function ($value, $key) use ($query) {
+            $query->where($key, $value);
+        });
+
+        return $query;
     }
 }

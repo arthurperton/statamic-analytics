@@ -17,6 +17,6 @@ class Pageviews extends AbstractQuery
 
     public function data()
     {
-        return $this->query()->value('value');
+        return $this->finalQuery()->value('value');
     }
 }

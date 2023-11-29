@@ -11,6 +11,9 @@ class Aggregate extends Component
 {
     #[Reactive]
     public $period;
+
+    #[Reactive]
+    public $filters = [];
    
     public $decimals = 0;
 
@@ -27,7 +30,7 @@ class Aggregate extends Component
     {
         $to = Carbon::today();
         $from = $to->clone()->subDays($this->period);
-        return (new ('\\ArthurPerton\\Analytics\\Data\\Query\\'.$this->query)($from, $to))->data();
+        return (new ('\\ArthurPerton\\Analytics\\Data\\Query\\'.$this->query)($from, $to, $this->filters))->data();
     }
 
     public function render()

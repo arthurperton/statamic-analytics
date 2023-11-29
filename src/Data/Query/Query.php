@@ -6,9 +6,11 @@ use Carbon\Carbon;
 
 interface Query
 {
-    public function __construct(Carbon $from, Carbon $to);
+    public function __construct(Carbon $from, Carbon $to, $filters);
     
     public function query();
+
+    public function finalQuery();
     
     public function data();
 
