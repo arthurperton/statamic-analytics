@@ -13,6 +13,7 @@ class TrendChart extends Component
 
     public $title = 'Chart';
 
+    #[Reactive]
     public $query;
 
     public function render()

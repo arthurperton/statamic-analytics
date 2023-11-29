@@ -14,7 +14,7 @@
         <livewire:aggregate title="Visit Duration" query="VisitDuration" :$period :$statistic unit="s" />
     </div>
     
-    <livewire:trend-chart query="UniqueVisitors" :period="$period" />
+    <livewire:trend-chart :query="$statistic" :period="$period" />
 
     <div class="grid grid-cols-2 gap-4">
         <x-analytics::tabs title="Top Sources" :tabs="['All']">
