@@ -1,7 +1,7 @@
-<div class="flex divide-x divide-slate-300 border border-slate-300 rounded-lg overflow-hidden">
-    <template x-for="option in options">
+<div class="flex  border border-slate-300 rounded-lg overflow-hidden">
+    <template class="contents" x-for="option in options">
         <button
-            class="px-2 py-0.5 text-sm"
+            class="px-2 py-0.5 text-sm border-r border-r-slate-300 last:border-r-0"
             :class="option === selected ? 'shadow-inner bg-slate-50 font-medium' : 'font-light tracking-wide'"
             x-text="option"
             @click.prevent="
