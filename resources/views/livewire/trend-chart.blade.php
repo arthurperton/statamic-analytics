@@ -111,7 +111,7 @@
             }"
             x-init="$watch('selected', (value) => setChartType(value))"
         >
-            @include('analytics::component.button-group')
+            <x-analytics::button-group />
         </div>
 
         <div class="ml-4"
@@ -121,7 +121,7 @@
             }"
             x-init="$watch('selected', (value) => setSmooth(value === 'smooth'))"
         >
-            @include('analytics::component.button-group')
+            <x-analytics::button-group />
         </div>
     </div>
 
