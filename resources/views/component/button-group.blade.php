@@ -1,20 +1,16 @@
-<div 
-    class="flex divide-x divide-slate-300 border border-slate-300 rounded-lg overflow-hidden"
-    x-data="{
-        selected: '{{ $options[0] }}',
-        options: [
-            @foreach ($options as $option)
-            '{{ $option }}', 
-            @endforeach
-        ],
-    }"
->
+<div class="flex divide-x divide-slate-300 border border-slate-300 rounded-lg overflow-hidden">
     <template x-for="option in options">
         <button
             class="px-2 py-0.5 text-sm"
-            :class="option === selected ? 'shadow-inner bg-slate-50 font-medium' : 'font-light'"
+            :class="option === selected ? 'shadow-inner bg-slate-50 font-medium' : 'font-light tracking-wide'"
             x-text="option"
-            @click.prevent="selected = option"
+            @click.prevent="
+                if (options.length === 1) {
+                    selected = (selected === option) ? undefined : option
+                } else {
+                    selected = option
+                }
+            "
         ></button>
     </template>
 </div>

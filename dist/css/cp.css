@@ -535,6 +535,9 @@ video {
 .mt-8 {
   margin-top: 2rem;
 }
+.ml-2 {
+  margin-left: 0.5rem;
+}
 .block {
   display: block;
 }
@@ -543,6 +546,9 @@ video {
 }
 .grid {
   display: grid;
+}
+.contents {
+  display: contents;
 }
 .h-96 {
   height: 24rem;
@@ -767,6 +773,15 @@ video {
 }
 .leading-\[1\] {
   line-height: 1;
+}
+.tracking-wider {
+  letter-spacing: 0.05em;
+}
+.tracking-widest {
+  letter-spacing: 0.1em;
+}
+.tracking-wide {
+  letter-spacing: 0.025em;
 }
 .text-blue-600 {
   --tw-text-opacity: 1;

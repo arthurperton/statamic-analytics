@@ -24,6 +24,10 @@ class TopSources extends AbstractQuery
         return $this->query()->get()->map(function ($record) {
             if (! $record->source) {
                 $record->source = 'Direct / None';
+                $record->icon = mb_chr(128279);
+            } else {
+                $record->icon = "https://icons.duckduckgo.com/ip3/{$record->source}.ico";
+                $record->iconType = 'url';
             }
 
             return $record;

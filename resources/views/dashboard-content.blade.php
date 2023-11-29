@@ -10,6 +10,10 @@
     @livewireStyles
     
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script type="module">
+        import { format } from 'https://esm.run/date-fns';
+        window.format = format
+    </script>
 </head>
 <body class="m-0 p-0 text-slate-600">
 
