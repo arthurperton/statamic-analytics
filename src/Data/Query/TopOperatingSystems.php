@@ -4,30 +4,30 @@ namespace ArthurPerton\Analytics\Data\Query;
 
 use ArthurPerton\Analytics\Facades\Database;
 
-class TopDevices extends AbstractQuery
+class TopOperatingSystems extends AbstractQuery
 {
     public function query()
     {
         return Database::connection()->table('sessions')
             ->distinct('anonymous_id')
-            ->selectRaw('device, COUNT(*) as visitors')
-            ->whereNotNull('device')
+            ->selectRaw('os, COUNT(*) as visitors')
+            ->whereNotNull('os')
             ->where('created', '>=', $this->from->getTimestamp())
             ->where('created', '<', $this->to->getTimestamp())
-            ->groupBy('device')
+            ->groupBy('os')
             ->orderBy('visitors', 'desc')
-            ->orderBy('device', 'asc');
+            ->orderBy('os', 'asc');
     }
-
+    
     public static function title()
     {
-        return 'Device';
+        return 'OS';
     }
 
     public static function columns()
     {
         return collect([
-            Column::make('device', 'Device'),
+            Column::make('os', 'Operating system'),
             Column::make('visitors', 'Visitors', 'right'),
         ]);
     }

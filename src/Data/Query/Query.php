@@ -12,5 +12,7 @@ interface Query
     
     public function data();
 
+    public static function title();
+
     public static function columns();
 }

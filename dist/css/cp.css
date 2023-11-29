@@ -676,6 +676,10 @@ video {
   --tw-border-opacity: 1;
   border-color: rgb(255 255 255 / var(--tw-border-opacity));
 }
+.border-r-slate-300 {
+  --tw-border-opacity: 1;
+  border-right-color: rgb(203 213 225 / var(--tw-border-opacity));
+}
 .bg-analytics-blue\/5 {
   background-color: rgb(45 156 249 / 0.05);
 }
@@ -842,6 +846,10 @@ video {
   width: 100%;
   max-width: none;
   padding: 0px;
+}
+
+.last\:border-r-0:last-child {
+  border-right-width: 0px;
 }
 
 .group:hover .group-hover\:text-blue-600 {

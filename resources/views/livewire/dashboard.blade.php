@@ -17,10 +17,10 @@
     <livewire:trend-chart query="UniqueVisitors" :period="$period" />
 
     <div class="grid grid-cols-2 gap-4">
-        <livewire:top-list title="Top Sources" query="TopSources" :period="$period" />
+        {{-- <livewire:top-list title="Top Sources" query="TopSources" :period="$period" />
         <livewire:top-list title="Top Pages" query="TopPages" :period="$period" />
-        <livewire:top-list title="Countries" query="TopCountries" :period="$period" />
-        <livewire:top-list title="Devices" query="TopDevices" :period="$period" />
+        <livewire:top-list title="Countries" query="TopCountries" :period="$period" /> --}}
+        <livewire:top-list title="Devices" :queries="['TopBrowsers', 'TopDevices', 'TopOperatingSystems']" :period="$period" />
     </div>
 
 </div>

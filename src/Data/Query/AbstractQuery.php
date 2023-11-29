@@ -22,6 +22,11 @@ abstract class AbstractQuery implements Query
         return $this->query()->get();
     }
 
+    public static function title()
+    {
+        return null;
+    }
+
     public static function columns()
     {
         return collect();

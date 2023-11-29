@@ -14,7 +14,14 @@ class TopList extends Component
 
     public $title;
 
+    public $queries;
+
     public $query;
+
+    public function mount()
+    {
+        $this->query = $this->queries[1]; 
+    }
 
     #[Computed]
     public function items()
