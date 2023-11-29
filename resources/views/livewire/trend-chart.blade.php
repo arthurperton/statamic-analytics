@@ -2,90 +2,69 @@
     class="shadow-md bg-white rounded-xl px-4 pt-4"
     x-data="{
         chart: undefined,
-        option: {
-            animation: false,
-            //textStyle: {
-            //   fontFamily: 'Inter',
-            //},
-            grid: {
-                top: 64,
-                bottom: 64,
-                left: 64,
-                right: 64,
-            },
-            legend: {
-                show: false,
-                selected: {
-                    line: true,
-                    bar: false,
-                }
-            },
-            tooltip: {
-                trigger: 'axis'
-            },
-            xAxis: {
-                type: 'time',
-                boundaryGap: false,
-                axisLabel: {
-                    //formatter: '{yyyy}-{MM}-{dd}',
-                    formatter: (value) => window.format(value, 'eee d MMM')
+        data: [],
+        type: 'line',
+        smooth: false,
+        option() {
+            return {
+                animation: false,
+                //textStyle: {
+                //   fontFamily: 'Inter',
+                //},
+                grid: {
+                    top: 64,
+                    bottom: 64,
+                    left: 64,
+                    right: 64,
                 },
-            },
-            yAxis: {
-                type: 'value',
-            },
-            series: [
-                {
-                    type: 'line',
-                    name: 'line',
-                    smooth: false,
-                    color: '#2D9CF9',
-                    areaStyle: {
-                        color: '#2D9CF9',
-                        opacity: 0.2,
-                    },
+                legend: {
+                    show: false,
+                    selected: {
+                        line: this.type !== 'bars',
+                        bar: this.type !== 'line',
+                    }
                 },
-                {
-                    type: 'bar',
-                    name: 'bar',
-                    color: '#2D9CF9',
-                    areaStyle: {
-                        color: '#2D9CF9',
-                        opacity: 0.2,
-                    },
-                },
-            ],
-        },
-        setChartData(data) {
-            //this.option.xAxis.data = data.map(d => d.timestamp)
-            //console.log(this.option.xAxis.data)
-            //this.option.series[0].data = data.map(d => d.value)
-            //this.option.series[1].data = data.map(d => d.value)
-            this.option.series[0].data = data.map(d => [new Date(d.timestamp * 1000), d.value])
-            this.option.series[1].data = data.map(d => [new Date(d.timestamp * 1000), d.value])
-
-            this.chart.setOption(this.option)
-        },
-        toggleSmooth() {
-            this.option.series[0].smooth = ! this.option.series[0].smooth
-
-            this.chart.setOption(this.option)
-        },
-        setSmooth(smooth) {
-            this.chart.setOption({ series: [{ name: 'line', smooth }] })
-        },
-        setChartType(type) {
-            this.chart.setOption({ 
-                legend: { 
-                    selected: { 
-                        line: type !== 'bars',
-                        bar: type !== 'line',
-                    } 
+                tooltip: {
+                    trigger: 'axis'
                 },
                 xAxis: {
-                    boundaryGap: type !== 'line'
-                }
-            })
+                    type: 'time',
+                    boundaryGap: this.type != 'line',
+                    axisLabel: {
+                        //formatter: '{yyyy}-{MM}-{dd}',
+                        formatter: (value) => window.format(value, 'eee d MMM')
+                    },
+                },
+                yAxis: {
+                    type: 'value',
+                },
+                series: [
+                    {
+                        type: 'line',
+                        name: 'line',
+                        smooth: this.smooth,
+                        color: '#2D9CF9',
+                        areaStyle: {
+                            color: '#2D9CF9',
+                            opacity: 0.2,
+                        },
+                        data: this.data,
+                    },
+                    {
+                        type: 'bar',
+                        name: 'bar',
+                        color: '#2D9CF9',
+                        areaStyle: {
+                            color: '#2D9CF9',
+                            opacity: 0.2,
+                        },
+                        data: this.data,
+                    },
+                ],
+            }
+        },
+        setChartData(data) {
+            this.data = data.map(d => [new Date(d.timestamp * 1000), d.value])
         },
     }"
     x-init="
@@ -94,6 +73,8 @@
         window.addEventListener('resize', function() {
             chart.resize()
         });
+
+        $watch('data, type, smooth', () => chart.setOption(option()))
 
         document.addEventListener('livewire:initialized', async () => {
             setChartData(await $wire.data())
@@ -109,7 +90,7 @@
                 selected: 'line',
                 options: ['line', 'bars', 'both'],
             }"
-            x-init="$watch('selected', (value) => setChartType(value))"
+            x-init="$watch('selected', (value) => type = value)"
         >
             <x-analytics::button-group />
         </div>
@@ -119,12 +100,12 @@
                 selected: undefined,
                 options: ['smooth'],
             }"
-            x-init="$watch('selected', (value) => setSmooth(value === 'smooth'))"
+            x-init="$watch('selected', (value) => smooth = value)"
         >
             <x-analytics::button-group />
         </div>
     </div>
 
-    <div wire:ignore id="chart" class="w-full h-96 transition-all duration-150" wire:loading.class="opacity-0 -translate-y-1"></div>
+    <div wire:ignore id="chart" class="w-full h-96"></div>
 
 </div>
