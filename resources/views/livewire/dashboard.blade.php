@@ -5,10 +5,11 @@
     <div class="flex justify-between items-center mb-2">
         <div class="flex items-center">
             <h1 class="text-xl text-slate-700">Anayltics Dashboard</h1>
-            <div class="ml-4 flex">
-                @foreach ($filters as $key => $value)
-                    <div class="px-2 py-1 bg-white rounded-md shadow-md">
-                        {{ $key }} is <span class="font-bold">{{ $value }}</span>
+            <div class="ml-4 flex gap-2">
+                @foreach ($filters as $filter)
+                    <div class="flex items-center bg-white rounded-md shadow-md">
+                        <div class="pl-3 py-1">{{ $filter['title'] }} is <span class="font-bold">{{ $filter['value'] }}</span></div>
+                        <button class="pl-3 pr-3 hover:text-analytics-blue" wire:click="removeFilter('{{ $filter['column'] }}')">x</button>
                     </div>
                 @endforeach
             </div>

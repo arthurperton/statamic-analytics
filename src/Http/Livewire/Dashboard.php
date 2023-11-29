@@ -11,12 +11,23 @@ class Dashboard extends Component
 
     public $statistic = 'UniqueVisitors';
 
-    public $filters = [];//['path' => '/'];
+    public $filters = [];
 
-    #[On('select-statistic')] 
+    #[On('set-statistic')] 
     public function setStatistic($statistic)
     {
         $this->statistic = $statistic;
+    }
+
+    #[On('set-filter')]
+    public function setFilter($filter)
+    {
+        $this->filters[$filter['column']] = $filter;
+    }
+
+    public function removeFilter($column)
+    {
+        unset($this->filters[$column]);
     }
 
     public function render()

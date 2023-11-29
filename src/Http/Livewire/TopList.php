@@ -28,6 +28,12 @@ class TopList extends Component
         return ('\\ArthurPerton\\Analytics\\Data\\Query\\'.$this->query)::columns();
     }
 
+    public function filterBy($value)
+    {
+        $column = $this->columns()[0];
+        $this->dispatch('set-filter', ['value' => $value, 'column' => $column->name, 'title' => $column->display]);
+    }
+
     public function render()
     {
         return view('analytics::livewire.top-list');

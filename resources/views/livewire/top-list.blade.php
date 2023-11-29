@@ -7,7 +7,7 @@
         @foreach ($this->items as $item)
         <div class="relative px-2 py-1 font-light text-sm truncate">
             <div class="absolute top-0 left-0 h-full bg-analytics-blue/5" style="width: {{ 100 * $item->visitors / $this->items->get(0)->visitors }}%;"></div>
-            <div class="relative flex items-center">
+            <button class="relative flex items-center" wire:click.prevent="filterBy('{{ $item->{$this->columns->get(0)->name} }}')">
                 @if (isset($item->icon))
                     <span class="text-lg m-0 p-0 leading-[1] mr-1.5">
                         @switch($item->iconType ?? null)
@@ -20,7 +20,7 @@
                     </span>
                 @endif
                 {{ $item->{$this->columns->get(0)->name} }}
-            </div>
+            </button>
         </div>
         <div class="text-right">
             {{ $item->{$this->columns->get(1)->name} }}

@@ -41,8 +41,8 @@ abstract class AbstractQuery implements Query
 
     protected function applyFilters($query)
     {
-        $this->filters->each(function ($value, $key) use ($query) {
-            $query->where($key, $value);
+        $this->filters->each(function ($filter) use ($query) {
+            $query->where($filter['column'], $filter['value']);
         });
 
         return $query;
