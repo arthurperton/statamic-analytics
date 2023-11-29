@@ -7,6 +7,7 @@ use ArthurPerton\Analytics\Http\Livewire\Chart;
 use ArthurPerton\Analytics\Http\Livewire\Counter;
 use ArthurPerton\Analytics\Http\Livewire\Dashboard;
 use ArthurPerton\Analytics\Http\Livewire\PeriodSelector;
+use ArthurPerton\Analytics\Http\Livewire\Tabs;
 use ArthurPerton\Analytics\Http\Livewire\TopList;
 use ArthurPerton\Analytics\Http\Livewire\TrendChart;
 use ArthurPerton\Analytics\Http\Livewire\UniqueVisitors;

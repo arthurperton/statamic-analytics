@@ -17,10 +17,39 @@
     <livewire:trend-chart query="UniqueVisitors" :period="$period" />
 
     <div class="grid grid-cols-2 gap-4">
+        <x-analytics::tabs title="Top Sources" :tabs="['All']">
+            <x-slot:tab-0>
+                <livewire:top-list query="TopSources" :period="$period" />
+            </x-slot:tab-0>
+        </x-analytics::tabs>
+
+        <x-analytics::tabs title="Top Pages" :tabs="['Pages']">
+            <x-slot:tab-0>
+                <livewire:top-list query="TopPages" :period="$period" />
+            </x-slot:tab-0>
+        </x-analytics::tabs>
+
+        <x-analytics::tabs title="Locations" :tabs="['Countries']">
+            <x-slot:tab-0>
+                <livewire:top-list query="TopCountries" :period="$period" />
+            </x-slot:tab-0>
+        </x-analytics::tabs>
+
+        <x-analytics::tabs title="Devices" :tabs="['Browser', 'OS', 'Size']">
+            <x-slot:tab-0>
+                <livewire:top-list query="TopBrowsers" :period="$period" />
+            </x-slot:tab-0>
+            <x-slot:tab-1>
+                <livewire:top-list query="TopOperatingSystems" :period="$period" />
+            </x-slot:tab-1>
+            <x-slot:tab-2>
+                <livewire:top-list query="TopDevices" :period="$period" />
+            </x-slot:tab-2>
+        </x-analytics::tabs>
         {{-- <livewire:top-list title="Top Sources" query="TopSources" :period="$period" />
         <livewire:top-list title="Top Pages" query="TopPages" :period="$period" />
         <livewire:top-list title="Countries" query="TopCountries" :period="$period" /> --}}
-        <livewire:top-list title="Devices" :queries="['TopBrowsers', 'TopDevices', 'TopOperatingSystems']" :period="$period" />
+        {{-- <livewire:top-list title="Devices" :queries="['TopBrowsers', 'TopDevices', 'TopOperatingSystems']" :period="$period" /> --}}
     </div>
 
 </div>

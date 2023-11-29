@@ -1,12 +1,3 @@
-<div class="flex-1 h-96 shadow-md bg-white rounded-xl px-4 py-3">
-    
-    <div class="w-full flex justify-between">
-        <h2 class="text-slate-500 mb-1">{{ $title }}</h2>
-        <ul class="flex gap-4">
-            <li><button>Hoi</button></li>
-            <li><button>Pipelio</button></li>
-        </ul>
-    </div>
 
     <div class="w-full grid grid-cols-[1fr_max-content] gap-1">
         
@@ -37,4 +28,3 @@
         @endforeach
     </div>
 
-</div>
