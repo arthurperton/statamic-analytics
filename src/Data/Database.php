@@ -83,16 +83,15 @@ class Database extends SqliteDatabase
         $this->schema()->dropAllViews();
 
         $this->connection()->statement('
-            CREATE VIEW v_sessions_pageviews
+            CREATE VIEW v_sessions
             AS
-            SELECT      session_id,
-                        sessions.created, 
+            SELECT      sessions.*,
                         count(*) AS pageview_count
             FROM        sessions
             LEFT JOIN   pageviews
             ON          sessions.id = pageviews.session_id
-            GROUP BY    session_id
-            ORDER BY    session_id
+            GROUP BY    sessions.id
+            ORDER BY    sessions.id
         ');
     }
 

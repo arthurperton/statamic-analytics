@@ -9,7 +9,7 @@ class ViewsPerVisit extends AbstractQuery
     public function query()
     {
         return Database::connection()
-            ->table('v_sessions_pageviews')
+            ->table('v_sessions')
             ->selectRaw('avg(pageview_count) AS value')
             ->where('created', '>=', $this->from->getTimestamp())
             ->where('created', '<', $this->to->getTimestamp());
