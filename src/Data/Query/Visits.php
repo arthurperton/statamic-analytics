@@ -10,7 +10,7 @@ class Visits extends AbstractQuery
     {
         return Database::connection()
             ->table('v_sessions')
-            ->selectRaw('COUNT(DISTINCT session_id) AS value')
+            ->selectRaw('COUNT(*) AS value')
             ->where('started_at', '>=', $this->from->getTimestamp())
             ->where('started_at', '<', $this->to->getTimestamp());
     }

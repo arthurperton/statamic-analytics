@@ -51,10 +51,10 @@ class Database extends SqliteDatabase
                 $table->string('city')->nullable();
                 $table->string('entry_pageview_id');
                 $table->string('exit_pageview_id');
-                // $table->unsignedInteger('started_at');
-                // $table->unsignedInteger('ended_at');
+                $table->unsignedInteger('started_at');
+                $table->unsignedInteger('ended_at');
 
-                // $table->index('started_at');
+                $table->index('started_at');
             });
         }
 

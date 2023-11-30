@@ -58,6 +58,8 @@ class FakeEvents extends Fake
 
             $session['entry_pageview_id'] = $sessionPageviews->sortBy('started_at')->first()['id'];
             $session['exit_pageview_id'] = $sessionPageviews->sortBy('started_at')->last()['id'];
+            $session['started_at'] = $sessionPageviews->min('started_at');
+            $session['ended_at'] = $sessionPageviews->max('ended_at');
 
             $sessions->add($session);
 
