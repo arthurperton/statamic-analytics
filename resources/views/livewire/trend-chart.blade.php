@@ -68,7 +68,7 @@
         },
     }"
     x-init="
-        chart = echarts.init(document.getElementById('chart'))
+        chart = echarts.init(document.getElementById('trend-chart'))
 
         window.addEventListener('resize', function() {
             chart.resize()
@@ -106,6 +106,6 @@
         </div>
     </div>
 
-    <div wire:ignore id="chart" class="w-full h-96"></div>
+    <div wire:ignore id="trend-chart" class="w-full h-96"></div>
 
 </div>

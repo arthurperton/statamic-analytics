@@ -10,6 +10,7 @@
     @livewireStyles
     
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/95368/world.js"></script>
     <script type="module">
         import { format } from 'https://esm.run/date-fns';
         window.format = format
