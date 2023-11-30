@@ -91,7 +91,27 @@ class Database extends SqliteDatabase
             LEFT JOIN   pageviews
             ON          sessions.id = pageviews.session_id
             GROUP BY    sessions.id
-            ORDER BY    sessions.id
+        ');
+
+        $this->connection()->statement('
+            CREATE VIEW v_pageviews
+            AS
+            SELECT      pageviews.*,
+                        sessions.anonymous_id,
+                        sessions.source,
+                        sessions.browser,
+                        sessions.browser_version,
+                        sessions.os,
+                        sessions.os_version,
+                        sessions.device,
+                        sessions.country,
+                        sessions.region,
+                        sessions.city,
+                        sessions.created as session_created,
+                        sessions.modified as session_modified
+            FROM        pageviews
+            LEFT JOIN   sessions
+            ON          pageviews.session_id = sessions.id
         ');
     }
 
