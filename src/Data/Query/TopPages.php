@@ -8,12 +8,11 @@ class TopPages extends AbstractQuery
 {
     public function baseQuery(): \Illuminate\Database\Query\Builder
     {
-        return Database::connection()->table('sessions')
-            ->join('pageviews', 'sessions.id', '=', 'pageviews.session_id')
-            ->distinct('anonymous_id')
+        return Database::connection()->table('v_pageview')
+            // ->distinct('anonymous_id')
             ->selectRaw('path as value, COUNT(DISTINCT anonymous_id) as visitors')
-            ->where('pageviews.started_at', '>=', $this->from->getTimestamp())
-            ->where('pageviews.started_at', '<', $this->to->getTimestamp())
+            ->where('pageview.started_at', '>=', $this->from->getTimestamp())
+            ->where('pageview.started_at', '<', $this->to->getTimestamp())
             ->groupBy('value')
             ->orderBy('visitors', 'desc')
             ->orderBy('value', 'asc');

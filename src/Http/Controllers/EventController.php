@@ -23,9 +23,9 @@ class EventController extends CpController
         // /** @var \Illuminate\Database\ConnectionInterface $db */
         $db = Database::connection();
 
-        $db->table('sessions')->upsert($session, 'id', ['modified']);
+        $db->table('session')->upsert($session, 'id', ['modified']);
 
-        $db->table('pageviews')->insert($pageview);
+        $db->table('pageview')->insert($pageview);
         // });
     }
 

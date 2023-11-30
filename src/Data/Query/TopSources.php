@@ -9,7 +9,7 @@ class TopSources extends AbstractQuery
     public function baseQuery(): \Illuminate\Database\Query\Builder
     {
         return Database::connection()
-            ->table('sessions')
+            ->table('session')
             ->distinct('anonymous_id')
             ->selectRaw('source as value, COUNT(*) as visitors')
             ->where('started_at', '>=', $this->from->getTimestamp())

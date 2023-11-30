@@ -36,8 +36,8 @@ class Database extends SqliteDatabase
             });
         }
 
-        if (! $schema->hasTable('sessions')) {
-            $schema->create('sessions', function (Blueprint $table) {
+        if (! $schema->hasTable('session')) {
+            $schema->create('session', function (Blueprint $table) {
                 $table->string('id')->primary();
                 $table->string('anonymous_id');
                 $table->string('source')->nullable();
@@ -58,11 +58,11 @@ class Database extends SqliteDatabase
             });
         }
 
-        if (! $schema->hasTable('pageviews')) {
-            $schema->create('pageviews', function (Blueprint $table) {
+        if (! $schema->hasTable('pageview')) {
+            $schema->create('pageview', function (Blueprint $table) {
                 $table->string('id')->primary();
                 $table->string('session_id');
-                $table->foreign('session_id')->references('id')->on('sessions');
+                $table->foreign('session_id')->references('id')->on('session');
                 $table->string('title')->nullable();
                 $table->string('url')->nullable();
                 $table->string('path');
@@ -77,18 +77,18 @@ class Database extends SqliteDatabase
         $this->schema()->dropAllViews();
 
         $this->connection()->statement('
-            CREATE VIEW v_sessions
+            CREATE VIEW v_session
             AS
-            SELECT      sessions.*,
+            SELECT      session.*,
                         count(*) AS pageview_count
-            FROM        sessions
-            LEFT JOIN   pageviews
-            ON          sessions.id = pageviews.session_id
-            GROUP BY    sessions.id
+            FROM        session
+            LEFT JOIN   pageview
+            ON          session.id = pageview.session_id
+            GROUP BY    session.id
         ');
 
         $this->connection()->statement('
-            CREATE VIEW v_pageviews
+            CREATE VIEW v_pageview
             AS
             SELECT      pageviews.*,
                         sessions.anonymous_id,
