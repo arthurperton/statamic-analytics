@@ -51,10 +51,10 @@ class Database extends SqliteDatabase
                 $table->string('city')->nullable();
                 $table->string('entry_pageview_id');
                 $table->string('exit_pageview_id');
-                $table->unsignedInteger('started_at');
-                $table->unsignedInteger('ended_at');
+                $table->unsignedInteger('session_started_at');
+                $table->unsignedInteger('session_ended_at');
 
-                $table->index('started_at');
+                $table->index('session_started_at');
             });
         }
 
@@ -100,7 +100,9 @@ class Database extends SqliteDatabase
                         sessions.device,
                         sessions.country,
                         sessions.region,
-                        sessions.city
+                        sessions.city,
+                        sessions.session_started_at,
+                        sessions.session_ended_at
             FROM        pageviews
             LEFT JOIN   sessions
             ON          pageviews.session_id = sessions.id

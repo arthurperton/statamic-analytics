@@ -4,7 +4,10 @@
     
     <div class="flex justify-between items-center mb-2">
         <div class="flex items-center">
+            {{-- Page title --}}
             <h1 class="text-xl text-slate-700">Anayltics Dashboard</h1>
+            
+            {{-- Active filters --}}
             <div class="ml-4 flex gap-2">
                 @foreach ($filters as $filter)
                     <div class="flex items-center bg-white rounded-md shadow-md">
@@ -13,44 +16,46 @@
                     </div>
                 @endforeach
             </div>
+
         </div>
+
+        {{-- Period selector --}}
         <livewire:period-selector wire:model.change="period" />
     </div>
     
+    {{-- Aggregates --}}
     <div class="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
         <livewire:aggregate title="Unique Visitors" query="UniqueVisitors" :$period :$filters selected />
         <livewire:aggregate title="Total Visits" query="Visits" :$period :$filters />
         <livewire:aggregate title="Pageviews" query="Pageviews" :$period :$filters />
         <livewire:aggregate title="Views per Visit" query="ViewsPerVisit" :$period :$filters decimals="2" />
         <livewire:aggregate title="Bounce Rate" query="BounceRate" :$period :$filters unit="%" />
-        <livewire:aggregate title="Visit Duration" query="VisitDuration" :$period :$filters unit="s" />
+        {{-- <livewire:aggregate title="Visit Duration" query="VisitDuration" :$period :$filters unit="s" /> --}}
     </div>
     
-    <livewire:trend-chart :query="$statistic" :$period :$filters />
+    {{-- Trend chart --}}
+    {{-- <livewire:trend-chart :query="$statistic" :$period :$filters /> --}}
 
     <div class="grid grid-cols-2 gap-4">
-        <x-analytics::tabs title="Top Sources" :tabs="['All']">
+        {{-- <x-analytics::tabs title="Top Sources" :tabs="['All']">
             <x-slot:tab-0>
                 <livewire:top-list query="TopSources" :$period />
             </x-slot:tab-0>
-        </x-analytics::tabs>
+        </x-analytics::tabs> --}}
 
-        <x-analytics::tabs title="Top Pages" :tabs="['Pages']">
+        {{-- <x-analytics::tabs title="Top Pages" :tabs="['Pages']">
             <x-slot:tab-0>
                 <livewire:top-list query="TopPages" :$period />
             </x-slot:tab-0>
-        </x-analytics::tabs>
+        </x-analytics::tabs> --}}
 
-        <x-analytics::tabs title="Locations" :tabs="[/*'Map',*/ 'Countries']">
-            {{-- <x-slot:tab-0>
-                <livewire:map-chart :$period />
-            </x-slot:tab-0> --}}
+        {{-- <x-analytics::tabs title="Locations" :tabs="['Countries']">
             <x-slot:tab-0>
                 <livewire:top-list query="TopCountries" :$period />
             </x-slot:tab-0>
-        </x-analytics::tabs>
+        </x-analytics::tabs> --}}
 
-        <x-analytics::tabs title="Devices" :tabs="['Browser', 'OS', 'Size']">
+        {{-- <x-analytics::tabs title="Devices" :tabs="['Browser', 'OS', 'Size']">
             <x-slot:tab-0>
                 <livewire:top-list query="TopBrowsers" :$period />
             </x-slot:tab-0>
@@ -60,7 +65,7 @@
             <x-slot:tab-2>
                 <livewire:top-list query="TopDevices" :$period />
             </x-slot:tab-2>
-        </x-analytics::tabs>
+        </x-analytics::tabs> --}}
     </div>
 
 </div>
