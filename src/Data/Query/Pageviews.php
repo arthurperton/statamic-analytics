@@ -6,10 +6,10 @@ use ArthurPerton\Analytics\Facades\Database;
 
 class Pageviews extends AbstractQuery
 {
-    public function query()
+    public function baseQuery()
     {
         return Database::connection()
-            ->table('pageviews')
+            ->table('v_pageviews')
             ->selectRaw('count(*) AS value')
             ->where('created', '>=', $this->from->getTimestamp())
             ->where('created', '<', $this->to->getTimestamp());

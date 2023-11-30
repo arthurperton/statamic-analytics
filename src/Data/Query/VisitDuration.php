@@ -6,7 +6,7 @@ use ArthurPerton\Analytics\Facades\Database;
 
 class VisitDuration extends AbstractQuery
 {
-    public function query()
+    public function baseQuery()
     {
         return Database::connection()
             ->table('sessions')
@@ -17,6 +17,6 @@ class VisitDuration extends AbstractQuery
 
     public function data()
     {
-        return $this->query()->value('value');
+        return $this->finalQuery()->value('value');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace ArthurPerton\Analytics\Http\Livewire;
 
+use ArthurPerton\Analytics\Data\Query\Query;
 use Carbon\Carbon;
 use Livewire\Attributes\Reactive;
 use Livewire\Component;
@@ -10,6 +11,9 @@ class TrendChart extends Component
 {
     #[Reactive]
     public $period;
+
+    #[Reactive]
+    public $filters = [];
 
     public $title = 'Chart';
 
@@ -46,7 +50,7 @@ class TrendChart extends Component
 
         $interval = $from->diff($to)->days <= 1 ? 3600 : 86400;
 
-        $records = (new ('\\ArthurPerton\\Analytics\\Data\\Query\\'.$this->query)($from, $to))->query()
+        $records = (new (Query::className($this->query))($from, $to, $this->filters))->finalQuery()
             ->selectRaw("created - ((created - {$fromSeconds}) % {$interval}) AS timestamp")
             ->groupBy('timestamp')
             ->orderBy('timestamp')

@@ -6,17 +6,17 @@ use ArthurPerton\Analytics\Facades\Database;
 
 class TopDevices extends AbstractQuery
 {
-    public function query()
+    public function baseQuery()
     {
         return Database::connection()->table('sessions')
             ->distinct('anonymous_id')
-            ->selectRaw('device, COUNT(*) as visitors')
-            ->whereNotNull('device')
+            ->selectRaw('device as value, COUNT(*) as visitors')
+            ->whereNotNull('value')
             ->where('created', '>=', $this->from->getTimestamp())
             ->where('created', '<', $this->to->getTimestamp())
-            ->groupBy('device')
+            ->groupBy('value')
             ->orderBy('visitors', 'desc')
-            ->orderBy('device', 'asc');
+            ->orderBy('value', 'asc');
     }
 
     public static function title()
@@ -24,11 +24,13 @@ class TopDevices extends AbstractQuery
         return 'Device';
     }
 
-    public static function columns()
+    public static function columnName()
     {
-        return collect([
-            Column::make('device', 'Device'),
-            Column::make('visitors', 'Visitors', 'right'),
-        ]);
+        return 'device';
+    }
+
+    public static function columnTitle()
+    {
+        return 'Device';
     }
 }

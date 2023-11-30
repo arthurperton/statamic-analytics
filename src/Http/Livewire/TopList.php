@@ -2,6 +2,7 @@
 
 namespace ArthurPerton\Analytics\Http\Livewire;
 
+use ArthurPerton\Analytics\Data\Query\Query;
 use Carbon\Carbon;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Reactive;
@@ -19,19 +20,29 @@ class TopList extends Component
     {
         $to = Carbon::today();
         $from = $to->clone()->subDays($this->period);
-        return (new ('\\ArthurPerton\\Analytics\\Data\\Query\\'.$this->query)($from, $to))->data();
+        return (new (Query::className($this->query))($from, $to))->data();
     }
 
     #[Computed]
-    public function columns()
+    public function columnName()
     {
-        return ('\\ArthurPerton\\Analytics\\Data\\Query\\'.$this->query)::columns();
+        return Query::className($this->query)::columnName();
     }
 
-    public function filterBy($value)
+    #[Computed]
+    public function columnTitle()
     {
-        $column = $this->columns()[0];
-        $this->dispatch('set-filter', ['value' => $value, 'column' => $column->name, 'title' => $column->display]);
+        return Query::className($this->query)::columnTitle();
+    }
+
+    public function filterBy($value, $displayValue)
+    {
+        $this->dispatch('set-filter', [
+            'value' => $value,
+            'displayValue' => $displayValue,
+            'column' => $this->columnName(),
+            'title' => $this->columnTitle(),
+        ]);
     }
 
     public function render()

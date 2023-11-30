@@ -7,7 +7,7 @@ use Locale;
 
 class TopCountries extends AbstractQuery
 {
-    public function query()
+    public function baseQuery()
     {
         return Database::connection()->table('sessions')
             ->distinct('anonymous_id')
@@ -15,37 +15,39 @@ class TopCountries extends AbstractQuery
                 CASE country 
                     WHEN NULL THEN 'ZZ'
                     ELSE TRIM(country, CHAR(10))
-                END country, 
+                END value, 
                 COUNT(*) AS visitors
             ")
             // ->whereNotNull('country')
             ->where('created', '>=', $this->from->getTimestamp())
             ->where('created', '<', $this->to->getTimestamp())
-            ->groupBy('country')
+            ->groupBy('value')
             ->orderBy('visitors', 'desc')
-            ->orderBy('country', 'asc');
+            ->orderBy('value', 'asc');
     }
 
     public function data()
     {
-        return $this->query()->get()
+        return $this->baseQuery()->get()
             ->map(function ($record) {
-                $record->icon = $this->flag($record->country);
+                $record->icon = $this->flag($record->value);
 
-                $record->country = $record->country == 'ZZ'
+                $record->displayValue = $record->value == 'ZZ'
                     ? 'Unknown'
-                    : Locale::getDisplayRegion('-'.$record->country, 'en');
+                    : Locale::getDisplayRegion('-'.$record->value, 'en');
 
                 return $record;
             });
     }
 
-    public static function columns()
+    public static function columnName()
     {
-        return collect([
-            Column::make('country', 'Country'),
-            Column::make('visitors', 'Visitors', 'right'),
-        ]);
+        return 'country';
+    }
+
+    public static function columnTitle()
+    {
+        return 'Country';
     }
 
     private function flag(string $country): string

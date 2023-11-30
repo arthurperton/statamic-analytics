@@ -6,17 +6,17 @@ use ArthurPerton\Analytics\Facades\Database;
 
 class TopOperatingSystems extends AbstractQuery
 {
-    public function query()
+    public function baseQuery()
     {
         return Database::connection()->table('sessions')
             ->distinct('anonymous_id')
-            ->selectRaw('os, COUNT(*) as visitors')
-            ->whereNotNull('os')
+            ->selectRaw('os as value, COUNT(*) as visitors')
+            ->whereNotNull('value')
             ->where('created', '>=', $this->from->getTimestamp())
             ->where('created', '<', $this->to->getTimestamp())
-            ->groupBy('os')
+            ->groupBy('value')
             ->orderBy('visitors', 'desc')
-            ->orderBy('os', 'asc');
+            ->orderBy('value', 'asc');
     }
     
     public static function title()
@@ -24,11 +24,13 @@ class TopOperatingSystems extends AbstractQuery
         return 'OS';
     }
 
-    public static function columns()
+    public static function columnName()
     {
-        return collect([
-            Column::make('os', 'Operating system'),
-            Column::make('visitors', 'Visitors', 'right'),
-        ]);
+        return 'os';
+    }
+
+    public static function columnTitle()
+    {
+        return 'Operating system';
     }
 }

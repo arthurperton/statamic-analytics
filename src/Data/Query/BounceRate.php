@@ -6,7 +6,7 @@ use ArthurPerton\Analytics\Facades\Database;
 
 class BounceRate extends AbstractQuery
 {
-    public function query()
+    public function baseQuery()
     {
         return Database::connection()
             ->table('v_sessions')
@@ -17,6 +17,6 @@ class BounceRate extends AbstractQuery
 
     public function data()
     {
-        return $this->query()->value('value');
+        return $this->finalQuery()->value('value');
     }
 }

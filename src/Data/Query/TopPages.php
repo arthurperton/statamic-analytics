@@ -6,24 +6,26 @@ use ArthurPerton\Analytics\Facades\Database;
 
 class TopPages extends AbstractQuery
 {
-    public function query()
+    public function baseQuery()
     {
         return Database::connection()->table('sessions')
             ->join('pageviews', 'sessions.id', '=', 'pageviews.session_id')
             ->distinct('anonymous_id')
-            ->selectRaw('path, COUNT(DISTINCT anonymous_id) as visitors')
+            ->selectRaw('path as value, COUNT(DISTINCT anonymous_id) as visitors')
             ->where('pageviews.created', '>=', $this->from->getTimestamp())
             ->where('pageviews.created', '<', $this->to->getTimestamp())
-            ->groupBy('path')
+            ->groupBy('value')
             ->orderBy('visitors', 'desc')
-            ->orderBy('path', 'asc');
+            ->orderBy('value', 'asc');
     }
 
-    public static function columns()
+    public static function columnName()
     {
-        return collect([
-            Column::make('path', 'Page'),
-            Column::make('visitors', 'Visitors', 'right'),
-        ]);
+        return 'path';
+    }
+
+    public static function columnTitle()
+    {
+        return 'Page';
     }
 }

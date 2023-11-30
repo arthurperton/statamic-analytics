@@ -8,7 +8,7 @@
             <div class="ml-4 flex gap-2">
                 @foreach ($filters as $filter)
                     <div class="flex items-center bg-white rounded-md shadow-md">
-                        <div class="pl-3 py-1">{{ $filter['title'] }} is <span class="font-bold">{{ $filter['value'] }}</span></div>
+                        <div class="pl-3 py-1">{{ $filter['title'] }} is <span class="font-bold">{{ $filter['displayValue'] }}</span></div>
                         <button class="pl-3 pr-3 hover:text-analytics-blue" wire:click="removeFilter('{{ $filter['column'] }}')">x</button>
                     </div>
                 @endforeach
@@ -18,15 +18,15 @@
     </div>
     
     <div class="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-        <livewire:aggregate title="Unique Visitors" query="UniqueVisitors" :$period selected />
-        <livewire:aggregate title="Total Visits" query="Visits" :$period />
-        <livewire:aggregate title="Pageviews" query="Pageviews" :$filters :$period />
-        <livewire:aggregate title="Views per Visit" query="ViewsPerVisit" :$period decimals="2" />
-        <livewire:aggregate title="Bounce Rate" query="BounceRate" :$period unit="%" />
-        <livewire:aggregate title="Visit Duration" query="VisitDuration" :$period unit="s" />
+        <livewire:aggregate title="Unique Visitors" query="UniqueVisitors" :$period :$filters selected />
+        <livewire:aggregate title="Total Visits" query="Visits" :$period :$filters />
+        <livewire:aggregate title="Pageviews" query="Pageviews" :$period :$filters />
+        <livewire:aggregate title="Views per Visit" query="ViewsPerVisit" :$period :$filters decimals="2" />
+        <livewire:aggregate title="Bounce Rate" query="BounceRate" :$period :$filters unit="%" />
+        <livewire:aggregate title="Visit Duration" query="VisitDuration" :$period :$filters unit="s" />
     </div>
     
-    <livewire:trend-chart :query="$statistic" :period="$period" />
+    <livewire:trend-chart :query="$statistic" :$period :$filters />
 
     <div class="grid grid-cols-2 gap-4">
         <x-analytics::tabs title="Top Sources" :tabs="['All']">
@@ -58,10 +58,6 @@
                 <livewire:top-list query="TopDevices" :period="$period" />
             </x-slot:tab-2>
         </x-analytics::tabs>
-        {{-- <livewire:top-list title="Top Sources" query="TopSources" :period="$period" />
-        <livewire:top-list title="Top Pages" query="TopPages" :period="$period" />
-        <livewire:top-list title="Countries" query="TopCountries" :period="$period" /> --}}
-        {{-- <livewire:top-list title="Devices" :queries="['TopBrowsers', 'TopDevices', 'TopOperatingSystems']" :period="$period" /> --}}
     </div>
 
 </div>

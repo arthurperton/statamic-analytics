@@ -6,17 +6,17 @@ use ArthurPerton\Analytics\Facades\Database;
 
 class Visits extends AbstractQuery
 {
-    public function query()
+    public function baseQuery()
     {
         return Database::connection()
-            ->table('sessions')
-            ->selectRaw('count(*) AS value')
-            ->where('created', '>=', $this->from->getTimestamp())
-            ->where('created', '<', $this->to->getTimestamp());
+            ->table('v_pageviews')
+            ->selectRaw('COUNT(DISTINCT session_id) AS value')
+            ->where('session_created', '>=', $this->from->getTimestamp())
+            ->where('session_created', '<', $this->to->getTimestamp());
     }
 
     public function data()
     {
-        return $this->query()->value('value');
+        return $this->finalQuery()->value('value');
     }
 }

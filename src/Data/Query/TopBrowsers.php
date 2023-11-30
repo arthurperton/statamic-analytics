@@ -6,17 +6,17 @@ use ArthurPerton\Analytics\Facades\Database;
 
 class TopBrowsers extends AbstractQuery
 {
-    public function query()
+    public function baseQuery()
     {
         return Database::connection()->table('sessions')
             ->distinct('anonymous_id')
-            ->selectRaw('browser, COUNT(*) as visitors')
-            ->whereNotNull('browser')
+            ->selectRaw('browser as value, COUNT(*) as visitors')
+            ->whereNotNull('value')
             ->where('created', '>=', $this->from->getTimestamp())
             ->where('created', '<', $this->to->getTimestamp())
-            ->groupBy('browser')
+            ->groupBy('value')
             ->orderBy('visitors', 'desc')
-            ->orderBy('browser', 'asc');
+            ->orderBy('value', 'asc');
     }
 
     public static function title()
@@ -24,11 +24,13 @@ class TopBrowsers extends AbstractQuery
         return 'Browser';
     }
 
-    public static function columns()
+    public static function columnName()
     {
-        return collect([
-            Column::make('browser', 'Browser'),
-            Column::make('visitors', 'Visitors', 'right'),
-        ]);
+        return 'browser';
+    }
+
+    public static function columnTitle()
+    {
+        return 'Browser';
     }
 }
