@@ -6,7 +6,7 @@ use ArthurPerton\Analytics\Facades\Database;
 
 class TopOperatingSystems extends AbstractQuery
 {
-    public function baseQuery()
+    public function baseQuery(): \Illuminate\Database\Query\Builder
     {
         return Database::connection()->table('sessions')
             ->distinct('anonymous_id')
@@ -19,17 +19,17 @@ class TopOperatingSystems extends AbstractQuery
             ->orderBy('value', 'asc');
     }
     
-    public static function title()
+    public static function title(): string
     {
         return 'OS';
     }
 
-    public static function columnName()
+    public static function columnName(): string
     {
         return 'os';
     }
 
-    public static function columnTitle()
+    public static function columnTitle(): string
     {
         return 'Operating system';
     }

@@ -2,6 +2,7 @@
 
 namespace ArthurPerton\Analytics\Http\Livewire;
 
+use ArthurPerton\Analytics\Data\Query\Query;
 use Carbon\Carbon;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Reactive;
@@ -30,7 +31,11 @@ class Aggregate extends Component
     {
         $to = Carbon::today();
         $from = $to->clone()->subDays($this->period);
-        return (new ('\\ArthurPerton\\Analytics\\Data\\Query\\'.$this->query)($from, $to, $this->filters))->data();
+        return Query::make($this->query)
+            ->from($from)
+            ->to($to)
+            ->filters($this->filters)
+            ->data();
     }
 
     public function render()

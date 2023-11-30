@@ -8,40 +8,67 @@ abstract class AbstractQuery implements QueryContract
 {
     protected Carbon $from;
     protected Carbon $to;
-    protected $filters;
+    protected array $filters = [];
+    protected int $limit;
 
-    public function __construct(Carbon $from, Carbon $to, $filters = [])
+    public function from($from): QueryContract
     {
         $this->from = $from;
+
+        return $this;
+    }
+
+    public function to($to): QueryContract
+    {
         $this->to = $to;
-        $this->filters = collect($filters);
+
+        return $this;
+    }
+
+    public function filters($filters): QueryContract
+    {
+        $this->filters = $filters;
+
+        return $this;
+    }
+
+    public function limit($limit): QueryContract
+    {
+        $this->limit = $limit;
+
+        return $this;
     }
     
-    abstract public function baseQuery();
+    abstract public function baseQuery(): \Illuminate\Database\Query\Builder;
 
-    public function finalQuery()
+    public function finalQuery(): \Illuminate\Database\Query\Builder
     {
-        return $this->applyFilters($this->baseQuery());
+        $query = $this->baseQuery();
+
+        $this->applyFilters($query);
+        $this->applyLimit($query);
+
+        return $query;
     }
     
     public function data()
     {
-        return $this->baseQuery()->get();
+        return $this->finalQuery()->get();
     }
 
-    public static function title()
+    public static function title(): string
     {
-        return null;
+        return '';
     }
 
-    public static function columnName()
+    public static function columnName(): string
     {
-        return null;
+        return '';
     }
 
-    public static function columnTitle()
+    public static function columnTitle(): string
     {
-        return null;
+        return '';
     }
 
     public static function columns()
@@ -49,11 +76,20 @@ abstract class AbstractQuery implements QueryContract
         return collect();
     }
 
-    protected function applyFilters($query)
+    protected function applyFilters(\Illuminate\Database\Query\Builder $query)
     {
-        $this->filters->each(function ($filter) use ($query) {
+        collect($this->filters)->each(function ($filter) use ($query) {
             $query->where($filter['column'], $filter['value']);
         });
+
+        return $query;
+    }
+
+    protected function applyLimit(\Illuminate\Database\Query\Builder $query)
+    {
+        if (isset($this->limit)) {
+            $query->limit($this->limit);
+        }
 
         return $query;
     }

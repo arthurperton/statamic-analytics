@@ -50,7 +50,11 @@ class TrendChart extends Component
 
         $interval = $from->diff($to)->days <= 1 ? 3600 : 86400;
 
-        $records = (new (Query::className($this->query))($from, $to, $this->filters))->finalQuery()
+        $records = Query::make($this->query)
+            ->from($from)
+            ->to($to) 
+            ->filters($this->filters)
+            ->finalQuery()
             ->selectRaw("created - ((created - {$fromSeconds}) % {$interval}) AS timestamp")
             ->groupBy('timestamp')
             ->orderBy('timestamp')

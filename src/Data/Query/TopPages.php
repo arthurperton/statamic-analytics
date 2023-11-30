@@ -6,7 +6,7 @@ use ArthurPerton\Analytics\Facades\Database;
 
 class TopPages extends AbstractQuery
 {
-    public function baseQuery()
+    public function baseQuery(): \Illuminate\Database\Query\Builder
     {
         return Database::connection()->table('sessions')
             ->join('pageviews', 'sessions.id', '=', 'pageviews.session_id')
@@ -19,12 +19,12 @@ class TopPages extends AbstractQuery
             ->orderBy('value', 'asc');
     }
 
-    public static function columnName()
+    public static function columnName(): string
     {
         return 'path';
     }
 
-    public static function columnTitle()
+    public static function columnTitle(): string
     {
         return 'Page';
     }

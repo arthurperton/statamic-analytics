@@ -20,7 +20,12 @@ class TopList extends Component
     {
         $to = Carbon::today();
         $from = $to->clone()->subDays($this->period);
-        return (new (Query::className($this->query))($from, $to))->data();
+
+        return Query::make($this->query)
+            ->from($from)
+            ->to($to)
+            ->limit(9)
+            ->data();
     }
 
     #[Computed]

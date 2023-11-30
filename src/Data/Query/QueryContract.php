@@ -6,19 +6,25 @@ use Carbon\Carbon;
 
 interface QueryContract
 {
-    public function __construct(Carbon $from, Carbon $to, $filters);
-    
-    public function baseQuery();
+    // public function __construct(Carbon $from, Carbon $to, $filters);
 
-    public function finalQuery();
+    public function from($from): QueryContract;
+
+    public function to($to): QueryContract;
+
+    public function filters($filters): QueryContract;
+
+    public function limit($limit): QueryContract;
+    
+    public function baseQuery(): \Illuminate\Database\Query\Builder;
+
+    public function finalQuery(): \Illuminate\Database\Query\Builder;
     
     public function data();
 
-    public static function title();
+    public static function title(): string;
 
-    public static function columnName();
+    public static function columnName(): string;
 
-    public static function columnTitle();
-
-    // public static function columns();
+    public static function columnTitle(): string;
 }

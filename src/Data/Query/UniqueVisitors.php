@@ -6,7 +6,7 @@ use ArthurPerton\Analytics\Facades\Database;
 
 class UniqueVisitors extends AbstractQuery
 {
-    public function baseQuery()
+    public function baseQuery(): \Illuminate\Database\Query\Builder
     {
         return Database::connection()
             ->table('sessions')
@@ -17,6 +17,6 @@ class UniqueVisitors extends AbstractQuery
 
     public function data()
     {
-        return $this->baseQuery()->value('value');
+        return $this->finalQuery()->value('value');
     }
 }

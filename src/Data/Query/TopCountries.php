@@ -7,7 +7,7 @@ use Locale;
 
 class TopCountries extends AbstractQuery
 {
-    public function baseQuery()
+    public function baseQuery(): \Illuminate\Database\Query\Builder
     {
         return Database::connection()->table('sessions')
             ->distinct('anonymous_id')
@@ -28,7 +28,7 @@ class TopCountries extends AbstractQuery
 
     public function data()
     {
-        return $this->baseQuery()->get()
+        return $this->finalQuery()->get()
             ->map(function ($record) {
                 $record->icon = $this->flag($record->value);
 
@@ -40,12 +40,12 @@ class TopCountries extends AbstractQuery
             });
     }
 
-    public static function columnName()
+    public static function columnName(): string
     {
         return 'country';
     }
 
-    public static function columnTitle()
+    public static function columnTitle(): string
     {
         return 'Country';
     }

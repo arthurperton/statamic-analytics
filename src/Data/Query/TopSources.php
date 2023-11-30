@@ -6,7 +6,7 @@ use ArthurPerton\Analytics\Facades\Database;
 
 class TopSources extends AbstractQuery
 {
-    public function baseQuery()
+    public function baseQuery(): \Illuminate\Database\Query\Builder
     {
         return Database::connection()
             ->table('sessions')
@@ -21,7 +21,7 @@ class TopSources extends AbstractQuery
 
     public function data()
     {
-        return $this->baseQuery()->get()->map(function ($record) {
+        return $this->finalQuery()->get()->map(function ($record) {
             if (! $record->value) {
                 $record->value = 'Direct / None';
                 $record->icon = mb_chr(128279);
@@ -34,15 +34,13 @@ class TopSources extends AbstractQuery
         });
     }
 
-    public static function columnName()
+    public static function columnName(): string
     {
         return 'source';
     }
 
-    public static function columnTitle()
+    public static function columnTitle(): string
     {
         return 'Source';
     }
-
-
 }
