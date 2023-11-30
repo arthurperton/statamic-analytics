@@ -39,44 +39,38 @@ class Database extends SqliteDatabase
         if (! $schema->hasTable('sessions')) {
             $schema->create('sessions', function (Blueprint $table) {
                 $table->string('id')->primary();
-
                 $table->string('anonymous_id');
-
                 $table->string('source')->nullable();
-
                 $table->string('browser');
                 $table->string('browser_version');
                 $table->string('os');
                 $table->string('os_version');
                 $table->string('device');
-
                 $table->string('country')->nullable();
                 $table->string('region')->nullable();
                 $table->string('city')->nullable();
+                $table->string('entry_pageview_id');
+                $table->string('exit_pageview_id');
+                // $table->unsignedInteger('started_at');
+                // $table->unsignedInteger('ended_at');
 
-                $table->unsignedInteger('created');
-                $table->unsignedInteger('modified');
-
-                $table->index('created');
+                // $table->index('started_at');
             });
         }
 
         if (! $schema->hasTable('pageviews')) {
             $schema->create('pageviews', function (Blueprint $table) {
                 $table->string('id')->primary();
-
                 $table->string('session_id');
                 $table->foreign('session_id')->references('id')->on('sessions');
-
                 $table->string('title')->nullable();
-
                 $table->string('url')->nullable();
                 $table->string('path');
                 $table->string('referrer_path')->nullable();
+                $table->unsignedInteger('started_at');
+                $table->unsignedInteger('ended_at');
 
-                $table->unsignedInteger('created');
-
-                $table->index('created');
+                $table->index('started_at');
             });
         }
 
@@ -107,8 +101,6 @@ class Database extends SqliteDatabase
                         sessions.country,
                         sessions.region,
                         sessions.city,
-                        sessions.created as session_created,
-                        sessions.modified as session_modified
             FROM        pageviews
             LEFT JOIN   sessions
             ON          pageviews.session_id = sessions.id

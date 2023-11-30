@@ -45,18 +45,21 @@ class FakeEvents extends Fake
         for ($i = 0; $i < $count; $i++) {
             $session = $this->createSession($startTime, $endTime, $this->randomItem($anonymousIds));
 
-            // Database::connection()->table('sessions')->insert($session);
-            $sessions->add($session);
-            
+            $sessionPageviews = collect();
             $numberOfPageviews = $this->randomInt(1, 6);
             for ($j = 0; $j < $numberOfPageviews; $j++) {
                 $pageview = $this->createPageview($startTime, $endTime);
 
                 $pageview['session_id'] = $session['id'];
 
-                // Database::connection()->table('pageviews')->insert($pageview);
+                $sessionPageviews->add($pageview);
                 $pageviews->add($pageview);
             }
+
+            $session['entry_pageview_id'] = $sessionPageviews->sortBy('started_at')->first()['id'];
+            $session['exit_pageview_id'] = $sessionPageviews->sortBy('started_at')->last()['id'];
+
+            $sessions->add($session);
 
             if ($pageviews->count() > 50000 || $i == $count - 1) {
                 Database::connection()->table('sessions')->insert($sessions->all());
@@ -84,7 +87,7 @@ class FakeEvents extends Fake
             'os_version' => ['int', 10, 20],
             'device' => ['item', ['Desktop', 'Mobile', 'Tablet']],
             'country' => ['item', ['NL', 'DE', 'US', 'BE', 'UK']],
-            'created' => ['int', $startTime, $endTime],
+            'started_at' => ['int', $startTime, $endTime],
         ];
 
         $session = [
@@ -95,10 +98,7 @@ class FakeEvents extends Fake
             $session[$field] = $this->randomValue($config);
         }
         
-        $session['modified'] = $session['created'];
-        if ($this->randomFloat(0, 1) > 0.3) {
-            $session['modified'] = $session['created'] + $this->randomInt(0, 30 * 60);
-        }
+        $session['ended_at'] = $session['started_at'] + $this->randomInt(0, 30 * 60);
 
         return $session;
     }
@@ -107,10 +107,14 @@ class FakeEvents extends Fake
     {
         $paths = ['/', '/about', '/blog', '/blog/post-1', '/blog/post-2', '/contact'];
 
-        return [
+        $pageview = [
             'id' => $this->randomId(),
             'path' => $this->randomItem($paths),
-            'created' => $this->randomInt($startTime, $endTime),
+            'started_at' => $this->randomInt($startTime, $endTime),
         ];
+
+        $pageview['ended_at'] = $pageview['started_at'] + $this->randomInt(0, 30 * 60);
+
+        return $pageview;
     }
 }
