@@ -19,8 +19,8 @@ class TopCountries extends AbstractQuery
                 COUNT(*) AS visitors
             ")
             // ->whereNotNull('country')
-            ->where('created', '>=', $this->from->getTimestamp())
-            ->where('created', '<', $this->to->getTimestamp())
+            ->where('started_at', '>=', $this->from->getTimestamp())
+            ->where('started_at', '<', $this->to->getTimestamp())
             ->groupBy('value')
             ->orderBy('visitors', 'desc')
             ->orderBy('value', 'asc');

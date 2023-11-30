@@ -55,7 +55,7 @@ class TrendChart extends Component
             ->to($to) 
             ->filters($this->filters)
             ->finalQuery()
-            ->selectRaw("created - ((created - {$fromSeconds}) % {$interval}) AS timestamp")
+            ->selectRaw("started_at - ((started_at - {$fromSeconds}) % {$interval}) AS timestamp")
             ->groupBy('timestamp')
             ->orderBy('timestamp')
             ->get();

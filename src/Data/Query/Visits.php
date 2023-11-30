@@ -9,8 +9,8 @@ class Visits extends AbstractQuery
     public function baseQuery(): \Illuminate\Database\Query\Builder
     {
         return Database::connection()
-            ->table('v_sessions')
-            ->selectRaw('COUNT(*) AS value')
+            ->table('v_pageviews')
+            ->selectRaw('COUNT(DISTINCT session_id) AS value')
             ->where('started_at', '>=', $this->from->getTimestamp())
             ->where('started_at', '<', $this->to->getTimestamp());
     }

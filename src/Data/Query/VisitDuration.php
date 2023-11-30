@@ -10,9 +10,9 @@ class VisitDuration extends AbstractQuery
     {
         return Database::connection()
             ->table('sessions')
-            ->selectRaw('AVG(modified - created) AS value')
-            ->where('created', '>=', $this->from->getTimestamp())
-            ->where('created', '<', $this->to->getTimestamp());
+            ->selectRaw('AVG(ended_at - started_at) AS value')
+            ->where('started_at', '>=', $this->from->getTimestamp())
+            ->where('started_at', '<', $this->to->getTimestamp());
     }
 
     public function data()

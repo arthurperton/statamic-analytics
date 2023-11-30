@@ -11,8 +11,8 @@ class BounceRate extends AbstractQuery
         return Database::connection()
             ->table('v_sessions')
             ->selectRaw('100.0 * sum(CASE WHEN pageview_count = 1 THEN 1 ELSE 0 END) / count(*) AS value')
-            ->where('created', '>=', $this->from->getTimestamp())
-            ->where('created', '<', $this->to->getTimestamp());
+            ->where('started_at', '>=', $this->from->getTimestamp())
+            ->where('started_at', '<', $this->to->getTimestamp());
     }
 
     public function data()
