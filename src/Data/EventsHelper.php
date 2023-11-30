@@ -12,7 +12,7 @@ class EventsHelper
         $now = $now ?? Carbon::now()->getTimestamp();
 
         return Database::connection()
-            ->table('sessions')
+            ->table('session')
             ->select()
             ->where('anonymous_id', $anonymousId)
             ->where('modified', '>', $now - 30 * 60)

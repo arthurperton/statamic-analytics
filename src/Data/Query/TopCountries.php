@@ -9,7 +9,7 @@ class TopCountries extends AbstractQuery
 {
     public function baseQuery(): \Illuminate\Database\Query\Builder
     {
-        return Database::connection()->table('sessions')
+        return Database::connection()->table('session')
             ->distinct('anonymous_id')
             ->selectRaw("
                 CASE country 

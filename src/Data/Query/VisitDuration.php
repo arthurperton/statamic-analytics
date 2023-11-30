@@ -9,7 +9,7 @@ class VisitDuration extends AbstractQuery
     public function baseQuery(): \Illuminate\Database\Query\Builder
     {
         return Database::connection()
-            ->table('sessions')
+            ->table('session')
             ->selectRaw('AVG(ended_at - started_at) AS value')
             ->where('started_at', '>=', $this->from->getTimestamp())
             ->where('started_at', '<', $this->to->getTimestamp());

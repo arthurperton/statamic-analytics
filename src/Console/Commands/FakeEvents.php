@@ -24,8 +24,8 @@ class FakeEvents extends Fake
     public function handle()
     {
         if ($this->option('truncate')) {
-            Database::connection()->table('pageviews')->truncate();
-            Database::connection()->table('sessions')->truncate();
+            Database::connection()->table('pageview')->truncate();
+            Database::connection()->table('session')->truncate();
         }
 
         $startTime = Carbon::parse($this->argument('start'))->timestamp;
@@ -64,8 +64,8 @@ class FakeEvents extends Fake
             $sessions->add($session);
 
             if ($pageviews->count() > 50000 || $i == $count - 1) {
-                Database::connection()->table('sessions')->insert($sessions->all());
-                Database::connection()->table('pageviews')->insert($pageviews->all());
+                Database::connection()->table('session')->insert($sessions->all());
+                Database::connection()->table('pageview')->insert($pageviews->all());
 
                 $sessions = collect();
                 $pageviews = collect();

@@ -8,7 +8,7 @@ class TopBrowsers extends AbstractQuery
 {
     public function baseQuery(): \Illuminate\Database\Query\Builder
     {
-        return Database::connection()->table('sessions')
+        return Database::connection()->table('session')
             ->distinct('anonymous_id')
             ->selectRaw('browser as value, COUNT(*) as visitors')
             ->whereNotNull('value')

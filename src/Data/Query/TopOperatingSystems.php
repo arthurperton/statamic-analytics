@@ -8,7 +8,7 @@ class TopOperatingSystems extends AbstractQuery
 {
     public function baseQuery(): \Illuminate\Database\Query\Builder
     {
-        return Database::connection()->table('sessions')
+        return Database::connection()->table('session')
             ->distinct('anonymous_id')
             ->selectRaw('os as value, COUNT(*) as visitors')
             ->whereNotNull('value')

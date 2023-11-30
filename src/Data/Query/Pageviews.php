@@ -9,7 +9,7 @@ class Pageviews extends AbstractQuery
     public function baseQuery(): \Illuminate\Database\Query\Builder
     {
         return Database::connection()
-            ->table('v_pageviews')
+            ->table('v_pageview')
             ->selectRaw('count(*) AS value')
             ->where('started_at', '>=', $this->from->getTimestamp())
             ->where('started_at', '<', $this->to->getTimestamp());
