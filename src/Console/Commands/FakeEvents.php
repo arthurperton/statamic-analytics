@@ -48,7 +48,7 @@ class FakeEvents extends Fake
             $sessionPageviews = collect();
             $numberOfPageviews = $this->randomInt(1, 6);
             for ($j = 0; $j < $numberOfPageviews; $j++) {
-                $pageview = $this->createPageview($startTime, $endTime);
+                $pageview = $this->createPageview($session['started_at'], $session['started_at'] + $this->randomInt(0, 30 * 60));
 
                 $pageview['session_id'] = $session['id'];
 
@@ -115,7 +115,7 @@ class FakeEvents extends Fake
             'started_at' => $this->randomInt($startTime, $endTime),
         ];
 
-        $pageview['ended_at'] = $pageview['started_at'] + $this->randomInt(0, 30 * 60);
+        $pageview['ended_at'] = $pageview['started_at'] + $this->randomInt(0, 3 * 60);
 
         return $pageview;
     }
