@@ -16,7 +16,7 @@ interface QueryContract
 
     public function limit($limit): QueryContract;
     
-    public function baseQuery(): \Illuminate\Database\Query\Builder;
+    public function baseQuery(): \Illuminate\Database\Query\Builder | null;
 
     public function finalQuery(): \Illuminate\Database\Query\Builder;
     

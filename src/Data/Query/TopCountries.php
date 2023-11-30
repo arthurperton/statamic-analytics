@@ -7,7 +7,7 @@ use Locale;
 
 class TopCountries extends AbstractQuery
 {
-    public function baseQuery(): \Illuminate\Database\Query\Builder
+    public function baseQuery(): \Illuminate\Database\Query\Builder | null
     {
         return Database::connection()->table('session')
             ->distinct('anonymous_id')
@@ -19,8 +19,8 @@ class TopCountries extends AbstractQuery
                 COUNT(*) AS visitors
             ")
             // ->whereNotNull('country')
-            ->where('started_at', '>=', $this->from->getTimestamp())
-            ->where('started_at', '<', $this->to->getTimestamp())
+            ->where('session_started_at', '>=', $this->from->getTimestamp())
+            ->where('session_started_at', '<', $this->to->getTimestamp())
             ->groupBy('value')
             ->orderBy('visitors', 'desc')
             ->orderBy('value', 'asc');

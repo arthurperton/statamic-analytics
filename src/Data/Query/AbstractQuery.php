@@ -39,7 +39,10 @@ abstract class AbstractQuery implements QueryContract
         return $this;
     }
     
-    abstract public function baseQuery(): \Illuminate\Database\Query\Builder;
+    public function baseQuery(): \Illuminate\Database\Query\Builder | null
+    {
+        return null;
+    }
 
     public function finalQuery(): \Illuminate\Database\Query\Builder
     {

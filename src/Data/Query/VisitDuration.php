@@ -6,14 +6,20 @@ use ArthurPerton\Analytics\Facades\Database;
 
 class VisitDuration extends AbstractQuery
 {
-    public function baseQuery(): \Illuminate\Database\Query\Builder
+    public function finalQuery(): \Illuminate\Database\Query\Builder
     {
-        return Database::connection()
-            ->table('v_pageviews')
-            ->selectRaw('session_id, AVG(session_ended_at - session_started_at) AS value')
+        $subQuery = Database::connection()
+            ->table('v_pageview')
+            ->selectRaw('DISTINCT session_id, session_started_at, session_ended_at')
             ->where('session_started_at', '>=', $this->from->getTimestamp())
-            ->where('session_started_at', '<', $this->to->getTimestamp())
-            ->groupBy('session_id');
+            ->where('session_started_at', '<', $this->to->getTimestamp());
+
+        $this->applyFilters($subQuery);
+        
+        return Database::connection()
+            ->table('v_pageview')
+            ->selectRaw('AVG(session_ended_at - session_started_at) as value')
+            ->fromSub($subQuery, 'session');
     }
 
     public function data()

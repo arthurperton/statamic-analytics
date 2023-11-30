@@ -79,8 +79,8 @@ class Database extends SqliteDatabase
         $this->connection()->statement('
             CREATE VIEW v_session
             AS
-            SELECT      session.*,
-                        count(*) AS pageview_count
+            SELECT      session.*
+            ,           count(*) AS pageview_count
             FROM        session
             LEFT JOIN   pageview
             ON          session.id = pageview.session_id
@@ -90,22 +90,22 @@ class Database extends SqliteDatabase
         $this->connection()->statement('
             CREATE VIEW v_pageview
             AS
-            SELECT      pageviews.*,
-                        sessions.anonymous_id,
-                        sessions.source,
-                        sessions.browser,
-                        sessions.browser_version,
-                        sessions.os,
-                        sessions.os_version,
-                        sessions.device,
-                        sessions.country,
-                        sessions.region,
-                        sessions.city,
-                        sessions.session_started_at,
-                        sessions.session_ended_at
-            FROM        pageviews
-            LEFT JOIN   sessions
-            ON          pageviews.session_id = sessions.id
+            SELECT      pageview.*
+            ,           anonymous_id
+            ,           source
+            ,           browser
+            ,           browser_version
+            ,           os
+            ,           os_version
+            ,           device
+            ,           country
+            ,           region
+            ,           city
+            ,           session_started_at
+            ,           session_ended_at
+            FROM        pageview
+            LEFT JOIN   session
+            ON          pageview.session_id = session.id
         ');
     }
 

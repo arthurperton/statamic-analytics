@@ -6,7 +6,7 @@ use ArthurPerton\Analytics\Facades\Database;
 
 class UniqueVisitors extends AbstractQuery
 {
-    public function baseQuery(): \Illuminate\Database\Query\Builder
+    public function baseQuery(): \Illuminate\Database\Query\Builder | null
     {
         return Database::connection()
             ->table('v_pageview')

@@ -6,13 +6,13 @@ use ArthurPerton\Analytics\Facades\Database;
 
 class TopPages extends AbstractQuery
 {
-    public function baseQuery(): \Illuminate\Database\Query\Builder
+    public function baseQuery(): \Illuminate\Database\Query\Builder | null
     {
         return Database::connection()->table('v_pageview')
             // ->distinct('anonymous_id')
             ->selectRaw('path as value, COUNT(DISTINCT anonymous_id) as visitors')
-            ->where('pageview.started_at', '>=', $this->from->getTimestamp())
-            ->where('pageview.started_at', '<', $this->to->getTimestamp())
+            ->where('session_started_at', '>=', $this->from->getTimestamp())
+            ->where('session_started_at', '<', $this->to->getTimestamp())
             ->groupBy('value')
             ->orderBy('visitors', 'desc')
             ->orderBy('value', 'asc');

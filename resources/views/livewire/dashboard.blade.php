@@ -30,32 +30,32 @@
         <livewire:aggregate title="Pageviews" query="Pageviews" :$period :$filters />
         <livewire:aggregate title="Views per Visit" query="ViewsPerVisit" :$period :$filters decimals="2" />
         <livewire:aggregate title="Bounce Rate" query="BounceRate" :$period :$filters unit="%" />
-        {{-- <livewire:aggregate title="Visit Duration" query="VisitDuration" :$period :$filters unit="s" /> --}}
+        <livewire:aggregate title="Visit Duration" query="VisitDuration" :$period :$filters unit="s" />
     </div>
     
     {{-- Trend chart --}}
-    {{-- <livewire:trend-chart :query="$statistic" :$period :$filters /> --}}
+    <livewire:trend-chart :query="$statistic" :$period :$filters />
 
     <div class="grid grid-cols-2 gap-4">
-        {{-- <x-analytics::tabs title="Top Sources" :tabs="['All']">
+        <x-analytics::tabs title="Top Sources" :tabs="['All']">
             <x-slot:tab-0>
                 <livewire:top-list query="TopSources" :$period />
             </x-slot:tab-0>
-        </x-analytics::tabs> --}}
+        </x-analytics::tabs>
 
-        {{-- <x-analytics::tabs title="Top Pages" :tabs="['Pages']">
+        <x-analytics::tabs title="Top Pages" :tabs="['Pages']">
             <x-slot:tab-0>
                 <livewire:top-list query="TopPages" :$period />
             </x-slot:tab-0>
-        </x-analytics::tabs> --}}
+        </x-analytics::tabs>
 
-        {{-- <x-analytics::tabs title="Locations" :tabs="['Countries']">
+        <x-analytics::tabs title="Locations" :tabs="['Countries']">
             <x-slot:tab-0>
                 <livewire:top-list query="TopCountries" :$period />
             </x-slot:tab-0>
-        </x-analytics::tabs> --}}
+        </x-analytics::tabs>
 
-        {{-- <x-analytics::tabs title="Devices" :tabs="['Browser', 'OS', 'Size']">
+        <x-analytics::tabs title="Devices" :tabs="['Browser', 'OS', 'Size']">
             <x-slot:tab-0>
                 <livewire:top-list query="TopBrowsers" :$period />
             </x-slot:tab-0>
@@ -65,7 +65,7 @@
             <x-slot:tab-2>
                 <livewire:top-list query="TopDevices" :$period />
             </x-slot:tab-2>
-        </x-analytics::tabs> --}}
+        </x-analytics::tabs>
     </div>
 
 </div>
