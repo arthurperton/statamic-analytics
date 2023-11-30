@@ -100,7 +100,7 @@ class Database extends SqliteDatabase
                         sessions.device,
                         sessions.country,
                         sessions.region,
-                        sessions.city,
+                        sessions.city
             FROM        pageviews
             LEFT JOIN   sessions
             ON          pageviews.session_id = sessions.id
