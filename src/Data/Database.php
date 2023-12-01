@@ -54,6 +54,7 @@ class Database extends SqliteDatabase
                 $table->unsignedInteger('session_started_at');
                 $table->unsignedInteger('session_ended_at');
 
+                $table->index('anonymous_id');
                 $table->index('session_started_at');
             });
         }
@@ -70,6 +71,7 @@ class Database extends SqliteDatabase
                 $table->unsignedInteger('started_at');
                 $table->unsignedInteger('ended_at');
 
+                $table->index('session_id');
                 $table->index('started_at');
             });
         }
