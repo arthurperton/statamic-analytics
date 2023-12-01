@@ -31,6 +31,7 @@ class Aggregate extends Component
     {
         $to = Carbon::today();
         $from = $to->clone()->subDays($this->period);
+
         return Query::make($this->query)
             ->from($from)
             ->to($to)

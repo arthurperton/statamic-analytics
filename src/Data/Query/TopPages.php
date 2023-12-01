@@ -9,7 +9,6 @@ class TopPages extends AbstractQuery
     public function baseQuery(): \Illuminate\Database\Query\Builder | null
     {
         return Database::connection()->table('v_pageview')
-            // ->distinct('anonymous_id')
             ->selectRaw('path as value, COUNT(DISTINCT anonymous_id) as visitors')
             ->where('session_started_at', '>=', $this->from->getTimestamp())
             ->where('session_started_at', '<', $this->to->getTimestamp())

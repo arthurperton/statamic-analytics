@@ -39,31 +39,31 @@
     <div class="grid grid-cols-2 gap-4">
         <x-analytics::tabs title="Top Sources" :tabs="['All']">
             <x-slot:tab-0>
-                <livewire:top-list query="TopSources" :$period />
+                <livewire:top-list query="TopSources" :$period :$filters />
             </x-slot:tab-0>
         </x-analytics::tabs>
 
         <x-analytics::tabs title="Top Pages" :tabs="['Pages']">
             <x-slot:tab-0>
-                <livewire:top-list query="TopPages" :$period />
+                <livewire:top-list query="TopPages" :$period :$filters />
             </x-slot:tab-0>
         </x-analytics::tabs>
 
         <x-analytics::tabs title="Locations" :tabs="['Countries']">
             <x-slot:tab-0>
-                <livewire:top-list query="TopCountries" :$period />
+                <livewire:top-list query="TopCountries" :$period :$filters />
             </x-slot:tab-0>
         </x-analytics::tabs>
 
         <x-analytics::tabs title="Devices" :tabs="['Browser', 'OS', 'Size']">
             <x-slot:tab-0>
-                <livewire:top-list query="TopBrowsers" :$period />
+                <livewire:top-list query="TopBrowsers" :$period :$filters />
             </x-slot:tab-0>
             <x-slot:tab-1>
-                <livewire:top-list query="TopOperatingSystems" :$period />
+                <livewire:top-list query="TopOperatingSystems" :$period :$filters />
             </x-slot:tab-1>
             <x-slot:tab-2>
-                <livewire:top-list query="TopDevices" :$period />
+                <livewire:top-list query="TopDevices" :$period :$filters />
             </x-slot:tab-2>
         </x-analytics::tabs>
     </div>

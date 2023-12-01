@@ -9,16 +9,14 @@ class TopCountries extends AbstractQuery
 {
     public function baseQuery(): \Illuminate\Database\Query\Builder | null
     {
-        return Database::connection()->table('session')
-            ->distinct('anonymous_id')
+        return Database::connection()->table('v_pageview')
             ->selectRaw("
                 CASE country 
                     WHEN NULL THEN 'ZZ'
                     ELSE TRIM(country, CHAR(10))
                 END value, 
-                COUNT(*) AS visitors
+                COUNT(DISTINCT anonymous_id) AS visitors
             ")
-            // ->whereNotNull('country')
             ->where('session_started_at', '>=', $this->from->getTimestamp())
             ->where('session_started_at', '<', $this->to->getTimestamp())
             ->groupBy('value')

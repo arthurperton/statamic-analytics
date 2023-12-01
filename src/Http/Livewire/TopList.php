@@ -13,6 +13,9 @@ class TopList extends Component
     #[Reactive]
     public $period;
 
+    #[Reactive]
+    public $filters = [];
+
     public $query;
 
     #[Computed]
@@ -24,6 +27,7 @@ class TopList extends Component
         return Query::make($this->query)
             ->from($from)
             ->to($to)
+            ->filters($this->filters)
             ->limit(9)
             ->data();
     }
