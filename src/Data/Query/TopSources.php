@@ -17,7 +17,7 @@ class TopSources extends AbstractQuery
             ->orderBy('value', 'asc');
     }
 
-    public function data()
+    protected function fetchData()
     {
         return $this->finalQuery()->get()->map(function ($record) {
             if (! $record->value) {

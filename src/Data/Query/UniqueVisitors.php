@@ -15,7 +15,7 @@ class UniqueVisitors extends AbstractQuery
             ->where('started_at', '<', $this->to->getTimestamp());
     }
 
-    public function data()
+    protected function fetchData()
     {
         return $this->finalQuery()->value('value');
     }

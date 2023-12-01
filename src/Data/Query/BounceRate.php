@@ -34,7 +34,7 @@ class BounceRate extends AbstractQuery
     }
 
 
-    public function data()
+    protected function fetchData()
     {
         return $this->finalQuery()->value('value');
     }

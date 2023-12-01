@@ -3,6 +3,7 @@
 namespace ArthurPerton\Analytics\Data\Query;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 abstract class AbstractQuery implements QueryContract
 {
@@ -38,8 +39,8 @@ abstract class AbstractQuery implements QueryContract
 
         return $this;
     }
-    
-    public function baseQuery(): \Illuminate\Database\Query\Builder | null
+
+    public function baseQuery(): ?\Illuminate\Database\Query\Builder
     {
         return null;
     }
@@ -53,10 +54,27 @@ abstract class AbstractQuery implements QueryContract
 
         return $query;
     }
-    
-    public function data()
+
+    protected function fetchData()
     {
         return $this->finalQuery()->get();
+    }
+
+    final public function data()
+    {
+        return Cache::remember($this->cacheKey(), 60, function () {
+            // $start = microtime(true);
+            $data = $this->fetchData();
+            // $duration = microtime(true) - $start;
+            // \Log::debug("$duration seconds for query ".get_class($this));
+
+            return $data;
+        });
+    }
+
+    protected function cacheKey()
+    {
+        return 'analytics:query.'.get_class($this).'.'.http_build_query(array_merge(['from' => $this->from->timestamp, 'to' => $this->to->timestamp], $this->filters));
     }
 
     public static function title(): string

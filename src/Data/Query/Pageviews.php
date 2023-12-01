@@ -15,7 +15,7 @@ class Pageviews extends AbstractQuery
             ->where('session_started_at', '<', $this->to->getTimestamp());
     }
 
-    public function data()
+    protected function fetchData()
     {
         return $this->finalQuery()->value('value');
     }

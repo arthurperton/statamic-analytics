@@ -24,7 +24,7 @@ class ViewsPerVisit extends AbstractQuery
             ->fromSub($subQuery, 'session');
     }
 
-    public function data()
+    protected function fetchData()
     {
         return $this->finalQuery()->value('value');
     }
