@@ -7,7 +7,9 @@
         smooth: false,
         option() {
             return {
-                animation: false,
+                //animation: false,
+                animationDuration: 0,
+                animationDurationUpdate: 50,
                 //textStyle: {
                 //   fontFamily: 'Inter',
                 //},
@@ -28,6 +30,7 @@
                     trigger: 'axis'
                 },
                 xAxis: {
+                    //animation: false,
                     type: 'time',
                     boundaryGap: this.type != 'line',
                     axisLabel: {
@@ -36,6 +39,7 @@
                     },
                 },
                 yAxis: {
+                    //animation: false,
                     type: 'value',
                 },
                 series: [
