@@ -6,13 +6,22 @@ use ArthurPerton\Analytics\Facades\Database;
 
 class ViewsPerVisit extends AbstractQuery
 {
-    public function baseQuery(): \Illuminate\Database\Query\Builder | null
+    public function finalQuery(): \Illuminate\Database\Query\Builder
     {
-        return Database::connection()
-            ->table('v_session')
-            ->selectRaw('AVG(pageview_count) AS value')
+        $subQuery = Database::connection()
+            ->table('v_pageview')
+            ->selectRaw('session_id, session_started_at, session_ended_at, COUNT(*) as pageviews')
             ->where('session_started_at', '>=', $this->from->getTimestamp())
             ->where('session_started_at', '<', $this->to->getTimestamp());
+
+        $this->applyFilters($subQuery);
+        
+        $subQuery->groupBy('session_id');
+
+        return Database::connection()
+            ->table('v_pageview')
+            ->selectRaw('AVG(pageviews) as value')
+            ->fromSub($subQuery, 'session');
     }
 
     public function data()
