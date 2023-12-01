@@ -10,6 +10,7 @@ class TopPages extends AbstractQuery
     {
         return Database::connection()->table('v_pageview')
             ->selectRaw('path as value, COUNT(DISTINCT anonymous_id) as visitors')
+            ->whereNotNull('value')
             ->where('session_started_at', '>=', $this->from->getTimestamp())
             ->where('session_started_at', '<', $this->to->getTimestamp())
             ->groupBy('value')
