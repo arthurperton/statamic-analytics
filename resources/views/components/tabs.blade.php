@@ -5,11 +5,11 @@
     }"
 >
     <div class="w-full flex justify-between">
-        <h2 class="text-slate-500 mb-1" :class="">{{ $title }}</h2>
+        <h2 class="text-slate-500 mb-1">{{ $title }}</h2>
         @if (count($tabs) > 1)
             <ul class="flex gap-2">
-                @foreach ($tabs as $tab)
-                    <li><button :class="index === {{ $loop->index }} ? 'text-analytics-blue' : ''" @click="index = {{ $loop->index }}">{{ $tab }}</button></li>
+                @foreach ($tabs as $index => $tab)
+                    <li><button :class="index === {{ $index }} ? 'text-analytics-blue' : ''" @click="index = {{ $index }}">{{ $tab }}</button></li>
                 @endforeach
             </ul>
         @endif
