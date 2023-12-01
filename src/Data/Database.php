@@ -38,7 +38,7 @@ class Database extends SqliteDatabase
 
         if (! $schema->hasTable('session')) {
             $schema->create('session', function (Blueprint $table) {
-                $table->string('id')->primary();
+                $table->string('id');
                 $table->string('anonymous_id');
                 $table->string('source')->nullable();
                 $table->string('browser');
@@ -54,6 +54,7 @@ class Database extends SqliteDatabase
                 $table->unsignedInteger('session_started_at');
                 $table->unsignedInteger('session_ended_at');
 
+                $table->unique('id');
                 $table->index('anonymous_id');
                 $table->index('session_started_at');
             });
@@ -61,7 +62,7 @@ class Database extends SqliteDatabase
 
         if (! $schema->hasTable('pageview')) {
             $schema->create('pageview', function (Blueprint $table) {
-                $table->string('id')->primary();
+                $table->string('id');
                 $table->string('session_id');
                 $table->foreign('session_id')->references('id')->on('session');
                 $table->string('title')->nullable();
@@ -71,6 +72,7 @@ class Database extends SqliteDatabase
                 $table->unsignedInteger('started_at');
                 $table->unsignedInteger('ended_at');
 
+                $table->unique('id');
                 $table->index('session_id');
                 $table->index('started_at');
             });
@@ -96,13 +98,13 @@ class Database extends SqliteDatabase
             ,           anonymous_id
             ,           source
             ,           browser
-            ,           browser_version
+            --,           browser_version
             ,           os
-            ,           os_version
+            --,           os_version
             ,           device
             ,           country
-            ,           region
-            ,           city
+            --,           region
+            --,           city
             ,           session_started_at
             ,           session_ended_at
             FROM        pageview
