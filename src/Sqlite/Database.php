@@ -82,7 +82,14 @@ abstract class Database
 
     public function connection(): ConnectionInterface
     {
-        return DB::connection($this->name);
+        $connection = DB::connection($this->name);
+        
+        $connection->statement('
+            PRAGMA cache_size = -100000;
+            PRAGMA temp_store = 2;
+        ');
+
+        return $connection;
     }
 
     public function schema(): \Illuminate\Database\Schema\Builder
