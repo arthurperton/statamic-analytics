@@ -24,6 +24,8 @@ class DashboardController extends CpController
     {
         $data = $request->json()->all();
 
+        \Log::debug($data);
+
         $query = array_get($data, 'query');
         $period = array_get($data, 'period', 7);
         $filters = array_get($data, 'filters', []);
@@ -44,6 +46,7 @@ class DashboardController extends CpController
             'meta' => [
                 'query' => $query,
                 'period' => $period,
+                'filters' => $filters,
                 'duration' => $duration,
             ]
         ]);
