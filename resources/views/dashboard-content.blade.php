@@ -87,7 +87,7 @@
         </div>
 
          {{-- Trend chart --}}
-        <x-analytics::trend-chart />
+        {{-- <x-analytics::trend-chart /> --}}
 
     </div>
 
