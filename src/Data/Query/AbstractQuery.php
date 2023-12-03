@@ -62,14 +62,14 @@ abstract class AbstractQuery implements QueryContract
 
     final public function data()
     {
-        return Cache::remember($this->cacheKey(), 300, function () {
+        //return Cache::remember($this->cacheKey(), 300, function () {
             // $start = microtime(true);
             $data = $this->fetchData();
             // $duration = microtime(true) - $start;
             // \Log::debug("$duration seconds for query ".get_class($this));
 
             return $data;
-        });
+        // });
     }
 
     protected function cacheKey()
