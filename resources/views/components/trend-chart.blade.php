@@ -3,11 +3,12 @@
     x-data="{
         chart: undefined,
         data: [],
+        loading: true,
         type: 'line',
         smooth: false,
         option() {
             return {
-                //animation: false,
+                animation: false,
                 animationDuration: 0,
                 animationDurationUpdate: 50,
                 //textStyle: {
@@ -71,9 +72,13 @@
             this.data = data.map(d => [new Date(d.timestamp * 1000), d.value])
         },
         async updateData() {
+            this.loading = true
+
             const data = await fetchData({ query: statistic, chart: true })
-            
+
             this.setChartData(data)
+
+            this.loading = false
         },
     }"
     x-init="
@@ -113,6 +118,15 @@
         </div>
     </div>
 
-    <div id="trend-chart" class="w-full h-96"></div>
+    <div class="relative w-full h-96">
+        <div id="trend-chart" class="w-full h-full"></div>
+
+        <div 
+            class="absolute inset-0 flex justify-center items-center bg-white transition-opacity duration-200 ease-in-out"
+            :class="loading ? 'opacity-100' : 'opacity-0'"
+        >
+            <x-analytics::spinner size="8" />
+        </div>
+    </div>
 
 </div>

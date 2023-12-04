@@ -34,7 +34,7 @@
             x-text="displayValue()"
         ></div>
         <div 
-            class="absolute inset-0 flex justify-end items-center bg-white transition-opacity duration-200"
+            class="absolute inset-0 flex justify-end items-center bg-white transition-opacity duration-200 ease-in-out"
             :class="loading ? 'opacity-100' : 'opacity-0'"
         >
             <x-analytics::spinner />

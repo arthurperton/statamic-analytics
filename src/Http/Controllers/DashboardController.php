@@ -22,14 +22,12 @@ class DashboardController extends CpController
 
     public function query(Request $request)
     {
-        $data = $request->json()->all();
+        $parameters = $request->json()->all();
 
-        \Log::debug($data);
-
-        $query = array_get($data, 'query');
-        $period = array_get($data, 'period', 7);
-        $filters = array_get($data, 'filters', []);
-        $chart = (bool) array_get($data, 'chart', false);
+        $query = array_get($parameters, 'query');
+        $period = array_get($parameters, 'period', 7);
+        $filters = array_get($parameters, 'filters', []);
+        $chart = (bool) array_get($parameters, 'chart', false);
 
         $to = Carbon::today();
         $from = $to->clone()->subDays($period);

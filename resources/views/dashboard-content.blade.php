@@ -92,7 +92,7 @@
         <x-analytics::trend-chart />
 
         {{-- Breakdown --}}
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid md:grid-cols-2 gap-4">
             <x-analytics::tabs title="Top Sources" :tabs="['All']">
                 <x-slot:tab-0>
                     <x-analytics::top-list query="TopSources" column-name="source" column-title="Source"  />
