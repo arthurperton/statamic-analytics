@@ -33,7 +33,6 @@
 
             setFilter(filter) {
                 this.filters[filter['column']] = filter
-                console.log(this.filters)
             },
 
             async fetchData(options) {
@@ -53,8 +52,6 @@
                 })
                 
                 const data = await response.json()
-
-                console.log(data)
 
                 return data.data
             },

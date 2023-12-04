@@ -1,7 +1,7 @@
-<a
-    role="button"
+<button
     class="flex-1 block max-w-xs shadow-md bg-white rounded-xl px-4 py-3 border-2" 
     :class="statistic === '{{ $query }}' ? 'border-analytics-blue' : 'border-white'"
+    x-on:click.prevent="statistic = '{{ $query }}'"
     x-data="{
         value: undefined,
         loading: false,
@@ -22,7 +22,7 @@
     }"
     x-init="
         updateValue()
-        $watch('period, filters', () => updateValue())
+        $watch('[period, filters]', () => updateValue())
     "
 >
     <h2 class="text-slate-500 mb-1">{{ $title }}</h2>
@@ -33,4 +33,4 @@
        
     
     </div>
-</a>
+</button>

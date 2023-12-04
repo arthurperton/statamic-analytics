@@ -85,9 +85,9 @@
 
         updateData()
         
-        $watch('statistic, period, filters', () => updateData())
+        $watch('[statistic, period, filters]', () => updateData())
         
-        $watch('data, type, smooth', () => chart.setOption(option()))
+        $watch('[data, type, smooth]', () => chart.setOption(option()))
     "
 >
     

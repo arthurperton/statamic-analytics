@@ -19,7 +19,7 @@
     x-init="
         updateData()
         
-        $watch('period, filters', () => updateData())
+        $watch('[period, filters]', () => updateData())
     "
 >
 
