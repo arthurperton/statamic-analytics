@@ -89,6 +89,39 @@
          {{-- Trend chart --}}
         <x-analytics::trend-chart />
 
+        {{-- Breakdown --}}
+        <div class="grid grid-cols-2 gap-4">
+            <x-analytics::tabs title="Top Sources" :tabs="['All']">
+                <x-slot:tab-0>
+                    <x-analytics::top-list query="TopSources" column-name="source" column-title="Source"  />
+                </x-slot:tab-0>
+            </x-analytics::tabs>
+
+            <x-analytics::tabs title="Top Pages" :tabs="['Pages']">
+                <x-slot:tab-0>
+                    <x-analytics::top-list query="TopPages" column-name="path" column-title="Page" />
+                </x-slot:tab-0>
+            </x-analytics::tabs>
+    
+            <x-analytics::tabs title="Locations" :tabs="['Countries']">
+                <x-slot:tab-0>
+                    <x-analytics::top-list query="TopCountries" column-name="country" column-title="Country" />
+                </x-slot:tab-0>
+            </x-analytics::tabs>
+    
+            <x-analytics::tabs title="Devices" :tabs="['Browser', 'OS', 'Size']">
+                <x-slot:tab-0>
+                    <x-analytics::top-list query="TopBrowsers" column-name="browser" column-title="Browser" />
+                </x-slot:tab-0>
+                <x-slot:tab-1>
+                    <x-analytics::top-list query="TopOperatingSystems" column-name="os" column-title="Operating system" />
+                </x-slot:tab-1>
+                <x-slot:tab-2>
+                    <x-analytics::top-list query="TopDevices" column-name="device" column-title="Device" />
+                </x-slot:tab-2>
+            </x-analytics::tabs>
+        </div>
+
     </div>
 
 </body>
