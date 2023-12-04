@@ -23,12 +23,17 @@
         x-data="{
             period: 7,
             
-            filters: [],
+            filters: {},
             
             statistic: 'UniqueVisitors',
             
             removeFilter(key) {
                 delete this.filters[key]
+            },
+
+            setFilter(filter) {
+                this.filters[filter['column']] = filter
+                console.log(this.filters)
             },
 
             async fetchData(options) {

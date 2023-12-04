@@ -7,6 +7,14 @@
             
             this.items = data
         },
+        filterBy(value, displayValue) {
+            setFilter({
+                value,
+                displayValue,
+                column: '{{ $columnName }}',
+                title: '{{ $columnTitle }}',
+            })
+        }
     }"
     x-init="
         updateData()

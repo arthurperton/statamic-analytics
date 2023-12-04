@@ -22,7 +22,7 @@
     }"
     x-init="
         updateValue()
-        $watch('period', () => updateValue())
+        $watch('period, filters', () => updateValue())
     "
 >
     <h2 class="text-slate-500 mb-1">{{ $title }}</h2>
