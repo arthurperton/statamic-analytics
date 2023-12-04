@@ -71,7 +71,7 @@
             this.data = data.map(d => [new Date(d.timestamp * 1000), d.value])
         },
         async updateData() {
-            const data = await fetchData(statistic)
+            const data = await fetchData({ query: statistic, chart: true })
             
             this.setChartData(data)
         },

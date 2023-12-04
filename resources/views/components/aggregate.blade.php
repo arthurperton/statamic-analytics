@@ -7,7 +7,7 @@
         loading: false,
         async updateValue() {
             this.loading = true
-            this.value = await fetchData('{{ $query }}')
+            this.value = await fetchData({ query: '{{ $query }}' })
             this.loading = false
         },
         displayValue() {

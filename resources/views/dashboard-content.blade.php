@@ -31,11 +31,11 @@
                 delete this.filters[key]
             },
 
-            async fetchData(query) {
+            async fetchData(options) {
                 const parameters = {
-                    query,
                     period: this.period,
                     filters: Object.values(this.filters),
+                    ...options,
                 }
 
                 const response = await fetch('dashboard/query', {
@@ -87,7 +87,7 @@
         </div>
 
          {{-- Trend chart --}}
-        {{-- <x-analytics::trend-chart /> --}}
+        <x-analytics::trend-chart />
 
     </div>
 

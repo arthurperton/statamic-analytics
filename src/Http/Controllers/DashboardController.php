@@ -29,16 +29,21 @@ class DashboardController extends CpController
         $query = array_get($data, 'query');
         $period = array_get($data, 'period', 7);
         $filters = array_get($data, 'filters', []);
+        $chart = (bool) array_get($data, 'chart', false);
 
         $to = Carbon::today();
         $from = $to->clone()->subDays($period);
 
         $start = microtime(true);
-        $data = Query::make($query)
-            ->from($from)
-            ->to($to)
-            ->filters($filters)
-            ->data();
+        if ($chart) {
+            $data = $this->createChartData($query, $from, $to, $filters);
+        } else {
+            $data = Query::make($query)
+                ->from($from)
+                ->to($to)
+                ->filters($filters)
+                ->data();
+        }
         $duration = round(1E3 * (microtime(true) - $start));
 
         return response()->json([
@@ -50,6 +55,35 @@ class DashboardController extends CpController
                 'duration' => $duration,
             ]
         ]);
+    }
+
+    protected function createChartData($query, $from, $to, $filters)
+    {
+        $fromSeconds = $from->getTimestamp();
+        $toSeconds = $to->getTimestamp();
+
+        $interval = $from->diff($to)->days <= 1 ? 3600 : 86400;
+
+        $records = Query::make($query)
+            ->from($from)
+            ->to($to) 
+            ->filters($filters)
+            ->finalQuery()
+            ->selectRaw("session_started_at - ((session_started_at - {$fromSeconds}) % {$interval}) AS timestamp")
+            ->groupBy('timestamp')
+            ->orderBy('timestamp')
+            ->get();
+
+        $series = collect();
+        for ($timestamp = $fromSeconds; $timestamp < $toSeconds; $timestamp += $interval) {
+            $series->put($timestamp, (object) ['timestamp' => $timestamp, 'value' => 0]);
+        }
+
+        $records->each(function ($record) use ($series) {
+            $series->put($record->timestamp, $record);
+        });
+
+        return $series->values();
     }
 
     public function stats(Request $request)
