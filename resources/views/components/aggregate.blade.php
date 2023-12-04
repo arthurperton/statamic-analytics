@@ -4,17 +4,13 @@
     x-on:click.prevent="statistic = '{{ $query }}'"
     x-data="{
         value: undefined,
-        loading: false,
+        loading: true,
         async updateValue() {
             this.loading = true
             this.value = await fetchData({ query: '{{ $query }}' })
             this.loading = false
         },
         displayValue() {
-            if (this.loading) {
-                return '...'
-            }
-
             return this.value 
                 ? this.value.toFixed({{ $decimals ?? 0 }})
                 : '&nbsp;'
@@ -22,14 +18,27 @@
     }"
     x-init="
         updateValue()
+
         $watch('[period, filters]', () => updateValue())
     "
 >
     <h2 class="text-slate-500 mb-1">{{ $title }}</h2>
     <div
-        class="relative font-medium text-slate-700 text-2xl text-right"
-        x-text="displayValue()"
+        class="relative font-medium text-slate-700 text-2xl"
     >
+        
+        <div 
+            class="text-right"
+            {{-- class="transition-opacity duration-150" --}}
+            {{-- :class="loading ? 'opacity-0' : 'opacity-300'" --}}
+            x-text="displayValue()"
+        ></div>
+        <div 
+            class="absolute inset-0 flex justify-end items-center bg-white transition-opacity duration-200"
+            :class="loading ? 'opacity-100' : 'opacity-0'"
+        >
+            <x-analytics::spinner />
+        </div>
        
     
     </div>
