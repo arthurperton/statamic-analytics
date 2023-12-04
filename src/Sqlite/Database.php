@@ -38,7 +38,7 @@ abstract class Database
 
     public function create($overwrite = false)
     {
-        $this->connection()->disconnect();
+        $this->connection(false)->disconnect();
 
         if ($overwrite || ! $this->exists()) {
             File::delete($this->path);
@@ -80,14 +80,16 @@ abstract class Database
         return $this->name;
     }
 
-    public function connection(): ConnectionInterface
+    public function connection($pragma = true): ConnectionInterface
     {
         $connection = DB::connection($this->name);
-        
-        $connection->statement('
-            PRAGMA cache_size = -100000;
-            PRAGMA temp_store = 2;
-        ');
+
+        if ($pragma) {
+            $connection->statement('
+                PRAGMA cache_size = -100000;
+                PRAGMA temp_store = 2;
+            ');
+        }
 
         return $connection;
     }
