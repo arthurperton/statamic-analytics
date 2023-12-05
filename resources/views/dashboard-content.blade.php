@@ -95,31 +95,31 @@
         <div class="grid md:grid-cols-2 gap-4">
             <x-analytics::tabs title="Top Sources" :tabs="['All']">
                 <x-slot:tab-0>
-                    <x-analytics::top-list query="TopSources" column-name="source" column-title="Source"  />
+                    <x-analytics::top-list query="TopSources" column-name="source" column-title="Source" bar-color="bg-analytics-blue/5" />
                 </x-slot:tab-0>
             </x-analytics::tabs>
 
             <x-analytics::tabs title="Top Pages" :tabs="['Pages']">
                 <x-slot:tab-0>
-                    <x-analytics::top-list query="TopPages" column-name="path" column-title="Page" />
+                    <x-analytics::top-list query="TopPages" column-name="path" column-title="Page" bar-color="bg-analytics-green/5" />
                 </x-slot:tab-0>
             </x-analytics::tabs>
     
             <x-analytics::tabs title="Locations" :tabs="['Countries']">
                 <x-slot:tab-0>
-                    <x-analytics::top-list query="TopCountries" column-name="country" column-title="Country" />
+                    <x-analytics::top-list query="TopCountries" column-name="country" column-title="Country" bar-color="bg-analytics-yellow/5" />
                 </x-slot:tab-0>
             </x-analytics::tabs>
     
             <x-analytics::tabs title="Devices" :tabs="['Browser', 'OS', 'Size']">
                 <x-slot:tab-0>
-                    <x-analytics::top-list query="TopBrowsers" column-name="browser" column-title="Browser" />
+                    <x-analytics::top-list query="TopBrowsers" column-name="browser" column-title="Browser" bar-color="bg-analytics-blue/5" />
                 </x-slot:tab-0>
                 <x-slot:tab-1>
-                    <x-analytics::top-list query="TopOperatingSystems" column-name="os" column-title="Operating system" />
+                    <x-analytics::top-list query="TopOperatingSystems" column-name="os" column-title="Operating system" bar-color="bg-analytics-blue/5" />
                 </x-slot:tab-1>
                 <x-slot:tab-2>
-                    <x-analytics::top-list query="TopDevices" column-name="device" column-title="Device" />
+                    <x-analytics::top-list query="TopDevices" column-name="device" column-title="Device" bar-color="bg-analytics-blue/5" />
                 </x-slot:tab-2>
             </x-analytics::tabs>
         </div>

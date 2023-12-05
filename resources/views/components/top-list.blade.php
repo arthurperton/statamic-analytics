@@ -43,7 +43,7 @@
 
                     {{-- Percentage bar --}}
                     <div 
-                        class="absolute top-0 left-0 h-full bg-analytics-blue/5"
+                        class="absolute top-0 left-0 h-full {{ $barColor ?? 'bg-analytics-blue/5' }}"
                         :style="`width: ${(100 * item.visitors) / items[0].visitors}%;`"
                     ></div>
 
