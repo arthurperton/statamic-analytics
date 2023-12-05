@@ -56,9 +56,10 @@
 
             async fetchData(options) {
                 const parameters = {
+                    query: options.query,
                     period: this.period,
-                    filters: Object.values(this.filters),
-                    ...options,
+                    filters: Object.values(this.filters).sort((a, b) => (a.column < b.column) ? - 1 : 1),
+                    chart: options.chart || false,
                 }
                 
                 const promise = new Promise((resolve, reject) => this.fetchQueue.push({ parameters, resolve, reject }))
@@ -80,17 +81,46 @@
 
                 const task = this.fetchQueue.shift()
                 
-                const key = JSON.stringify(task.parameters)
+                const key = this.createKey(task.parameters)
                 
                 this.fetchActive[key] = task
                 
-                const data = await this.actuallyFetchData(task.parameters)
+                const data = await this.remember(key, 60, () => this.actuallyFetchData(task.parameters))
 
                 delete this.fetchActive[key]
 
                 task.resolve(data)
                 
                 this.processQueue()
+            },
+
+            createKey(parameters) {
+                return JSON.stringify(parameters)
+            },
+
+            async remember(key, ttl, callback) {
+                const cached = sessionStorage.getItem(key)
+
+                if (cached) {
+                    const parsed = JSON.parse(cached)
+                    
+                    if (parsed.expires > Date.now()) {
+                        await new Promise(resolve => setTimeout(resolve, 100));
+
+                        return parsed.data
+                    }
+                        
+                    sessionStorage.removeItem(key)
+                }
+
+                const data = await callback()
+
+                sessionStorage.setItem(key, JSON.stringify({
+                    expires: Date.now() + ttl * 1000,
+                    data,
+                }))
+
+                return data
             },
         }"
         x-init="
