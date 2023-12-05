@@ -41,6 +41,10 @@
                 },
                 yAxis: {
                     //animation: false,
+                    //name: 'Visitors',
+                    nameTextStyle: {
+                        align: 'right',
+                    },
                     type: 'value',
                 },
                 series: [
