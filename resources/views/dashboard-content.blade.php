@@ -174,7 +174,7 @@
     
             <x-analytics::tabs title="Locations" :tabs="['Countries']">
                 <x-slot:tab-0>
-                    <x-analytics::top-list query="TopCountries" column-name="country" column-title="Country" bar-color="bg-analytics-yellow/5" />
+                    <x-analytics::top-list query="TopCountries" column-name="country" column-title="Country" bar-color="bg-analytics-yellow/10" />
                 </x-slot:tab-0>
             </x-analytics::tabs>
     
