@@ -59,7 +59,7 @@
                         x-on:click.prevent="filterBy(item.value, item.displayValue ?? item.value)"
                     >
                         <template x-if="item.icon">
-                            <span class="text-lg m-0 p-0 leading-[1] mr-1.5">
+                            <span class="text-lg m-0 p-0 leading-none mr-1.5">
                                 <template x-if="item.iconType === 'url'">
                                     <img style="width: 1em; height: 1em;" :src="item.icon" />
                                 </template>

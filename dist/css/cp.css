@@ -769,6 +769,9 @@ video {
 .leading-\[1\] {
   line-height: 1;
 }
+.leading-none {
+  line-height: 1;
+}
 .tracking-wide {
   letter-spacing: 0.025em;
 }
