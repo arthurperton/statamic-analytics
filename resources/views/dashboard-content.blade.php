@@ -26,6 +26,10 @@
             filters: {},
             
             statistic: 'UniqueVisitors',
+
+            fetchQueue: [],
+
+            fetchActive: {},
             
             removeFilter(key) {
                 delete this.filters[key]
@@ -35,13 +39,7 @@
                 this.filters[filter['column']] = filter
             },
 
-            async fetchData(options) {
-                const parameters = {
-                    period: this.period,
-                    filters: Object.values(this.filters),
-                    ...options,
-                }
-
+            async actuallyFetchData(parameters) {
                 const response = await fetch('dashboard/query', {
                     method: 'POST',
                     headers: {
@@ -54,6 +52,45 @@
                 const data = await response.json()
 
                 return data.data
+            },
+
+            async fetchData(options) {
+                const parameters = {
+                    period: this.period,
+                    filters: Object.values(this.filters),
+                    ...options,
+                }
+                
+                const promise = new Promise((resolve, reject) => this.fetchQueue.push({ parameters, resolve, reject }))
+
+                this.processQueue()
+
+                return promise
+            },
+
+            async processQueue() {
+                if (this.fetchQueue.length === 0) {
+                    return
+                }
+
+                if (Object.values(this.fetchActive).length >= 6) {
+                    setTimeout(() => this.processQueue(), 50)
+                    return
+                }
+
+                const task = this.fetchQueue.shift()
+                
+                const key = JSON.stringify(task.parameters)
+                
+                this.fetchActive[key] = task
+                
+                const data = await this.actuallyFetchData(task.parameters)
+
+                delete this.fetchActive[key]
+
+                task.resolve(data)
+                
+                this.processQueue()
             },
         }"
         x-init="
