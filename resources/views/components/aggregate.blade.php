@@ -1,5 +1,5 @@
 <button
-    class="flex-1 block max-w-xs shadow-md bg-white rounded-xl px-4 py-3 border-2" 
+    class="flex-1 block max-w-xs shadow-md bg-white rounded-xl px-4 py-3 border-2 text-left" 
     :class="statistic === '{{ $query }}' ? 'border-analytics-blue' : 'border-white'"
     x-on:click.prevent="statistic = '{{ $query }}'"
     x-data="{
