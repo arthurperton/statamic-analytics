@@ -62,7 +62,7 @@ abstract class AbstractQuery implements QueryContract
 
     final public function data()
     {
-        //return Cache::remember($this->cacheKey(), 300, function () {
+        // return Cache::remember($this->cacheKey(), 300, function () {
             // $start = microtime(true);
             $data = $this->fetchData();
             // $duration = microtime(true) - $start;
@@ -74,7 +74,15 @@ abstract class AbstractQuery implements QueryContract
 
     protected function cacheKey()
     {
-        return 'analytics:query.'.get_class($this).'.'.http_build_query(array_merge(['from' => $this->from->timestamp, 'to' => $this->to->timestamp], $this->filters));
+        $filters = $this->filters;
+        usort($filters, fn ($a, $b) => ($a['column'] < $b['column']) ? - 1 : 1);
+
+        return 'analytics:query.'.md5(json_encode([
+            'query' => get_class($this),
+            'from' => $this->from->timestamp,
+            'to' => $this->to->timestamp,
+            'filters' => $filters,
+        ]));
     }
 
     public static function title(): string
