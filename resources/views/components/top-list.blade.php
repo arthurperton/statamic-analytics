@@ -4,6 +4,10 @@
         items: [],
         loading: true,
         async updateData() {
+            if (!tabVisible) {
+                return;
+            }
+
             this.loading = true
             
             const data = await fetchData({ query: '{{ $query }}' })
@@ -25,6 +29,8 @@
         updateData()
         
         $watch('[period, filters]', () => updateData())
+
+        $watch('tabVisible', (visible) => visible && updateData())
     "
 >
     <div
