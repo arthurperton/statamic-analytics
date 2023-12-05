@@ -46,15 +46,6 @@ class ServiceProvider extends AddonServiceProvider
             $command->call('analytics:create-database');
             $command->call('analytics:update-geo');
         });
-
-        Livewire::component('aggregate', Aggregate::class);
-        Livewire::component('chart', Chart::class);
-        Livewire::component('counter', Counter::class);
-        Livewire::component('dashboard', Dashboard::class);
-        Livewire::component('map-chart', MapChart::class);
-        Livewire::component('period-selector', PeriodSelector::class);
-        Livewire::component('top-list', TopList::class);
-        Livewire::component('trend-chart', TrendChart::class);
     }
 
     protected function schedule($schedule)
