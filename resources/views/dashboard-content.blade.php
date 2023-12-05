@@ -74,7 +74,7 @@
                 }
 
                 if (Object.values(this.fetchActive).length >= 6) {
-                    setTimeout(() => this.processQueue(), 50)
+                    setTimeout(() => this.processQueue(), 10)
                     return
                 }
 
