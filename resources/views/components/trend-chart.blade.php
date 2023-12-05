@@ -8,7 +8,7 @@
         smooth: false,
         option() {
             return {
-                animation: false,
+                //animation: false,
                 animationDuration: 0,
                 animationDurationUpdate: 50,
                 //textStyle: {
