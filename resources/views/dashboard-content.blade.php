@@ -85,7 +85,7 @@
                 
                 this.fetchActive[key] = task
                 
-                const data = await this.remember(key, 60, () => this.actuallyFetchData(task.parameters))
+                const data = await this.remember(key, 300, () => this.actuallyFetchData(task.parameters))
 
                 delete this.fetchActive[key]
 
