@@ -124,9 +124,9 @@
             },
         }"
         x-init="
-
+            $watch('[period, filters]', () => fetchQueue.length = 0)
         "
-        >
+    >
 
         {{-- Title row --}}
         <div class="flex justify-between items-center mb-2">
