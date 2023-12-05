@@ -35,12 +35,11 @@
 >
     <div
         class="w-full grid grid-cols-[1fr_max-content] gap-1"
-       
     >
 
         {{-- Column headers --}}
-        <div class="">{{ $columnTitle }}</div>
-        <div class="text-right">Visitors</div>
+        <div class="text-slate-500 text-sm">{{ $columnTitle }}</div>
+        <div class="text-slate-500 text-sm text-right">Visitors</div>
 
         {{-- Data rows --}}
         <template x-for="item in items">

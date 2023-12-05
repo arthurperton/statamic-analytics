@@ -5,7 +5,7 @@
     }"
 >
     <div class="flex-0 flex justify-between">
-        <h2 class="text-slate-500 mb-1">{{ $title }}</h2>
+        <h3 class="mb-1 text-slate-700 text-base font-medium">{{ $title }}</h3>
         @if (count($tabs) > 1)
             <ul class="flex gap-2">
                 @foreach ($tabs as $index => $title)
