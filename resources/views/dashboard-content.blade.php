@@ -82,13 +82,20 @@
                 const task = this.fetchQueue.shift()
                 
                 const key = this.createKey(task.parameters)
-                
-                this.fetchActive[key] = task
-                
-                const data = await this.remember(key, 300, () => this.actuallyFetchData(task.parameters))
 
-                delete this.fetchActive[key]
+                let data = this.get(key)
+                if (data) {
+                    await new Promise(resolve => setTimeout(resolve, 200));
+                } else {
+                    this.fetchActive[key] = task
+                
+                    data = await this.actuallyFetchData(task.parameters)
 
+                    delete this.fetchActive[key]    
+                    
+                    this.put(key, data, 300)
+                }
+                
                 task.resolve(data)
                 
                 this.processQueue()
@@ -98,29 +105,45 @@
                 return JSON.stringify(parameters)
             },
 
+            // Cache functions
+
             async remember(key, ttl, callback) {
-                const cached = sessionStorage.getItem(key)
+                const cached = this.get(key)
 
                 if (cached) {
-                    const parsed = JSON.parse(cached)
-                    
-                    if (parsed.expires > Date.now()) {
-                        await new Promise(resolve => setTimeout(resolve, 100));
-
-                        return parsed.data
-                    }
-                        
-                    sessionStorage.removeItem(key)
+                    return cached
                 }
 
                 const data = await callback()
 
+                this.put(key, data, ttl)
+
+                return data
+            },
+
+            put(key, data, ttl) {
                 sessionStorage.setItem(key, JSON.stringify({
                     expires: Date.now() + ttl * 1000,
                     data,
                 }))
+            },
 
-                return data
+            get(key) {
+                const cached = sessionStorage.getItem(key)
+
+                if (!cached) {
+                    return undefined
+                }
+                
+                const parsed = JSON.parse(cached)
+                    
+                if (parsed.expires <= Date.now()) {
+                    sessionStorage.removeItem(key)
+
+                    return undefined
+                }
+
+                return parsed.data
             },
         }"
         x-init="
