@@ -156,7 +156,7 @@
 
             <div class="flex items-center">
                 {{-- Page title --}}
-                <h1 class="text-xl text-slate-700">Anayltics Dashboard</h1>
+                <h1 class="flex-shrink-0 text-xl text-slate-700">Anayltics Dashboard</h1>
                 
                 {{-- Active filters --}}
                 <x-analytics::filters />

@@ -87,17 +87,14 @@
     }"
     x-init="
         chart = echarts.init(document.getElementById('trend-chart'))
-
-        window.addEventListener('resize', function() {
-            chart.resize()
-        });
-
+    
         updateData()
         
         $watch('[statistic, period, filters]', () => updateData())
         
         $watch('[data, type, smooth]', () => chart.setOption(option()))
     "
+    x-on:resize.window="chart.resize()"
 >
     
     <div class="flex">
