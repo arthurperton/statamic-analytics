@@ -127,7 +127,7 @@
 
         <div 
             class="absolute inset-0 flex justify-center items-center bg-white transition-opacity duration-200 ease-in-out"
-            :class="loading ? 'opacity-100' : 'opacity-0'"
+            :class="loading ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'"
         >
             <x-analytics::spinner size="8" />
         </div>
