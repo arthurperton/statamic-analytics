@@ -152,16 +152,13 @@
     >
 
         {{-- Title row --}}
-        <div class="flex justify-between items-center mb-2">
+        <div class="flex items-center mb-2">
 
-            <div class="flex items-center">
-                {{-- Page title --}}
-                <h1 class="flex-shrink-0 text-xl text-slate-700">Anayltics Dashboard</h1>
-                
-                {{-- Active filters --}}
-                <x-analytics::filters />
+            {{-- Page title --}}
+            <h1 class="flex-shrink-0 text-xl text-slate-700">Anayltics Dashboard</h1>
             
-            </div>
+            {{-- Active filters --}}
+            <x-analytics::filters />
 
             {{-- Period selector --}}
             <x-analytics::period-selector />
