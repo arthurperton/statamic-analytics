@@ -10,6 +10,20 @@ class Database extends SqliteDatabase
     protected $name = 'analytics';
     protected $wal = true;
 
+    public function setMeta(string $key, mixed $value)
+    {
+        $this->connection()->table('meta')
+            ->upsert(['key' => $key, 'value' => $value], ['key'], ['value']);
+    }
+
+    public function getMeta(string $key, mixed $fallback = null)
+    {
+        $this->connection()->table('meta')
+            ->select('value')
+            ->where('key', $key)
+            ->value('value') ?? $fallback;
+    }
+
     public function createTables()
     {
         $this->createTablesStep1();
@@ -23,6 +37,15 @@ class Database extends SqliteDatabase
         if (! $schema->hasTable('dummy')) {
             $schema->create('dummy', function (Blueprint $table) {
                 $table->id('id');
+            });
+        }
+
+        if (! $schema->hasTable('meta')) {
+            $schema->create('meta', function (Blueprint $table) {
+                $table->string('key');
+                $table->string('value');
+
+                $table->unique('key');
             });
         }
 

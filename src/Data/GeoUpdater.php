@@ -2,6 +2,7 @@
 
 namespace ArthurPerton\Analytics\Data;
 
+use ArthurPerton\Analytics\Facades\Database;
 use Statamic\Facades\File;
 
 class GeoUpdater
@@ -14,8 +15,10 @@ class GeoUpdater
             };
         }
 
+        Database::create();
+
         $info('Updating geolocation data');
-        $current = $this->getMeta('version');
+        $current = Database::getMeta('ip2geo_version');
 
         $monthsAgo = 0;
 
@@ -52,7 +55,7 @@ class GeoUpdater
         $info('Importing...');
         $this->import($csv);
 
-        $this->setMeta(['version' => $date]);
+        Database::setMeta('ip2geo_version', $date);
 
         File::delete($csv);
 
@@ -87,7 +90,6 @@ class GeoUpdater
     protected function import($filename)
     {
         $geo = new GeoHelper();
-        $geo->createDatabase();
 
         $file = fopen($filename, 'r'); // TODO handle fail
 
@@ -108,32 +110,5 @@ class GeoUpdater
         $geo->flushBatched();
 
         fclose($file);
-    }
-
-    protected function metaPath()
-    {
-        return storage_path('analytics/meta');
-    }
-
-    protected function setMeta(array $data)
-    {
-        $meta = $this->getMeta();
-
-        $meta = array_merge($meta, $data);
-
-        File::put($this->metaPath(), serialize($meta));
-    }
-
-    protected function getMeta(string $key = null, mixed $fallback = null)
-    {
-        $text = File::get($this->metaPath());
-
-        $meta = $text ? unserialize($text) : [];
-
-        if (is_null($key)) {
-            return $meta;
-        }
-
-        return $meta[$key] ?? $fallback;
     }
 }

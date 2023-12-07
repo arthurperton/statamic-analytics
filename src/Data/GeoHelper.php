@@ -45,11 +45,6 @@ class GeoHelper
         Database::connection()->table('ip2geo')->truncate();
     }
 
-    public function createDatabase()
-    {
-        Database::create();
-    }
-
     public function insertBatched($from, $to, $country)
     {
         // TODO support ipv6

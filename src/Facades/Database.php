@@ -5,6 +5,8 @@ namespace ArthurPerton\Analytics\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
+ * @method static string|null getMeta(string $key, mixed $fallback = null))
+ * @method static void setMeta(string $key, mixed $value)
  * @method static string path()
  * @method static bool exists(): bool
  * @method static void create($overwrite = false)
