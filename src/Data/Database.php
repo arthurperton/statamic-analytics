@@ -49,8 +49,8 @@ class Database extends SqliteDatabase
                 $table->string('country')->nullable();
                 $table->string('region')->nullable();
                 $table->string('city')->nullable();
-                $table->string('entry_pageview_id');
-                $table->string('exit_pageview_id');
+                $table->string('entry_pageview_id')->nullable();
+                $table->string('exit_pageview_id')->nullable();
                 $table->unsignedInteger('session_started_at');
                 $table->unsignedInteger('session_ended_at');
 

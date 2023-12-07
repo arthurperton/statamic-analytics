@@ -29,7 +29,7 @@ class DashboardController extends CpController
         $filters = array_get($parameters, 'filters', []);
         $chart = (bool) array_get($parameters, 'chart', false);
 
-        $to = Carbon::today();
+        $to = $period === 1 ? Carbon::tomorrow() : Carbon::today();
         $from = $to->clone()->subDays($period);
 
         $start = microtime(true);

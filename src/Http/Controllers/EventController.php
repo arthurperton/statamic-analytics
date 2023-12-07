@@ -23,9 +23,14 @@ class EventController extends CpController
         // /** @var \Illuminate\Database\ConnectionInterface $db */
         $db = Database::connection();
 
-        $db->table('session')->upsert($session, 'id', ['modified']);
+        $db->table('session')->upsert($session, 'id', ['session_ended_at']);
 
-        $db->table('pageview')->insert($pageview);
+        if (array_get($data, 'type') === 'load') {
+            $db->table('pageview')->insert($pageview);
+        }
+        if (array_get($data, 'type') === 'unload') {
+            $db->table('pageview')->where('id', array_get($data, 'id'))->update($pageview);
+        }    
         // });
     }
 
@@ -43,8 +48,8 @@ class EventController extends CpController
 
         $session = [
             'id' => $sessionId,
-            'created' => $now,
-            'modified' => $now,
+            'session_started_at' => $now,
+            'session_ended_at' => $now,
             'anonymous_id' => $anonymousId,
             'source' => $data['referrer'] ? parse_url($data['referrer'], PHP_URL_HOST): null,
             'device' => Browser::deviceType(),
@@ -58,15 +63,23 @@ class EventController extends CpController
         // TODO multi-site
         $path = parse_url($data['url'], PHP_URL_PATH);
         
-        $pageview = [
-            'title' => $data['title'] ?? null,
-            // 'url' => Request::url,
-            'path' => $path,
-            'referrer_path' => $data['referrer'] ? parse_url($data['referrer'], PHP_URL_PATH): null,
-            'session_id' => $sessionId,
-            'id' => uniqid(),
-            'created' => $now,
-        ];
+        $type = array_get($data, 'type');
+
+        if ($type === 'load') {
+            $pageview = [
+                'id' => array_get($data, 'id'),
+                'title' => array_get($data, 'title'),
+                'path' => $path,
+                'referrer_path' => $data['referrer'] ? parse_url($data['referrer'], PHP_URL_PATH): null,
+                'session_id' => $sessionId,
+                'started_at' => $now,
+                'ended_at' => $now, 
+            ];
+        } elseif ($type === 'unload') {
+            $pageview = [
+                'ended_at' => $now,
+            ];
+        }
 
         return [$session, $pageview];
     }

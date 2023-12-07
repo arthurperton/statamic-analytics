@@ -15,7 +15,7 @@ class EventsHelper
             ->table('session')
             ->select()
             ->where('anonymous_id', $anonymousId)
-            ->where('modified', '>', $now - 30 * 60)
+            ->where('session_ended_at', '>', $now - 30 * 60)
             ->first();
     }
 }
