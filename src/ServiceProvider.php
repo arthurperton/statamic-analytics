@@ -2,21 +2,16 @@
 
 namespace ArthurPerton\Analytics;
 
-use ArthurPerton\Analytics\Http\Livewire\Aggregate;
-use ArthurPerton\Analytics\Http\Livewire\Chart;
-use ArthurPerton\Analytics\Http\Livewire\Counter;
-use ArthurPerton\Analytics\Http\Livewire\Dashboard;
-use ArthurPerton\Analytics\Http\Livewire\MapChart;
-use ArthurPerton\Analytics\Http\Livewire\PeriodSelector;
-use ArthurPerton\Analytics\Http\Livewire\TopList;
-use ArthurPerton\Analytics\Http\Livewire\TrendChart;
-use Livewire\Livewire;
 use Statamic\Facades\CP\Nav;
 use Statamic\Providers\AddonServiceProvider;
 use Statamic\Statamic;
 
 class ServiceProvider extends AddonServiceProvider
 {
+    protected $tags = [
+        Tags\Analytics::class,
+    ];
+
     protected $commands = [
         Console\Commands\CreateDatabase::class,
         Console\Commands\FakeEvents::class,

@@ -11,6 +11,8 @@ abstract class AbstractQuery implements QueryContract
     protected Carbon $to;
     protected array $filters = [];
     protected int $limit;
+    protected $ttl = 0;
+    protected $fresh = false;
 
     public function from($from): QueryContract
     {
@@ -62,14 +64,33 @@ abstract class AbstractQuery implements QueryContract
 
     final public function data()
     {
-        // return Cache::remember($this->cacheKey(), 300, function () {
+        if ($this->ttl === 0) {
+            return $this->fetchData();
+        }
+
+        $data = null;
+        if (! $this->fresh) {
+            $data = Cache::get($this->cacheKey());
+        }
+
+        if (! $data) {
+            $data = $this->fetchData();
+        }
+
+        if ($this->ttl > 0) {
+            Cache::put($this->cacheKey(), $data, $this->ttl); 
+        }
+
+        return $data;
+
+        return Cache::remember($this->cacheKey(), $this->ttl, function () {
             // $start = microtime(true);
             $data = $this->fetchData();
             // $duration = microtime(true) - $start;
             // \Log::debug("$duration seconds for query ".get_class($this));
 
             return $data;
-        // });
+        });
     }
 
     protected function cacheKey()
