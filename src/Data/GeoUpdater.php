@@ -87,6 +87,7 @@ class GeoUpdater
     protected function import($filename)
     {
         $geo = new GeoHelper();
+        $geo->createDatabase();
 
         $file = fopen($filename, 'r'); // TODO handle fail
 
