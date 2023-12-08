@@ -63,7 +63,7 @@ class FakeEvents extends Fake
 
             $sessions->add($session);
 
-            if ($pageviews->count() > 50000 || $i == $count - 1) {
+            if ($pageviews->count() > 10000 || $i == $count - 1) {
                 Database::connection()->table('session')->insert($sessions->all());
                 Database::connection()->table('pageview')->insert($pageviews->all());
 

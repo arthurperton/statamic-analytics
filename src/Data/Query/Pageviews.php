@@ -11,8 +11,8 @@ class Pageviews extends AbstractQuery
         return Database::connection()
             ->table('v_pageview')
             ->selectRaw('count(*) AS value')
-            ->where('session_started_at', '>=', $this->from->getTimestamp())
-            ->where('session_started_at', '<', $this->to->getTimestamp());
+            ->where('session_started_at', '>=', $this->fromTimestamp())
+            ->where('session_started_at', '<', $this->toTimestamp());
     }
 
     protected function fetchData()

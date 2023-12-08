@@ -6,20 +6,24 @@ use Carbon\Carbon;
 
 interface QueryContract
 {
-    // public function __construct(Carbon $from, Carbon $to, $filters);
+    public function from(Carbon|int $from): QueryContract;
 
-    public function from($from): QueryContract;
+    public function to(Carbon|int $to): QueryContract;
 
-    public function to($to): QueryContract;
+    public function filters(array $filters): QueryContract;
 
-    public function filters($filters): QueryContract;
+    public function limit(int $limit): QueryContract;
 
-    public function limit($limit): QueryContract;
+    public function remember(string|int $duration): QueryContract;
+
+    public function fromTimestamp(): int;
     
-    public function baseQuery(): \Illuminate\Database\Query\Builder | null;
+    public function toTimestamp(): int;
+
+    public function baseQuery(): ?\Illuminate\Database\Query\Builder;
 
     public function finalQuery(): \Illuminate\Database\Query\Builder;
-    
+
     public function data();
 
     public static function title(): string;

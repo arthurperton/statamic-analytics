@@ -11,8 +11,8 @@ class VisitDuration extends AbstractQuery
         $subQuery = Database::connection()
             ->table('v_pageview')
             ->selectRaw('DISTINCT session_id, session_started_at, session_ended_at')
-            ->where('session_started_at', '>=', $this->from->getTimestamp())
-            ->where('session_started_at', '<', $this->to->getTimestamp());
+            ->where('session_started_at', '>=', $this->fromTimestamp())
+            ->where('session_started_at', '<', $this->toTimestamp());
 
         $this->applyFilters($subQuery);
         

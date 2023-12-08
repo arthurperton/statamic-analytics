@@ -17,8 +17,8 @@ class TopCountries extends AbstractQuery
                 END value, 
                 COUNT(DISTINCT anonymous_id) AS visitors
             ")
-            ->where('session_started_at', '>=', $this->from->getTimestamp())
-            ->where('session_started_at', '<', $this->to->getTimestamp())
+            ->where('session_started_at', '>=', $this->fromTimestamp())
+            ->where('session_started_at', '<', $this->toTimestamp())
             ->groupBy('value')
             ->orderBy('visitors', 'desc')
             ->orderBy('value', 'asc');

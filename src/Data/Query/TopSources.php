@@ -10,8 +10,8 @@ class TopSources extends AbstractQuery
     {
         return Database::connection()->table('v_pageview')
             ->selectRaw('source as value, COUNT(DISTINCT anonymous_id) as visitors')
-            ->where('session_started_at', '>=', $this->from->getTimestamp())
-            ->where('session_started_at', '<', $this->to->getTimestamp())
+            ->where('session_started_at', '>=', $this->fromTimestamp())
+            ->where('session_started_at', '<', $this->toTimestamp())
             ->groupBy('value')
             ->orderBy('visitors', 'desc')
             ->orderBy('value', 'asc');

@@ -11,35 +11,55 @@ abstract class AbstractQuery implements QueryContract
     protected Carbon $to;
     protected array $filters = [];
     protected int $limit;
-    protected $ttl = 0;
-    protected $fresh = false;
+    protected $remember = 0;
 
-    public function from($from): QueryContract
+    public function from(Carbon|int $from): QueryContract
     {
-        $this->from = $from;
+        $this->from = $from instanceof Carbon
+            ? $from
+            : Carbon::createFromTimestamp($from);
 
         return $this;
     }
 
-    public function to($to): QueryContract
+    public function to(Carbon|int $to): QueryContract
     {
-        $this->to = $to;
+        $this->to = $to instanceof Carbon
+            ? $to
+            : Carbon::createFromTimestamp($to);
 
         return $this;
     }
 
-    public function filters($filters): QueryContract
+    public function filters(array $filters): QueryContract
     {
         $this->filters = $filters;
 
         return $this;
     }
 
-    public function limit($limit): QueryContract
+    public function limit(int $limit): QueryContract
     {
         $this->limit = $limit;
 
         return $this;
+    }
+
+    public function remember(string|int $duration): QueryContract
+    {
+        $this->remember = $duration;
+
+        return $this;
+    }
+
+    public function fromTimestamp(): int
+    {
+        return $this->from->timestamp;
+    }
+    
+    public function toTimestamp(): int
+    {
+        return $this->to->timestamp;
     }
 
     public function baseQuery(): ?\Illuminate\Database\Query\Builder
@@ -64,26 +84,7 @@ abstract class AbstractQuery implements QueryContract
 
     final public function data()
     {
-        if ($this->ttl === 0) {
-            return $this->fetchData();
-        }
-
-        $data = null;
-        if (! $this->fresh) {
-            $data = Cache::get($this->cacheKey());
-        }
-
-        if (! $data) {
-            $data = $this->fetchData();
-        }
-
-        if ($this->ttl > 0) {
-            Cache::put($this->cacheKey(), $data, $this->ttl); 
-        }
-
-        return $data;
-
-        return Cache::remember($this->cacheKey(), $this->ttl, function () {
+        return Cache::remember($this->cacheKey(), $this->remember, function () {
             // $start = microtime(true);
             $data = $this->fetchData();
             // $duration = microtime(true) - $start;
@@ -96,12 +97,12 @@ abstract class AbstractQuery implements QueryContract
     protected function cacheKey()
     {
         $filters = $this->filters;
-        usort($filters, fn ($a, $b) => ($a['column'] < $b['column']) ? - 1 : 1);
+        usort($filters, fn ($a, $b) => ($a['column'] < $b['column']) ? -1 : 1);
 
         return 'analytics:query.'.md5(json_encode([
             'query' => get_class($this),
-            'from' => $this->from->timestamp,
-            'to' => $this->to->timestamp,
+            'from' => $this->fromTimestamp(),
+            'to' => $this->toTimestamp(),
             'filters' => $filters,
         ]));
     }
