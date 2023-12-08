@@ -4,7 +4,6 @@ namespace ArthurPerton\Analytics\Tags;
 
 use ArthurPerton\Analytics\Data\Query\Query;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Cache;
 use Statamic\Facades\Entry;
 use Statamic\Facades\URL;
 use Statamic\Fields\Value;
@@ -14,33 +13,31 @@ class Analytics extends Tags
 {
     public function index()
     {
-        return $this->getValue();
+        return $this->value();
     }
 
-    protected function getValue()
+    protected function value()
     {
-        $to = Carbon::now();
-        $from = Carbon::create(1970, 1, 1);
-
         return Query::make('UniqueVisitors')
-            ->from($from)
-            ->to($to)
+            ->from($this->from())
+            ->to($this->to())
             ->filters([[
                 'column' => 'path',
-                'value' => $this->getUrl(),
+                'value' => $this->url(),
             ]])
+            ->remember($this->remember())
             ->data();
     }
 
-    protected function getUrl()
+    protected function url()
     {
         if ($url = array_get($this->params, 'url')) {
             return $url;
         }
 
-        if ($id = $this->getId()) {
-            $entry = Entry::find($id);
-            // TODO handle not found
+        if ($id = $this->id()) {
+            /** @var \Statamic\Entries\Entry $entry */
+            throw_unless($entry = Entry::find($id), new \Exception("Entry [$id] does not exist."));
 
             return $entry->url();
         }
@@ -48,7 +45,7 @@ class Analytics extends Tags
         return URL::getCurrent();
     }
 
-    protected function getId()
+    protected function id()
     {
         $id = $this->params['id'] ?? $this->context['id'] ?? null;
 
@@ -59,12 +56,24 @@ class Analytics extends Tags
         return $id;
     }
 
-    protected function getTtl()
+    protected function from()
     {
-        if ($length = array_get($this->params, 'for')) {
-            now()->add('+'.$length);
-        }
+        $from = array_get($this->params, 'from');
 
-        return 3600;
+        return $from ? Carbon::parse($from) : Carbon::createFromTimestamp(0);
+    }
+
+    protected function to()
+    {
+        $to = array_get($this->params, 'to');
+
+        return $to ? Carbon::parse($to) : Carbon::now();
+    }
+
+    protected function remember()
+    {
+        $length = array_get($this->params, 'remember', '1 day');
+
+        return now()->add('+'.$length);
     }
 }
