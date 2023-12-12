@@ -12,6 +12,10 @@
     @apply w-full h-full;
 }
 
+.analytics-main:not(.showing-license-banner) {
+    padding-bottom: 0 !important;
+}
+
 .analytics-page-wrapper { 
     @apply w-full h-full p-0 max-w-none;
 }
