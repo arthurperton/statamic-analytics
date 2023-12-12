@@ -6,6 +6,14 @@
         loading: true,
         type: 'line',
         smooth: false,
+        dateFormatter() {
+            switch (period) {
+                case 1:
+                    return '{HH}:{mm}'
+                default:
+                    return '{ee} {d} {MMM}'
+            }
+        },
         option() {
             return {
                 //animation: false,
@@ -35,8 +43,8 @@
                     type: 'time',
                     boundaryGap: this.type != 'line',
                     axisLabel: {
-                        //formatter: '{yyyy}-{MM}-{dd}',
-                        formatter: (value) => window.format(value, 'eee d MMM')
+                        // formatter: (value) => window.format(value, 'eee d MMM')
+                        formatter: this.dateFormatter()
                     },
                 },
                 yAxis: {
