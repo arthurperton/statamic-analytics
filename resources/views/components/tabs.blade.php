@@ -1,5 +1,5 @@
 <div
-    class="h-96 flex flex-col shadow-md bg-white rounded-xl px-4 py-3"
+    class="h-96 overflow-hidden flex flex-col shadow-md bg-white rounded-xl px-4 py-3"
     x-data="{
         tabIndex: 0,
     }"
