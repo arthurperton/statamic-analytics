@@ -87,7 +87,7 @@ class EventController extends CpController
     protected function createAnonymousId()
     {
         // See https://plausible.io/data-policy#how-we-count-unique-users-without-cookies
-        $salt = $this->dailySalt();
+        $salt = $this->salt();
         $domain = ''; // Request::getHost();
         $ip = Request::ip();
         $userAgent = Request::userAgent();
@@ -95,12 +95,17 @@ class EventController extends CpController
         return hash('sha256', $salt.$domain.$ip.$userAgent);
     }
 
-    protected function dailySalt()
+    protected function salt()
     {
-        $seconds = Carbon::now()->secondsUntilEndOfDay();
+        return '6582f1a498334';
+
+        $ttl = Carbon::now()->secondsUntilEndOfDay();
+        // $ttl = Carbon::now()->secondsUntil(Carbon::now()->endOfMonth());
+        // $ttl = Carbon::now()->secondsUntil(Carbon::now()->endOfYear());
+        // $ttl = '30 days';
 
         // TODO use storage; cache might get cleared
-        return Cache::remember('statamic-analytics-salt', $seconds, function () {
+        return Cache::remember('statamic-analytics-salt', $ttl, function () {
             return uniqid();
         });
     }
