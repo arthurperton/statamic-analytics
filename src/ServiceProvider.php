@@ -3,6 +3,7 @@
 namespace ArthurPerton\Analytics;
 
 use Statamic\Facades\CP\Nav;
+use Statamic\Facades\Permission;
 use Statamic\Providers\AddonServiceProvider;
 use Statamic\Statamic;
 
@@ -38,8 +39,10 @@ class ServiceProvider extends AddonServiceProvider
     public function bootAddon()
     {
         $this->addPublishables();
-        
+
         $this->bootNavigation();
+
+        $this->bootPermissions();
 
         Statamic::afterInstalled(function ($command) {
             $command->call('analytics:create-database');
@@ -60,15 +63,18 @@ class ServiceProvider extends AddonServiceProvider
     protected function bootNavigation()
     {
         Nav::extend(function ($nav) {
-            // $nav->create('Dashboard')
-            //     ->section('Analytics')
-            //     ->route('analytics.dashboard.index')
-            //     ->icon('charts');
             $nav->create('Analytics')
                 ->section('Tools')
                 ->route('analytics.dashboard.index')
                 ->can('view analytics')
                 ->icon('charts');
+        });
+    }
+
+    protected function bootPermissions()
+    {
+        Permission::group('analytics', 'Analytics', function () {
+            Permission::register('view analytics')->label('View Analytics');
         });
     }
 }
