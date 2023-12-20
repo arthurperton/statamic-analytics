@@ -10,7 +10,7 @@
 
             this.loading = true
             
-            const data = await fetchData({ query: '{{ $query }}' })
+            const data = await fetchData({ query: '{{ $query }}', limit: 9 })
             
             this.items = data
 

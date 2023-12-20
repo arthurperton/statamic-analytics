@@ -59,6 +59,7 @@
                     query: options.query,
                     period: this.period,
                     filters: Object.values(this.filters).sort((a, b) => (a.column < b.column) ? - 1 : 1),
+                    limit: options.limit,
                     chart: options.chart || false,
                 }
                 
