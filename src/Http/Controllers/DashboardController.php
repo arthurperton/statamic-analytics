@@ -27,6 +27,7 @@ class DashboardController extends CpController
         $query = array_get($parameters, 'query');
         $period = array_get($parameters, 'period', 7);
         $filters = array_get($parameters, 'filters', []);
+        $limit = array_get($parameters, 'limit', -1);
         $chart = (bool) array_get($parameters, 'chart', false);
 
         $to = $period === 1 ? Carbon::tomorrow() : Carbon::today();
@@ -40,6 +41,7 @@ class DashboardController extends CpController
                 ->from($from)
                 ->to($to)
                 ->filters($filters)
+                ->limit($limit)
                 ->data();
         }
         $duration = round(1E3 * (microtime(true) - $start));

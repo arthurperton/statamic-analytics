@@ -10,7 +10,7 @@ abstract class AbstractQuery implements QueryContract
     protected Carbon $from;
     protected Carbon $to;
     protected array $filters = [];
-    protected int $limit;
+    protected int $limit = -1;
     protected $remember = 0;
 
     public function from(Carbon|int $from): QueryContract
@@ -104,6 +104,7 @@ abstract class AbstractQuery implements QueryContract
             'from' => $this->fromTimestamp(),
             'to' => $this->toTimestamp(),
             'filters' => $filters,
+            'limit' => $this->limit,
         ]));
     }
 
@@ -138,7 +139,7 @@ abstract class AbstractQuery implements QueryContract
 
     protected function applyLimit(\Illuminate\Database\Query\Builder $query)
     {
-        if (isset($this->limit)) {
+        if ($this->limit >= 0) {
             $query->limit($this->limit);
         }
 
