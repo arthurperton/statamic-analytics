@@ -3,6 +3,7 @@
     x-data="{
         items: [],
         loading: true,
+        modalOpen: false,
         async updateData() {
             if (!tabVisible) {
                 return;
@@ -35,6 +36,7 @@
 >
     <div
         class="w-full grid grid-cols-[1fr_max-content] gap-1"
+        x-on:click="modalOpen = true"
     >
 
         {{-- Column headers --}}
@@ -77,10 +79,25 @@
             </div>
         </template>
     </div>
+
+    {{-- Spinner --}}
     <div 
         class="absolute inset-0 flex justify-center items-center bg-white transition-opacity duration-200 ease-in-out"
         :class="loading ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'"
     >
         <x-analytics::spinner size="8" />
+    </div>
+
+    {{-- Modal --}}
+    <div 
+        class="z-10 fixed inset-0 flex justify-center items-center bg-slate-500 bg-opacity-40"
+        x-show="modalOpen"
+    >
+        <div 
+            class="w-1/2 in-h-96 shadow-md bg-white rounded-xl px-4 py-3"
+            x-on:click="modalOpen = false"
+        >
+            MODAL!
+        </div>
     </div>
 </div>
