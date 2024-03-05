@@ -11,9 +11,13 @@
             this.loading = false
         },
         displayValue() {
-            return this.value 
-                ? this.value.toFixed({{ $decimals ?? 0 }})
-                : '&nbsp;'
+            if (!this.value) {
+                return '&nbsp;'
+            }
+
+            const value = this.value.toFixed({{ $decimals ?? 0 }})
+            
+            return `${value}{{ $unit ?? '' }}`
         },
     }"
     x-init="
