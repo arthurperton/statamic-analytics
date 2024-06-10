@@ -7,6 +7,7 @@ use ArthurPerton\Analytics\Data\StatsHelper;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Statamic\Http\Controllers\CP\CpController;
+use Statamic\Support\Arr;
 
 class DashboardController extends CpController
 {
@@ -24,11 +25,11 @@ class DashboardController extends CpController
     {
         $parameters = $request->json()->all();
 
-        $query = array_get($parameters, 'query');
-        $period = array_get($parameters, 'period', 7);
-        $filters = array_get($parameters, 'filters', []);
-        $limit = array_get($parameters, 'limit', -1);
-        $chart = (bool) array_get($parameters, 'chart', false);
+        $query = Arr::get($parameters, 'query');
+        $period = Arr::get($parameters, 'period', 7);
+        $filters = Arr::get($parameters, 'filters', []);
+        $limit = Arr::get($parameters, 'limit', -1);
+        $chart = (bool) Arr::get($parameters, 'chart', false);
 
         $to = $period === 1 ? Carbon::tomorrow() : Carbon::today();
         $from = $to->clone()->subDays($period);
@@ -53,7 +54,7 @@ class DashboardController extends CpController
                 'period' => $period,
                 'filters' => $filters,
                 'duration' => $duration,
-            ]
+            ],
         ]);
     }
 
@@ -66,7 +67,7 @@ class DashboardController extends CpController
 
         $records = Query::make($query)
             ->from($from)
-            ->to($to) 
+            ->to($to)
             ->filters($filters)
             ->finalQuery()
             ->selectRaw("session_started_at - ((session_started_at - {$fromSeconds}) % {$interval}) AS timestamp")
@@ -102,7 +103,7 @@ class DashboardController extends CpController
         } else {
             return response('', 400);
         }
-        
+
         $start = microtime(true);
         $data = StatsHelper::$method($from, $to);
         $duration = round(1E3 * (microtime(true) - $start));
@@ -113,7 +114,7 @@ class DashboardController extends CpController
                 'type' => $method,
                 'period' => $period,
                 'queryDuration' => $duration,
-            ]
+            ],
         ]);
     }
 }

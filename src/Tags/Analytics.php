@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Statamic\Facades\Entry;
 use Statamic\Facades\URL;
 use Statamic\Fields\Value;
+use Statamic\Support\Arr;
 use Statamic\Tags\Tags;
 
 class Analytics extends Tags
@@ -31,7 +32,7 @@ class Analytics extends Tags
 
     protected function url()
     {
-        if ($url = array_get($this->params, 'url')) {
+        if ($url = Arr::get($this->params, 'url')) {
             return $url;
         }
 
@@ -58,21 +59,21 @@ class Analytics extends Tags
 
     protected function from()
     {
-        $from = array_get($this->params, 'from');
+        $from = Arr::get($this->params, 'from');
 
         return $from ? Carbon::parse($from) : Carbon::createFromTimestamp(0);
     }
 
     protected function to()
     {
-        $to = array_get($this->params, 'to');
+        $to = Arr::get($this->params, 'to');
 
         return $to ? Carbon::parse($to) : Carbon::now();
     }
 
     protected function remember()
     {
-        $length = array_get($this->params, 'remember', '1 day');
+        $length = Arr::get($this->params, 'remember', '1 day');
 
         return now()->add('+'.$length);
     }
