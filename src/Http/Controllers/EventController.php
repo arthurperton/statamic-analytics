@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Request;
 use Statamic\Http\Controllers\CP\CpController;
+use Statamic\Support\Arr;
 
 class EventController extends CpController
 {
