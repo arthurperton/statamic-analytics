@@ -25,10 +25,13 @@ class ServiceProvider extends AddonServiceProvider
 
     protected $scripts = [
         __DIR__.'/../dist/js/cp.js',
+        // __DIR__.'/../dist/js/dashboard.js',
     ];
 
     protected $publishables = [
         __DIR__.'/../dist/js/web.js' => 'js/web.js',
+        __DIR__.'/../dist/js/dashboard.js' => 'js/dashboard.js',
+
     ];
 
     protected $routes = [
