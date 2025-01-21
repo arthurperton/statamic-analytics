@@ -33,7 +33,7 @@ class FakeEvents extends Fake
         $count = (int) $this->argument('count');
 
         $anonymousIds = [];
-        $anonymousIdsCount = floor($count / 5);//($this->randomFloat(1, 5)));
+        $anonymousIdsCount = floor($count / 5); // ($this->randomFloat(1, 5)));
         for ($i = 0; $i < $anonymousIdsCount; $i++) {
             $anonymousIds[] = uniqid();
         }
@@ -63,7 +63,7 @@ class FakeEvents extends Fake
 
             $sessions->add($session);
 
-            if ($pageviews->count() > 10000 || $i == $count - 1) {
+            if ($pageviews->count() > 1000 || $i == $count - 1) {
                 Database::connection()->table('session')->insert($sessions->all());
                 Database::connection()->table('pageview')->insert($pageviews->all());
 
@@ -76,7 +76,7 @@ class FakeEvents extends Fake
         return 0;
     }
 
-    public function createSession(int $startTime, int $endTime, string $anonymousId = null)
+    public function createSession(int $startTime, int $endTime, ?string $anonymousId = null)
     {
         $anonymousId = $anonymousId ?? uniqid();
 
@@ -99,7 +99,7 @@ class FakeEvents extends Fake
         foreach ($fields as $field => $config) {
             $session[$field] = $this->randomValue($config);
         }
-        
+
         $session['session_ended_at'] = $session['session_started_at'] + $this->randomInt(0, 30 * 60);
 
         return $session;
