@@ -1,12 +1,15 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-    content: [
-        './resources/**/*.blade.php',
-        './resources/**/*.js',
-        './resources/**/*.vue',
-        './resources/**/*.jsx',
-    ],
+    darkMode: ['class'],
+    content: ['./resources/**/*.{js,jsx,ts,tsx,blade.php}'],
     theme: {
+        container: {
+            center: true,
+            padding: '2rem',
+            screens: {
+                '2xl': '1400px',
+            },
+        },
         extend: {
             colors: {
                 'analytics-blue': '#2D9CF9',

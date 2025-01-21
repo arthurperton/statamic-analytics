@@ -4,10 +4,7 @@ mix.setPublicPath('dist')
     .postCss('resources/css/cp.css', 'dist/css/cp.css', [
         require('tailwindcss'),
     ])
-    .postCss('resources/css/app.css', 'dist/css/app.css', [
-        require('tailwindcss'),
-    ])
     .js('resources/js/cp/main.js', 'dist/js/cp.js')
     .js('resources/js/web/main.js', 'dist/js/web.js')
-    .js('resources/js/dashboard/main.jsx', 'dist/js/dashboard.js')
+    .ts('resources/js/dashboard/main.tsx', 'dist/js/dashboard.js')
     .react()
