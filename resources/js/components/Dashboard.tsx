@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { Suspense } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'
 import PeriodSelector from './PeriodSelector'
 import Filters from './Filters'
 import TopList from './TopList'
 import TrendChart from './TrendChart'
+import LoadingWrapper from './LoadingWrapper'
+import * as api from '../lib/api'
 
 type StatisticType =
     | 'UniqueVisitors'
@@ -35,6 +38,91 @@ interface BreakdownCardProps {
     children: React.ReactNode
 }
 
+interface DataComponentProps<T> {
+    period: string
+    filters: Record<string, Filter>
+    children: (data: T) => React.ReactNode
+}
+
+interface TrendDataProps extends Omit<DataComponentProps<any>, 'children'> {
+    statistic: StatisticType
+    children: (data: any) => React.ReactNode
+}
+
+// Separate components for each data section
+const Stats: React.FC<DataComponentProps<any>> = ({
+    period,
+    filters,
+    children,
+}) => {
+    const { data } = useQuery({
+        queryKey: ['stats', period, filters],
+        queryFn: () => api.fetchStats({ period, filters }),
+    })
+    return <>{children(data)}</>
+}
+
+const TrendData: React.FC<TrendDataProps> = ({
+    period,
+    filters,
+    statistic,
+    children,
+}) => {
+    const { data } = useQuery({
+        queryKey: ['trend', period, filters, statistic],
+        queryFn: () => api.fetchTrend({ period, filters }),
+    })
+    return <>{children(data)}</>
+}
+
+const SourcesData: React.FC<DataComponentProps<any>> = ({
+    period,
+    filters,
+    children,
+}) => {
+    const { data } = useQuery({
+        queryKey: ['sources', period, filters],
+        queryFn: () => api.fetchTopSources({ period, filters }),
+    })
+    return <>{children(data)}</>
+}
+
+const PagesData: React.FC<DataComponentProps<any>> = ({
+    period,
+    filters,
+    children,
+}) => {
+    const { data } = useQuery({
+        queryKey: ['pages', period, filters],
+        queryFn: () => api.fetchTopPages({ period, filters }),
+    })
+    return <>{children(data)}</>
+}
+
+const LocationsData: React.FC<DataComponentProps<any>> = ({
+    period,
+    filters,
+    children,
+}) => {
+    const { data } = useQuery({
+        queryKey: ['locations', period, filters],
+        queryFn: () => api.fetchLocations({ period, filters }),
+    })
+    return <>{children(data)}</>
+}
+
+const DevicesData: React.FC<DataComponentProps<any>> = ({
+    period,
+    filters,
+    children,
+}) => {
+    const { data } = useQuery({
+        queryKey: ['devices', period, filters],
+        queryFn: () => api.fetchDevices({ period, filters }),
+    })
+    return <>{children(data)}</>
+}
+
 const Dashboard: React.FC = () => {
     const [period, setPeriod] = React.useState<string>('7')
     const [filters, setFilters] = React.useState<Record<string, Filter>>({})
@@ -59,115 +147,169 @@ const Dashboard: React.FC = () => {
             </div>
 
             {/* Aggregates */}
-            <div className="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-                <StatCard
-                    title="Unique Visitors"
-                    value="0"
-                    statistic="UniqueVisitors"
-                    onSelect={setStatistic}
-                    selected={statistic === 'UniqueVisitors'}
-                />
-                <StatCard
-                    title="Total Visits"
-                    value="0"
-                    statistic="Visits"
-                    onSelect={setStatistic}
-                    selected={statistic === 'Visits'}
-                />
-                <StatCard
-                    title="Pageviews"
-                    value="0"
-                    statistic="Pageviews"
-                    onSelect={setStatistic}
-                    selected={statistic === 'Pageviews'}
-                />
-                <StatCard
-                    title="Views per Visit"
-                    value="0"
-                    decimals={2}
-                    statistic="ViewsPerVisit"
-                    onSelect={setStatistic}
-                    selected={statistic === 'ViewsPerVisit'}
-                />
-                <StatCard
-                    title="Bounce Rate"
-                    value="0"
-                    unit="%"
-                    statistic="BounceRate"
-                    onSelect={setStatistic}
-                    selected={statistic === 'BounceRate'}
-                />
-                <StatCard
-                    title="Visit Duration"
-                    value="0"
-                    unit="s"
-                    statistic="VisitDuration"
-                    onSelect={setStatistic}
-                    selected={statistic === 'VisitDuration'}
-                />
-            </div>
+            <Suspense fallback={<LoadingWrapper />}>
+                <div className="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                    <Stats period={period} filters={filters}>
+                        {(stats: any) => (
+                            <>
+                                <StatCard
+                                    title="Unique Visitors"
+                                    value={stats?.uniqueVisitors ?? 0}
+                                    statistic="UniqueVisitors"
+                                    onSelect={setStatistic}
+                                    selected={statistic === 'UniqueVisitors'}
+                                />
+                                <StatCard
+                                    title="Total Visits"
+                                    value={stats?.visits ?? 0}
+                                    statistic="Visits"
+                                    onSelect={setStatistic}
+                                    selected={statistic === 'Visits'}
+                                />
+                                <StatCard
+                                    title="Pageviews"
+                                    value={stats?.pageviews ?? 0}
+                                    statistic="Pageviews"
+                                    onSelect={setStatistic}
+                                    selected={statistic === 'Pageviews'}
+                                />
+                                <StatCard
+                                    title="Views per Visit"
+                                    value={stats?.viewsPerVisit ?? 0}
+                                    decimals={2}
+                                    statistic="ViewsPerVisit"
+                                    onSelect={setStatistic}
+                                    selected={statistic === 'ViewsPerVisit'}
+                                />
+                                <StatCard
+                                    title="Bounce Rate"
+                                    value={stats?.bounceRate ?? 0}
+                                    unit="%"
+                                    statistic="BounceRate"
+                                    onSelect={setStatistic}
+                                    selected={statistic === 'BounceRate'}
+                                />
+                                <StatCard
+                                    title="Visit Duration"
+                                    value={stats?.visitDuration ?? 0}
+                                    unit="s"
+                                    statistic="VisitDuration"
+                                    onSelect={setStatistic}
+                                    selected={statistic === 'VisitDuration'}
+                                />
+                            </>
+                        )}
+                    </Stats>
+                </div>
+            </Suspense>
 
             {/* Trend chart */}
-            <Card className="animate-slide-in">
-                <CardHeader>
-                    <CardTitle>Trend</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <TrendChart statistic={statistic} />
-                </CardContent>
-            </Card>
+            <Suspense fallback={<LoadingWrapper />}>
+                <Card className="animate-slide-in">
+                    <CardHeader>
+                        <CardTitle>Trend</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <TrendData
+                            period={period}
+                            filters={filters}
+                            statistic={statistic}
+                        >
+                            {(trend: any) => (
+                                <TrendChart
+                                    data={trend?.data}
+                                    statistic={statistic}
+                                />
+                            )}
+                        </TrendData>
+                    </CardContent>
+                </Card>
+            </Suspense>
 
             {/* Breakdown */}
             <div className="grid md:grid-cols-2 gap-4">
-                <BreakdownCard title="Top Sources" tabs={['All']}>
-                    <TopList
-                        columnName="source"
-                        columnTitle="Source"
-                        barColor="bg-analytics-blue/5"
-                    />
-                </BreakdownCard>
+                <Suspense fallback={<LoadingWrapper />}>
+                    <BreakdownCard title="Top Sources" tabs={['All']}>
+                        <SourcesData period={period} filters={filters}>
+                            {(sources: any) => (
+                                <TopList
+                                    items={sources?.data}
+                                    columnName="source"
+                                    columnTitle="Source"
+                                    barColor="bg-analytics-blue/5"
+                                />
+                            )}
+                        </SourcesData>
+                    </BreakdownCard>
+                </Suspense>
 
-                <BreakdownCard title="Top Pages" tabs={['Pages']}>
-                    <TopList
-                        columnName="path"
-                        columnTitle="Page"
-                        barColor="bg-analytics-green/5"
-                    />
-                </BreakdownCard>
+                <Suspense fallback={<LoadingWrapper />}>
+                    <BreakdownCard title="Top Pages" tabs={['Pages']}>
+                        <PagesData period={period} filters={filters}>
+                            {(pages: any) => (
+                                <TopList
+                                    items={pages?.data}
+                                    columnName="path"
+                                    columnTitle="Page"
+                                    barColor="bg-analytics-green/5"
+                                />
+                            )}
+                        </PagesData>
+                    </BreakdownCard>
+                </Suspense>
 
-                <BreakdownCard title="Locations" tabs={['Countries']}>
-                    <TopList
-                        columnName="country"
-                        columnTitle="Country"
-                        barColor="bg-analytics-yellow/10"
-                    />
-                </BreakdownCard>
+                <Suspense fallback={<LoadingWrapper />}>
+                    <BreakdownCard title="Locations" tabs={['Countries']}>
+                        <LocationsData period={period} filters={filters}>
+                            {(locations: any) => (
+                                <TopList
+                                    items={locations?.data}
+                                    columnName="country"
+                                    columnTitle="Country"
+                                    barColor="bg-analytics-yellow/10"
+                                />
+                            )}
+                        </LocationsData>
+                    </BreakdownCard>
+                </Suspense>
 
-                <BreakdownCard title="Devices" tabs={['Browser', 'OS', 'Size']}>
-                    <Tabs defaultValue="Browser">
-                        <TabsContent value="Browser">
-                            <TopList
-                                columnName="browser"
-                                columnTitle="Browser"
-                                barColor="bg-analytics-blue/5"
-                            />
-                        </TabsContent>
-                        <TabsContent value="OS">
-                            <TopList
-                                columnName="os"
-                                columnTitle="Operating system"
-                                barColor="bg-analytics-blue/5"
-                            />
-                        </TabsContent>
-                        <TabsContent value="Size">
-                            <TopList
-                                columnName="device"
-                                columnTitle="Device"
-                                barColor="bg-analytics-blue/5"
-                            />
-                        </TabsContent>
-                    </Tabs>
-                </BreakdownCard>
+                <Suspense fallback={<LoadingWrapper />}>
+                    <BreakdownCard
+                        title="Devices"
+                        tabs={['Browser', 'OS', 'Size']}
+                    >
+                        <DevicesData period={period} filters={filters}>
+                            {(devices: any) => (
+                                <Tabs defaultValue="Browser">
+                                    <TabsContent value="Browser">
+                                        <TopList
+                                            items={devices?.browsers}
+                                            columnName="browser"
+                                            columnTitle="Browser"
+                                            barColor="bg-analytics-blue/5"
+                                        />
+                                    </TabsContent>
+                                    <TabsContent value="OS">
+                                        <TopList
+                                            items={devices?.operatingSystems}
+                                            columnName="os"
+                                            columnTitle="Operating system"
+                                            barColor="bg-analytics-blue/5"
+                                        />
+                                    </TabsContent>
+                                    <TabsContent value="Size">
+                                        <TopList
+                                            items={devices?.sizes}
+                                            columnName="device"
+                                            columnTitle="Device"
+                                            barColor="bg-analytics-blue/5"
+                                        />
+                                    </TabsContent>
+                                </Tabs>
+                            )}
+                        </DevicesData>
+                    </BreakdownCard>
+                </Suspense>
             </div>
         </div>
     )
