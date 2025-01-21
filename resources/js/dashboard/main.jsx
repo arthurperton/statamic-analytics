@@ -1,14 +1,13 @@
-import React from 'react'
+import React, { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-
-function App() {
-    return (
-        <div>
-            <h1>Analytics Dashboard</h1>
-        </div>
-    )
-}
+import Dashboard from '../components/Dashboard'
+import '../../css/app.css'
 
 const container = document.getElementById('app')
 const root = createRoot(container)
-root.render(<App />)
+
+root.render(
+    <StrictMode>
+        <Dashboard />
+    </StrictMode>
+)

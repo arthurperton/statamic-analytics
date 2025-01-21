@@ -10,13 +10,26 @@
     "devDependencies": {
         "@babel/preset-react": "^7.23.3",
         "autoprefixer": "^10.4.17",
+        "css-loader": "^7.1.2",
         "laravel-mix": "^6.0.49",
         "postcss": "^8.4.35",
-        "tailwindcss": "^3.4.1"
+        "tailwindcss": "^3.4.1",
+        "tailwindcss-animate": "^1.0.7"
     },
     "dependencies": {
+        "@radix-ui/react-dialog": "^1.1.4",
+        "@radix-ui/react-dropdown-menu": "^2.1.4",
+        "@radix-ui/react-select": "^2.1.4",
+        "@radix-ui/react-slot": "^1.1.1",
+        "@radix-ui/react-tabs": "^1.1.2",
+        "class-variance-authority": "^0.7.1",
+        "clsx": "^2.1.1",
+        "date-fns": "^4.1.0",
+        "lucide-react": "^0.473.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
+        "recharts": "^2.15.0",
+        "tailwind-merge": "^2.6.0",
         "uniqid": "^5.4.0"
     }
 }
