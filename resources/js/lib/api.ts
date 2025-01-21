@@ -1,3 +1,5 @@
+import { ApiResponse, StatsResponse } from '../types/dashboard'
+
 interface FetchOptions {
     period?: string
     filters?: Record<string, any>
@@ -11,7 +13,10 @@ function getCsrfToken(): string {
     return metaTag?.getAttribute('content') || ''
 }
 
-async function queryEndpoint(endpoint: string, options: FetchOptions = {}) {
+async function queryEndpoint<T>(
+    endpoint: string,
+    options: FetchOptions = {}
+): Promise<ApiResponse<T>> {
     const { period, filters = {} } = options
     const response = await fetch(`${BASE_URL}/query`, {
         method: 'POST',
@@ -20,7 +25,7 @@ async function queryEndpoint(endpoint: string, options: FetchOptions = {}) {
             'X-CSRF-TOKEN': getCsrfToken(),
         },
         body: JSON.stringify({
-            endpoint,
+            query: endpoint,
             period: period || '7',
             filters,
         }),
@@ -40,44 +45,63 @@ async function queryEndpoint(endpoint: string, options: FetchOptions = {}) {
     return data
 }
 
-export async function fetchStats(options: FetchOptions = {}) {
-    return fetch(`${BASE_URL}/stats`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': getCsrfToken(),
+export async function fetchStats(
+    options: FetchOptions = {}
+): Promise<ApiResponse<StatsResponse>> {
+    const [
+        uniqueVisitors,
+        visits,
+        pageviews,
+        viewsPerVisit,
+        bounceRate,
+        visitDuration,
+    ] = await Promise.all([
+        queryEndpoint<number>('UniqueVisitors', options),
+        queryEndpoint<number>('Visits', options),
+        queryEndpoint<number>('Pageviews', options),
+        queryEndpoint<number>('ViewsPerVisit', options),
+        queryEndpoint<number>('BounceRate', options),
+        queryEndpoint<number>('VisitDuration', options),
+    ])
+
+    return {
+        data: {
+            uniqueVisitors: uniqueVisitors.data,
+            visits: visits.data,
+            pageviews: pageviews.data,
+            viewsPerVisit: viewsPerVisit.data,
+            bounceRate: bounceRate.data,
+            visitDuration: visitDuration.data,
         },
-        body: JSON.stringify({
-            period: options.period || '7',
-            filters: options.filters || {},
-        }),
-    }).then(async (response) => {
-        if (!response.ok) {
-            console.error('Stats error:', response.status, response.statusText)
-            throw new Error('Failed to fetch stats')
-        }
-        const data = await response.json()
-        console.log('Stats response:', data)
-        return data
-    })
+    }
 }
 
-export async function fetchTrend(options: FetchOptions = {}) {
+export async function fetchTrend(
+    options: FetchOptions = {}
+): Promise<ApiResponse<any>> {
     return queryEndpoint('trend', options)
 }
 
-export async function fetchTopSources(options: FetchOptions = {}) {
+export async function fetchTopSources(
+    options: FetchOptions = {}
+): Promise<ApiResponse<any>> {
     return queryEndpoint('sources', options)
 }
 
-export async function fetchTopPages(options: FetchOptions = {}) {
+export async function fetchTopPages(
+    options: FetchOptions = {}
+): Promise<ApiResponse<any>> {
     return queryEndpoint('pages', options)
 }
 
-export async function fetchLocations(options: FetchOptions = {}) {
+export async function fetchLocations(
+    options: FetchOptions = {}
+): Promise<ApiResponse<any>> {
     return queryEndpoint('locations', options)
 }
 
-export async function fetchDevices(options: FetchOptions = {}) {
+export async function fetchDevices(
+    options: FetchOptions = {}
+): Promise<ApiResponse<any>> {
     return queryEndpoint('devices', options)
 }

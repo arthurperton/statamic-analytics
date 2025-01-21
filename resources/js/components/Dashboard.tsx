@@ -1,156 +1,21 @@
-import React, { Suspense, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import React, { Suspense } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'
+import { Tabs, TabsContent } from './ui/tabs'
 import PeriodSelector from './PeriodSelector'
 import Filters from './Filters'
 import TopList from './TopList'
 import TrendChart from './TrendChart'
 import { LoadingWrapper } from './LoadingWrapper'
-import * as api from '../lib/api'
 import { ErrorBoundary } from './ErrorBoundary'
-
-type StatisticType =
-    | 'UniqueVisitors'
-    | 'Visits'
-    | 'PageViews'
-    | 'ViewsPerVisit'
-    | 'BounceRate'
-    | 'VisitDuration'
-
-interface Filter {
-    column: string
-    value: string | number
-}
-
-interface StatCardProps {
-    title: string
-    value: number | string
-    unit?: string
-    decimals?: number
-    statistic?: StatisticType
-    onSelect?: (statistic: StatisticType) => void
-    selected?: boolean
-}
-
-interface BreakdownCardProps {
-    title: string
-    tabs: string[]
-    children: React.ReactNode
-}
-
-interface DataComponentProps<T> {
-    period: string
-    filters: Record<string, Filter>
-    children: (data: T) => React.ReactNode
-}
-
-interface TrendDataProps extends Omit<DataComponentProps<any>, 'children'> {
-    statistic: StatisticType
-    children: (data: any) => React.ReactNode
-}
-
-interface StatsResponse {
-    uniqueVisitors: number
-    visits: number
-    pageviews: number
-    viewsPerVisit: number
-    bounceRate: number
-    visitDuration: number
-}
-
-// Separate components for each data section
-const Stats: React.FC<DataComponentProps<StatsResponse>> = ({
-    period,
-    filters,
-    children,
-}) => {
-    const { data, error } = useQuery({
-        queryKey: ['stats', period, filters],
-        queryFn: () => api.fetchStats({ period, filters }),
-    })
-
-    if (error) {
-        console.error('Stats error:', error)
-        return <div>Error loading stats</div>
-    }
-
-    return (
-        <>
-            {children(
-                data || {
-                    uniqueVisitors: 0,
-                    visits: 0,
-                    pageviews: 0,
-                    viewsPerVisit: 0,
-                    bounceRate: 0,
-                    visitDuration: 0,
-                }
-            )}
-        </>
-    )
-}
-
-const TrendData: React.FC<TrendDataProps> = ({
-    period,
-    filters,
-    statistic,
-    children,
-}) => {
-    const { data } = useQuery({
-        queryKey: ['trend', period, filters, statistic],
-        queryFn: () => api.fetchTrend({ period, filters }),
-    })
-    return <>{children(data)}</>
-}
-
-const SourcesData: React.FC<DataComponentProps<any>> = ({
-    period,
-    filters,
-    children,
-}) => {
-    const { data } = useQuery({
-        queryKey: ['sources', period, filters],
-        queryFn: () => api.fetchTopSources({ period, filters }),
-    })
-    return <>{children(data)}</>
-}
-
-const PagesData: React.FC<DataComponentProps<any>> = ({
-    period,
-    filters,
-    children,
-}) => {
-    const { data } = useQuery({
-        queryKey: ['pages', period, filters],
-        queryFn: () => api.fetchTopPages({ period, filters }),
-    })
-    return <>{children(data)}</>
-}
-
-const LocationsData: React.FC<DataComponentProps<any>> = ({
-    period,
-    filters,
-    children,
-}) => {
-    const { data } = useQuery({
-        queryKey: ['locations', period, filters],
-        queryFn: () => api.fetchLocations({ period, filters }),
-    })
-    return <>{children(data)}</>
-}
-
-const DevicesData: React.FC<DataComponentProps<any>> = ({
-    period,
-    filters,
-    children,
-}) => {
-    const { data } = useQuery({
-        queryKey: ['devices', period, filters],
-        queryFn: () => api.fetchDevices({ period, filters }),
-    })
-    return <>{children(data)}</>
-}
+import StatCard from './StatCard'
+import BreakdownCard from './BreakdownCard'
+import Stats from './data/Stats'
+import TrendData from './data/TrendData'
+import SourcesData from './data/SourcesData'
+import PagesData from './data/PagesData'
+import LocationsData from './data/LocationsData'
+import DevicesData from './data/DevicesData'
+import { Filter, StatisticType, StatsResponse } from '../types/dashboard'
 
 const Dashboard: React.FC = () => {
     const [period, setPeriod] = React.useState<string>('7')
@@ -379,58 +244,6 @@ const Dashboard: React.FC = () => {
                 </ErrorBoundary>
             </div>
         </div>
-    )
-}
-
-const StatCard: React.FC<StatCardProps> = ({
-    title,
-    value,
-    unit = '',
-    decimals = 0,
-    statistic,
-    onSelect,
-    selected,
-}) => {
-    return (
-        <Card
-            className={`cursor-pointer ${
-                selected ? 'ring-2 ring-primary' : ''
-            }`}
-            onClick={() => statistic && onSelect?.(statistic)}
-        >
-            <CardHeader>
-                <div className="text-sm font-medium">{title}</div>
-                <div className="text-2xl font-bold">
-                    {typeof value === 'number'
-                        ? value.toFixed(decimals)
-                        : value}
-                    {unit && (
-                        <span className="text-sm font-normal ml-1">{unit}</span>
-                    )}
-                </div>
-            </CardHeader>
-        </Card>
-    )
-}
-
-const BreakdownCard: React.FC<BreakdownCardProps> = ({
-    title,
-    tabs,
-    children,
-}) => {
-    return (
-        <Card className="animate-slide-in">
-            <CardHeader>
-                <h3 className="text-lg font-medium">{title}</h3>
-            </CardHeader>
-            <Tabs defaultValue={tabs[0]} className="p-6">
-                {tabs.map((tab) => (
-                    <TabsContent key={tab} value={tab}>
-                        {children}
-                    </TabsContent>
-                ))}
-            </Tabs>
-        </Card>
     )
 }
 

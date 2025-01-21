@@ -185,6 +185,45 @@ var suppressOthers = function (originalTarget, parentNode, markerName) {
 
 /***/ }),
 
+/***/ "./resources/js/components/BreakdownCard.tsx":
+/*!***************************************************!*\
+  !*** ./resources/js/components/BreakdownCard.tsx ***!
+  \***************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ BreakdownCard)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _ui_card__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ui/card */ "./resources/js/components/ui/card.tsx");
+/* harmony import */ var _ui_tabs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ui/tabs */ "./resources/js/components/ui/tabs.tsx");
+
+
+
+function BreakdownCard(_a) {
+  var title = _a.title,
+    tabs = _a.tabs,
+    children = _a.children;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ui_card__WEBPACK_IMPORTED_MODULE_1__.Card, {
+    className: "animate-slide-in"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ui_card__WEBPACK_IMPORTED_MODULE_1__.CardHeader, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", {
+    className: "text-lg font-medium"
+  }, title)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ui_tabs__WEBPACK_IMPORTED_MODULE_2__.Tabs, {
+    defaultValue: tabs[0],
+    className: "p-6"
+  }, tabs.map(function (tab) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ui_tabs__WEBPACK_IMPORTED_MODULE_2__.TabsContent, {
+      key: tab,
+      value: tab
+    }, children);
+  })));
+}
+
+/***/ }),
+
 /***/ "./resources/js/components/Dashboard.tsx":
 /*!***********************************************!*\
   !*** ./resources/js/components/Dashboard.tsx ***!
@@ -198,7 +237,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _tanstack_react_query__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @tanstack/react-query */ "./node_modules/@tanstack/react-query/build/modern/useQuery.js");
 /* harmony import */ var _ui_card__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ui/card */ "./resources/js/components/ui/card.tsx");
 /* harmony import */ var _ui_tabs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ui/tabs */ "./resources/js/components/ui/tabs.tsx");
 /* harmony import */ var _PeriodSelector__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./PeriodSelector */ "./resources/js/components/PeriodSelector.tsx");
@@ -206,8 +244,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _TopList__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./TopList */ "./resources/js/components/TopList.tsx");
 /* harmony import */ var _TrendChart__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./TrendChart */ "./resources/js/components/TrendChart.tsx");
 /* harmony import */ var _LoadingWrapper__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./LoadingWrapper */ "./resources/js/components/LoadingWrapper.tsx");
-/* harmony import */ var _lib_api__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../lib/api */ "./resources/js/lib/api.ts");
-/* harmony import */ var _ErrorBoundary__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./ErrorBoundary */ "./resources/js/components/ErrorBoundary.tsx");
+/* harmony import */ var _ErrorBoundary__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./ErrorBoundary */ "./resources/js/components/ErrorBoundary.tsx");
+/* harmony import */ var _StatCard__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./StatCard */ "./resources/js/components/StatCard.tsx");
+/* harmony import */ var _BreakdownCard__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./BreakdownCard */ "./resources/js/components/BreakdownCard.tsx");
+/* harmony import */ var _data_Stats__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./data/Stats */ "./resources/js/components/data/Stats.tsx");
+/* harmony import */ var _data_TrendData__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./data/TrendData */ "./resources/js/components/data/TrendData.tsx");
+/* harmony import */ var _data_SourcesData__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./data/SourcesData */ "./resources/js/components/data/SourcesData.tsx");
+/* harmony import */ var _data_PagesData__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./data/PagesData */ "./resources/js/components/data/PagesData.tsx");
+/* harmony import */ var _data_LocationsData__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./data/LocationsData */ "./resources/js/components/data/LocationsData.tsx");
+/* harmony import */ var _data_DevicesData__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./data/DevicesData */ "./resources/js/components/data/DevicesData.tsx");
 var __assign = undefined && undefined.__assign || function () {
   __assign = Object.assign || function (t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -229,111 +274,12 @@ var __assign = undefined && undefined.__assign || function () {
 
 
 
-// Separate components for each data section
-var Stats = function Stats(_a) {
-  var period = _a.period,
-    filters = _a.filters,
-    children = _a.children;
-  var _b = (0,_tanstack_react_query__WEBPACK_IMPORTED_MODULE_10__.useQuery)({
-      queryKey: ['stats', period, filters],
-      queryFn: function queryFn() {
-        return _lib_api__WEBPACK_IMPORTED_MODULE_8__.fetchStats({
-          period: period,
-          filters: filters
-        });
-      }
-    }),
-    data = _b.data,
-    error = _b.error;
-  if (error) {
-    console.error('Stats error:', error);
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, "Error loading stats");
-  }
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, children(data || {
-    uniqueVisitors: 0,
-    visits: 0,
-    pageviews: 0,
-    viewsPerVisit: 0,
-    bounceRate: 0,
-    visitDuration: 0
-  }));
-};
-var TrendData = function TrendData(_a) {
-  var period = _a.period,
-    filters = _a.filters,
-    statistic = _a.statistic,
-    children = _a.children;
-  var data = (0,_tanstack_react_query__WEBPACK_IMPORTED_MODULE_10__.useQuery)({
-    queryKey: ['trend', period, filters, statistic],
-    queryFn: function queryFn() {
-      return _lib_api__WEBPACK_IMPORTED_MODULE_8__.fetchTrend({
-        period: period,
-        filters: filters
-      });
-    }
-  }).data;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, children(data));
-};
-var SourcesData = function SourcesData(_a) {
-  var period = _a.period,
-    filters = _a.filters,
-    children = _a.children;
-  var data = (0,_tanstack_react_query__WEBPACK_IMPORTED_MODULE_10__.useQuery)({
-    queryKey: ['sources', period, filters],
-    queryFn: function queryFn() {
-      return _lib_api__WEBPACK_IMPORTED_MODULE_8__.fetchTopSources({
-        period: period,
-        filters: filters
-      });
-    }
-  }).data;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, children(data));
-};
-var PagesData = function PagesData(_a) {
-  var period = _a.period,
-    filters = _a.filters,
-    children = _a.children;
-  var data = (0,_tanstack_react_query__WEBPACK_IMPORTED_MODULE_10__.useQuery)({
-    queryKey: ['pages', period, filters],
-    queryFn: function queryFn() {
-      return _lib_api__WEBPACK_IMPORTED_MODULE_8__.fetchTopPages({
-        period: period,
-        filters: filters
-      });
-    }
-  }).data;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, children(data));
-};
-var LocationsData = function LocationsData(_a) {
-  var period = _a.period,
-    filters = _a.filters,
-    children = _a.children;
-  var data = (0,_tanstack_react_query__WEBPACK_IMPORTED_MODULE_10__.useQuery)({
-    queryKey: ['locations', period, filters],
-    queryFn: function queryFn() {
-      return _lib_api__WEBPACK_IMPORTED_MODULE_8__.fetchLocations({
-        period: period,
-        filters: filters
-      });
-    }
-  }).data;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, children(data));
-};
-var DevicesData = function DevicesData(_a) {
-  var period = _a.period,
-    filters = _a.filters,
-    children = _a.children;
-  var data = (0,_tanstack_react_query__WEBPACK_IMPORTED_MODULE_10__.useQuery)({
-    queryKey: ['devices', period, filters],
-    queryFn: function queryFn() {
-      return _lib_api__WEBPACK_IMPORTED_MODULE_8__.fetchDevices({
-        period: period,
-        filters: filters
-      });
-    }
-  }).data;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, children(data));
-};
+
+
+
+
+
+
 var Dashboard = function Dashboard() {
   var _a = react__WEBPACK_IMPORTED_MODULE_0___default().useState('7'),
     period = _a[0],
@@ -361,47 +307,47 @@ var Dashboard = function Dashboard() {
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_PeriodSelector__WEBPACK_IMPORTED_MODULE_3__["default"], {
     value: period,
     onChange: setPeriod
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ErrorBoundary__WEBPACK_IMPORTED_MODULE_9__.ErrorBoundary, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react__WEBPACK_IMPORTED_MODULE_0__.Suspense, {
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ErrorBoundary__WEBPACK_IMPORTED_MODULE_8__.ErrorBoundary, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react__WEBPACK_IMPORTED_MODULE_0__.Suspense, {
     fallback: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_LoadingWrapper__WEBPACK_IMPORTED_MODULE_7__.LoadingWrapper, null, "Loading stats...")
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Stats, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_data_Stats__WEBPACK_IMPORTED_MODULE_11__["default"], {
     period: period,
     filters: filters
   }, function (data) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(StatCard, {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_StatCard__WEBPACK_IMPORTED_MODULE_9__["default"], {
       title: "Unique visitors",
       value: data.uniqueVisitors,
       statistic: "UniqueVisitors",
       onSelect: setStatistic,
       selected: statistic === 'UniqueVisitors'
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(StatCard, {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_StatCard__WEBPACK_IMPORTED_MODULE_9__["default"], {
       title: "Visits",
       value: data.visits,
       statistic: "Visits",
       onSelect: setStatistic,
       selected: statistic === 'Visits'
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(StatCard, {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_StatCard__WEBPACK_IMPORTED_MODULE_9__["default"], {
       title: "Page views",
       value: data.pageviews,
       statistic: "PageViews",
       onSelect: setStatistic,
       selected: statistic === 'PageViews'
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(StatCard, {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_StatCard__WEBPACK_IMPORTED_MODULE_9__["default"], {
       title: "Views per visit",
       value: data.viewsPerVisit,
       decimals: 1,
       statistic: "ViewsPerVisit",
       onSelect: setStatistic,
       selected: statistic === 'ViewsPerVisit'
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(StatCard, {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_StatCard__WEBPACK_IMPORTED_MODULE_9__["default"], {
       title: "Bounce rate",
       value: data.bounceRate,
       unit: "%",
       statistic: "BounceRate",
       onSelect: setStatistic,
       selected: statistic === 'BounceRate'
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(StatCard, {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_StatCard__WEBPACK_IMPORTED_MODULE_9__["default"], {
       title: "Visit duration",
       value: data.visitDuration,
       unit: "s",
@@ -409,11 +355,11 @@ var Dashboard = function Dashboard() {
       onSelect: setStatistic,
       selected: statistic === 'VisitDuration'
     }));
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ErrorBoundary__WEBPACK_IMPORTED_MODULE_9__.ErrorBoundary, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react__WEBPACK_IMPORTED_MODULE_0__.Suspense, {
+  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ErrorBoundary__WEBPACK_IMPORTED_MODULE_8__.ErrorBoundary, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react__WEBPACK_IMPORTED_MODULE_0__.Suspense, {
     fallback: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_LoadingWrapper__WEBPACK_IMPORTED_MODULE_7__.LoadingWrapper, null, "Loading trend...")
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ui_card__WEBPACK_IMPORTED_MODULE_1__.Card, {
     className: "animate-slide-in"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ui_card__WEBPACK_IMPORTED_MODULE_1__.CardHeader, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ui_card__WEBPACK_IMPORTED_MODULE_1__.CardTitle, null, "Trend")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ui_card__WEBPACK_IMPORTED_MODULE_1__.CardContent, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(TrendData, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ui_card__WEBPACK_IMPORTED_MODULE_1__.CardHeader, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ui_card__WEBPACK_IMPORTED_MODULE_1__.CardTitle, null, "Trend")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ui_card__WEBPACK_IMPORTED_MODULE_1__.CardContent, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_data_TrendData__WEBPACK_IMPORTED_MODULE_12__["default"], {
     period: period,
     filters: filters,
     statistic: statistic
@@ -424,12 +370,12 @@ var Dashboard = function Dashboard() {
     });
   }))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "grid md:grid-cols-2 gap-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ErrorBoundary__WEBPACK_IMPORTED_MODULE_9__.ErrorBoundary, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react__WEBPACK_IMPORTED_MODULE_0__.Suspense, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ErrorBoundary__WEBPACK_IMPORTED_MODULE_8__.ErrorBoundary, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react__WEBPACK_IMPORTED_MODULE_0__.Suspense, {
     fallback: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_LoadingWrapper__WEBPACK_IMPORTED_MODULE_7__.LoadingWrapper, null, "Loading sources...")
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(BreakdownCard, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_BreakdownCard__WEBPACK_IMPORTED_MODULE_10__["default"], {
     title: "Top Sources",
     tabs: ['All']
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(SourcesData, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_data_SourcesData__WEBPACK_IMPORTED_MODULE_13__["default"], {
     period: period,
     filters: filters
   }, function (sources) {
@@ -439,12 +385,12 @@ var Dashboard = function Dashboard() {
       columnTitle: "Source",
       barColor: "bg-analytics-blue/5"
     });
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ErrorBoundary__WEBPACK_IMPORTED_MODULE_9__.ErrorBoundary, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react__WEBPACK_IMPORTED_MODULE_0__.Suspense, {
+  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ErrorBoundary__WEBPACK_IMPORTED_MODULE_8__.ErrorBoundary, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react__WEBPACK_IMPORTED_MODULE_0__.Suspense, {
     fallback: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_LoadingWrapper__WEBPACK_IMPORTED_MODULE_7__.LoadingWrapper, null, "Loading pages...")
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(BreakdownCard, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_BreakdownCard__WEBPACK_IMPORTED_MODULE_10__["default"], {
     title: "Top Pages",
     tabs: ['Pages']
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(PagesData, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_data_PagesData__WEBPACK_IMPORTED_MODULE_14__["default"], {
     period: period,
     filters: filters
   }, function (pages) {
@@ -454,12 +400,12 @@ var Dashboard = function Dashboard() {
       columnTitle: "Page",
       barColor: "bg-analytics-green/5"
     });
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ErrorBoundary__WEBPACK_IMPORTED_MODULE_9__.ErrorBoundary, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react__WEBPACK_IMPORTED_MODULE_0__.Suspense, {
+  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ErrorBoundary__WEBPACK_IMPORTED_MODULE_8__.ErrorBoundary, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react__WEBPACK_IMPORTED_MODULE_0__.Suspense, {
     fallback: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_LoadingWrapper__WEBPACK_IMPORTED_MODULE_7__.LoadingWrapper, null, "Loading locations...")
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(BreakdownCard, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_BreakdownCard__WEBPACK_IMPORTED_MODULE_10__["default"], {
     title: "Locations",
     tabs: ['Countries']
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(LocationsData, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_data_LocationsData__WEBPACK_IMPORTED_MODULE_15__["default"], {
     period: period,
     filters: filters
   }, function (locations) {
@@ -469,12 +415,12 @@ var Dashboard = function Dashboard() {
       columnTitle: "Country",
       barColor: "bg-analytics-yellow/10"
     });
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ErrorBoundary__WEBPACK_IMPORTED_MODULE_9__.ErrorBoundary, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react__WEBPACK_IMPORTED_MODULE_0__.Suspense, {
+  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ErrorBoundary__WEBPACK_IMPORTED_MODULE_8__.ErrorBoundary, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react__WEBPACK_IMPORTED_MODULE_0__.Suspense, {
     fallback: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_LoadingWrapper__WEBPACK_IMPORTED_MODULE_7__.LoadingWrapper, null, "Loading devices...")
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(BreakdownCard, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_BreakdownCard__WEBPACK_IMPORTED_MODULE_10__["default"], {
     title: "Devices",
     tabs: ['Browser', 'OS', 'Size']
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(DevicesData, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_data_DevicesData__WEBPACK_IMPORTED_MODULE_16__["default"], {
     period: period,
     filters: filters
   }, function (devices) {
@@ -503,47 +449,6 @@ var Dashboard = function Dashboard() {
       barColor: "bg-analytics-blue/5"
     })));
   }))))));
-};
-var StatCard = function StatCard(_a) {
-  var title = _a.title,
-    value = _a.value,
-    _b = _a.unit,
-    unit = _b === void 0 ? '' : _b,
-    _c = _a.decimals,
-    decimals = _c === void 0 ? 0 : _c,
-    statistic = _a.statistic,
-    onSelect = _a.onSelect,
-    selected = _a.selected;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ui_card__WEBPACK_IMPORTED_MODULE_1__.Card, {
-    className: "cursor-pointer ".concat(selected ? 'ring-2 ring-primary' : ''),
-    onClick: function onClick() {
-      return statistic && (onSelect === null || onSelect === void 0 ? void 0 : onSelect(statistic));
-    }
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ui_card__WEBPACK_IMPORTED_MODULE_1__.CardHeader, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "text-sm font-medium"
-  }, title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "text-2xl font-bold"
-  }, typeof value === 'number' ? value.toFixed(decimals) : value, unit && (/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
-    className: "text-sm font-normal ml-1"
-  }, unit)))));
-};
-var BreakdownCard = function BreakdownCard(_a) {
-  var title = _a.title,
-    tabs = _a.tabs,
-    children = _a.children;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ui_card__WEBPACK_IMPORTED_MODULE_1__.Card, {
-    className: "animate-slide-in"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ui_card__WEBPACK_IMPORTED_MODULE_1__.CardHeader, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", {
-    className: "text-lg font-medium"
-  }, title)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ui_tabs__WEBPACK_IMPORTED_MODULE_2__.Tabs, {
-    defaultValue: tabs[0],
-    className: "p-6"
-  }, tabs.map(function (tab) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ui_tabs__WEBPACK_IMPORTED_MODULE_2__.TabsContent, {
-      key: tab,
-      value: tab
-    }, children);
-  })));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Dashboard);
 
@@ -742,6 +647,48 @@ var PeriodSelector = function PeriodSelector(_a) {
 
 /***/ }),
 
+/***/ "./resources/js/components/StatCard.tsx":
+/*!**********************************************!*\
+  !*** ./resources/js/components/StatCard.tsx ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ StatCard)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _ui_card__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ui/card */ "./resources/js/components/ui/card.tsx");
+
+
+function StatCard(_a) {
+  var title = _a.title,
+    value = _a.value,
+    _b = _a.unit,
+    unit = _b === void 0 ? '' : _b,
+    _c = _a.decimals,
+    decimals = _c === void 0 ? 0 : _c,
+    statistic = _a.statistic,
+    onSelect = _a.onSelect,
+    selected = _a.selected;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ui_card__WEBPACK_IMPORTED_MODULE_1__.Card, {
+    className: "cursor-pointer ".concat(selected ? 'ring-2 ring-primary' : ''),
+    onClick: function onClick() {
+      return statistic && (onSelect === null || onSelect === void 0 ? void 0 : onSelect(statistic));
+    }
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ui_card__WEBPACK_IMPORTED_MODULE_1__.CardHeader, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "text-sm font-medium"
+  }, title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "text-2xl font-bold"
+  }, typeof value === 'number' ? value.toFixed(decimals) : value, unit && (/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
+    className: "text-sm font-normal ml-1"
+  }, unit)))));
+}
+
+/***/ }),
+
 /***/ "./resources/js/components/TopList.tsx":
 /*!*********************************************!*\
   !*** ./resources/js/components/TopList.tsx ***!
@@ -902,6 +849,236 @@ var TrendChart = function TrendChart(_a) {
   }))));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TrendChart);
+
+/***/ }),
+
+/***/ "./resources/js/components/data/DevicesData.tsx":
+/*!******************************************************!*\
+  !*** ./resources/js/components/data/DevicesData.tsx ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ DevicesData)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _tanstack_react_query__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @tanstack/react-query */ "./node_modules/@tanstack/react-query/build/modern/useQuery.js");
+/* harmony import */ var _lib_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../lib/api */ "./resources/js/lib/api.ts");
+
+
+
+function DevicesData(_a) {
+  var period = _a.period,
+    filters = _a.filters,
+    children = _a.children;
+  var data = (0,_tanstack_react_query__WEBPACK_IMPORTED_MODULE_2__.useQuery)({
+    queryKey: ['devices', period, filters],
+    queryFn: function queryFn() {
+      return _lib_api__WEBPACK_IMPORTED_MODULE_1__.fetchDevices({
+        period: period,
+        filters: filters
+      });
+    }
+  }).data;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, children(data));
+}
+
+/***/ }),
+
+/***/ "./resources/js/components/data/LocationsData.tsx":
+/*!********************************************************!*\
+  !*** ./resources/js/components/data/LocationsData.tsx ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ LocationsData)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _tanstack_react_query__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @tanstack/react-query */ "./node_modules/@tanstack/react-query/build/modern/useQuery.js");
+/* harmony import */ var _lib_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../lib/api */ "./resources/js/lib/api.ts");
+
+
+
+function LocationsData(_a) {
+  var period = _a.period,
+    filters = _a.filters,
+    children = _a.children;
+  var data = (0,_tanstack_react_query__WEBPACK_IMPORTED_MODULE_2__.useQuery)({
+    queryKey: ['locations', period, filters],
+    queryFn: function queryFn() {
+      return _lib_api__WEBPACK_IMPORTED_MODULE_1__.fetchLocations({
+        period: period,
+        filters: filters
+      });
+    }
+  }).data;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, children(data));
+}
+
+/***/ }),
+
+/***/ "./resources/js/components/data/PagesData.tsx":
+/*!****************************************************!*\
+  !*** ./resources/js/components/data/PagesData.tsx ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ PagesData)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _tanstack_react_query__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @tanstack/react-query */ "./node_modules/@tanstack/react-query/build/modern/useQuery.js");
+/* harmony import */ var _lib_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../lib/api */ "./resources/js/lib/api.ts");
+
+
+
+function PagesData(_a) {
+  var period = _a.period,
+    filters = _a.filters,
+    children = _a.children;
+  var data = (0,_tanstack_react_query__WEBPACK_IMPORTED_MODULE_2__.useQuery)({
+    queryKey: ['pages', period, filters],
+    queryFn: function queryFn() {
+      return _lib_api__WEBPACK_IMPORTED_MODULE_1__.fetchTopPages({
+        period: period,
+        filters: filters
+      });
+    }
+  }).data;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, children(data));
+}
+
+/***/ }),
+
+/***/ "./resources/js/components/data/SourcesData.tsx":
+/*!******************************************************!*\
+  !*** ./resources/js/components/data/SourcesData.tsx ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ SourcesData)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _tanstack_react_query__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @tanstack/react-query */ "./node_modules/@tanstack/react-query/build/modern/useQuery.js");
+/* harmony import */ var _lib_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../lib/api */ "./resources/js/lib/api.ts");
+
+
+
+function SourcesData(_a) {
+  var period = _a.period,
+    filters = _a.filters,
+    children = _a.children;
+  var data = (0,_tanstack_react_query__WEBPACK_IMPORTED_MODULE_2__.useQuery)({
+    queryKey: ['sources', period, filters],
+    queryFn: function queryFn() {
+      return _lib_api__WEBPACK_IMPORTED_MODULE_1__.fetchTopSources({
+        period: period,
+        filters: filters
+      });
+    }
+  }).data;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, children(data));
+}
+
+/***/ }),
+
+/***/ "./resources/js/components/data/Stats.tsx":
+/*!************************************************!*\
+  !*** ./resources/js/components/data/Stats.tsx ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Stats)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _tanstack_react_query__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @tanstack/react-query */ "./node_modules/@tanstack/react-query/build/modern/useQuery.js");
+/* harmony import */ var _lib_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../lib/api */ "./resources/js/lib/api.ts");
+
+
+
+function Stats(_a) {
+  var period = _a.period,
+    filters = _a.filters,
+    children = _a.children;
+  var _b = (0,_tanstack_react_query__WEBPACK_IMPORTED_MODULE_2__.useQuery)({
+      queryKey: ['stats', period, filters],
+      queryFn: function queryFn() {
+        return _lib_api__WEBPACK_IMPORTED_MODULE_1__.fetchStats({
+          period: period,
+          filters: filters
+        });
+      }
+    }),
+    response = _b.data,
+    error = _b.error;
+  if (error) {
+    console.error('Stats error:', error);
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, "Error loading stats");
+  }
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, children((response === null || response === void 0 ? void 0 : response.data) || {
+    uniqueVisitors: 0,
+    visits: 0,
+    pageviews: 0,
+    viewsPerVisit: 0,
+    bounceRate: 0,
+    visitDuration: 0
+  }));
+}
+
+/***/ }),
+
+/***/ "./resources/js/components/data/TrendData.tsx":
+/*!****************************************************!*\
+  !*** ./resources/js/components/data/TrendData.tsx ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ TrendData)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _tanstack_react_query__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @tanstack/react-query */ "./node_modules/@tanstack/react-query/build/modern/useQuery.js");
+/* harmony import */ var _lib_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../lib/api */ "./resources/js/lib/api.ts");
+
+
+
+function TrendData(_a) {
+  var period = _a.period,
+    filters = _a.filters,
+    statistic = _a.statistic,
+    children = _a.children;
+  var data = (0,_tanstack_react_query__WEBPACK_IMPORTED_MODULE_2__.useQuery)({
+    queryKey: ['trend', period, filters, statistic],
+    queryFn: function queryFn() {
+      return _lib_api__WEBPACK_IMPORTED_MODULE_1__.fetchTrend({
+        period: period,
+        filters: filters
+      });
+    }
+  }).data;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, children(data));
+}
 
 /***/ }),
 
@@ -1426,7 +1603,7 @@ function queryEndpoint(endpoint_1) {
               'X-CSRF-TOKEN': getCsrfToken()
             },
             body: JSON.stringify({
-              endpoint: endpoint,
+              query: endpoint,
               period: period || '7',
               filters: filters
             })
@@ -1448,40 +1625,27 @@ function queryEndpoint(endpoint_1) {
 }
 function fetchStats() {
   return __awaiter(this, arguments, void 0, function (options) {
-    var _this = this;
+    var _a, uniqueVisitors, visits, pageviews, viewsPerVisit, bounceRate, visitDuration;
     if (options === void 0) {
       options = {};
     }
-    return __generator(this, function (_a) {
-      return [2 /*return*/, fetch("".concat(BASE_URL, "/stats"), {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': getCsrfToken()
-        },
-        body: JSON.stringify({
-          period: options.period || '7',
-          filters: options.filters || {}
-        })
-      }).then(function (response) {
-        return __awaiter(_this, void 0, void 0, function () {
-          var data;
-          return __generator(this, function (_a) {
-            switch (_a.label) {
-              case 0:
-                if (!response.ok) {
-                  console.error('Stats error:', response.status, response.statusText);
-                  throw new Error('Failed to fetch stats');
-                }
-                return [4 /*yield*/, response.json()];
-              case 1:
-                data = _a.sent();
-                console.log('Stats response:', data);
-                return [2 /*return*/, data];
+    return __generator(this, function (_b) {
+      switch (_b.label) {
+        case 0:
+          return [4 /*yield*/, Promise.all([queryEndpoint('UniqueVisitors', options), queryEndpoint('Visits', options), queryEndpoint('Pageviews', options), queryEndpoint('ViewsPerVisit', options), queryEndpoint('BounceRate', options), queryEndpoint('VisitDuration', options)])];
+        case 1:
+          _a = _b.sent(), uniqueVisitors = _a[0], visits = _a[1], pageviews = _a[2], viewsPerVisit = _a[3], bounceRate = _a[4], visitDuration = _a[5];
+          return [2 /*return*/, {
+            data: {
+              uniqueVisitors: uniqueVisitors.data,
+              visits: visits.data,
+              pageviews: pageviews.data,
+              viewsPerVisit: viewsPerVisit.data,
+              bounceRate: bounceRate.data,
+              visitDuration: visitDuration.data
             }
-          });
-        });
-      })];
+          }];
+      }
     });
   });
 }
