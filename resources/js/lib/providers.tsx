@@ -7,7 +7,7 @@ const queryClient = new QueryClient({
             staleTime: 1000 * 60 * 5, // 5 minutes
             retry: 1,
             refetchOnWindowFocus: false,
-            suspense: true, // Enable Suspense mode globally
+            throwOnError: true, // This enables Suspense mode in v5
         },
     },
 })

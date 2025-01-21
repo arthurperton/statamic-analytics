@@ -1,4 +1,5 @@
 const mix = require('laravel-mix')
+const path = require('path')
 
 mix.setPublicPath('dist')
     .postCss('resources/css/cp.css', 'dist/css/cp.css', [
@@ -8,3 +9,10 @@ mix.setPublicPath('dist')
     .js('resources/js/web/main.js', 'dist/js/web.js')
     .ts('resources/js/dashboard/main.tsx', 'dist/js/dashboard.js')
     .react()
+    .webpackConfig({
+        resolve: {
+            alias: {
+                '@': path.resolve(__dirname, 'resources/js'),
+            },
+        },
+    })

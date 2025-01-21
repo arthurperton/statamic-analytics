@@ -3,80 +3,81 @@ interface FetchOptions {
     filters?: Record<string, any>
 }
 
-export async function fetchStats({ period, filters = {} }: FetchOptions = {}) {
-    const params = new URLSearchParams({
-        period: period || '7',
-        ...filters,
-    })
+const BASE_URL = '/cp/analytics/dashboard'
 
-    const response = await fetch(`/cp/analytics/stats?${params}`)
-    if (!response.ok) throw new Error('Failed to fetch stats')
-    return response.json()
+// Get the CSRF token from the meta tag
+function getCsrfToken(): string {
+    const metaTag = document.querySelector('meta[name="csrf-token"]')
+    return metaTag?.getAttribute('content') || ''
 }
 
-export async function fetchTrend({ period, filters = {} }: FetchOptions = {}) {
-    const params = new URLSearchParams({
-        period: period || '7',
-        ...filters,
+async function queryEndpoint(endpoint: string, options: FetchOptions = {}) {
+    const { period, filters = {} } = options
+    const response = await fetch(`${BASE_URL}/query`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': getCsrfToken(),
+        },
+        body: JSON.stringify({
+            endpoint,
+            period: period || '7',
+            filters,
+        }),
     })
 
-    const response = await fetch(`/cp/analytics/trend?${params}`)
-    if (!response.ok) throw new Error('Failed to fetch trend')
-    return response.json()
+    if (!response.ok) {
+        console.error(
+            `${endpoint} error:`,
+            response.status,
+            response.statusText
+        )
+        throw new Error(`Failed to fetch ${endpoint}`)
+    }
+
+    const data = await response.json()
+    console.log(`${endpoint} response:`, data)
+    return data
 }
 
-export async function fetchTopSources({
-    period,
-    filters = {},
-}: FetchOptions = {}) {
-    const params = new URLSearchParams({
-        period: period || '7',
-        ...filters,
+export async function fetchStats(options: FetchOptions = {}) {
+    return fetch(`${BASE_URL}/stats`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': getCsrfToken(),
+        },
+        body: JSON.stringify({
+            period: options.period || '7',
+            filters: options.filters || {},
+        }),
+    }).then(async (response) => {
+        if (!response.ok) {
+            console.error('Stats error:', response.status, response.statusText)
+            throw new Error('Failed to fetch stats')
+        }
+        const data = await response.json()
+        console.log('Stats response:', data)
+        return data
     })
-
-    const response = await fetch(`/cp/analytics/sources?${params}`)
-    if (!response.ok) throw new Error('Failed to fetch sources')
-    return response.json()
 }
 
-export async function fetchTopPages({
-    period,
-    filters = {},
-}: FetchOptions = {}) {
-    const params = new URLSearchParams({
-        period: period || '7',
-        ...filters,
-    })
-
-    const response = await fetch(`/cp/analytics/pages?${params}`)
-    if (!response.ok) throw new Error('Failed to fetch pages')
-    return response.json()
+export async function fetchTrend(options: FetchOptions = {}) {
+    return queryEndpoint('trend', options)
 }
 
-export async function fetchLocations({
-    period,
-    filters = {},
-}: FetchOptions = {}) {
-    const params = new URLSearchParams({
-        period: period || '7',
-        ...filters,
-    })
-
-    const response = await fetch(`/cp/analytics/locations?${params}`)
-    if (!response.ok) throw new Error('Failed to fetch locations')
-    return response.json()
+export async function fetchTopSources(options: FetchOptions = {}) {
+    return queryEndpoint('sources', options)
 }
 
-export async function fetchDevices({
-    period,
-    filters = {},
-}: FetchOptions = {}) {
-    const params = new URLSearchParams({
-        period: period || '7',
-        ...filters,
-    })
+export async function fetchTopPages(options: FetchOptions = {}) {
+    return queryEndpoint('pages', options)
+}
 
-    const response = await fetch(`/cp/analytics/devices?${params}`)
-    if (!response.ok) throw new Error('Failed to fetch devices')
-    return response.json()
+export async function fetchLocations(options: FetchOptions = {}) {
+    return queryEndpoint('locations', options)
+}
+
+export async function fetchDevices(options: FetchOptions = {}) {
+    return queryEndpoint('devices', options)
 }

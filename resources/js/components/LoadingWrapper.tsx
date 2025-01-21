@@ -1,12 +1,13 @@
 import React from 'react'
-import Spinner from './ui/spinner'
 
-const LoadingWrapper: React.FC = () => {
+interface LoadingWrapperProps {
+    children: React.ReactNode
+}
+
+export function LoadingWrapper({ children }: LoadingWrapperProps) {
     return (
-        <div className="flex items-center justify-center min-h-[200px]">
-            <Spinner size={8} />
+        <div className="flex items-center justify-center p-8 text-sm text-muted-foreground">
+            {children}
         </div>
     )
 }
-
-export default LoadingWrapper
