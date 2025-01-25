@@ -11,7 +11,7 @@ export default function TrendData({
 }: TrendDataProps) {
     const { data } = useQuery({
         queryKey: ['trend', period, filters, statistic],
-        queryFn: () => api.fetchTrend({ period, filters }),
+        queryFn: () => api.fetchTrend(statistic, { period, filters }),
     })
     return <>{children(data)}</>
 }

@@ -3,6 +3,8 @@ import { ApiResponse, StatsResponse } from '../types/dashboard'
 interface FetchOptions {
     period?: string
     filters?: Record<string, any>
+    chart?: boolean
+    statistic?: string
 }
 
 const BASE_URL = '/cp/analytics/dashboard'
@@ -14,10 +16,10 @@ function getCsrfToken(): string {
 }
 
 async function queryEndpoint<T>(
-    endpoint: string,
+    query: string,
     options: FetchOptions = {}
 ): Promise<ApiResponse<T>> {
-    const { period, filters = {} } = options
+    const { period = '7', filters = {}, chart = false } = options
     const response = await fetch(`${BASE_URL}/query`, {
         method: 'POST',
         headers: {
@@ -25,23 +27,20 @@ async function queryEndpoint<T>(
             'X-CSRF-TOKEN': getCsrfToken(),
         },
         body: JSON.stringify({
-            query: endpoint,
-            period: period || '7',
+            query,
+            period,
             filters,
+            chart,
         }),
     })
 
     if (!response.ok) {
-        console.error(
-            `${endpoint} error:`,
-            response.status,
-            response.statusText
-        )
-        throw new Error(`Failed to fetch ${endpoint}`)
+        console.error(`${query} error:`, response.status, response.statusText)
+        throw new Error(`Failed to fetch ${query}`)
     }
 
     const data = await response.json()
-    console.log(`${endpoint} response:`, data)
+    console.log(`${query} response:`, data)
     return data
 }
 
@@ -77,9 +76,10 @@ export async function fetchStats(
 }
 
 export async function fetchTrend(
+    query: string,
     options: FetchOptions = {}
 ): Promise<ApiResponse<any>> {
-    return queryEndpoint('trend', options)
+    return queryEndpoint(query, { ...options, chart: true })
 }
 
 export async function fetchTopSources(
