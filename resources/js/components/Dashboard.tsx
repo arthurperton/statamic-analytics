@@ -30,7 +30,7 @@ const Dashboard: React.FC = () => {
     }
 
     return (
-        <div className="mx-auto max-w-7xl px-6 py-6 flex flex-col gap-4">
+        <div className="flex flex-col gap-4 px-6 py-6 mx-auto max-w-7xl">
             {/* Title row */}
             <div className="flex items-center mb-2 animate-fade-in">
                 <h1 className="flex-shrink-0 text-xl text-slate-700">
@@ -45,7 +45,7 @@ const Dashboard: React.FC = () => {
                 <Suspense
                     fallback={<LoadingWrapper>Loading stats...</LoadingWrapper>}
                 >
-                    <div className="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                    <div className="grid w-full grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
                         <Stats period={period} filters={filters}>
                             {(data: StatsResponse) => (
                                 <>
@@ -131,7 +131,7 @@ const Dashboard: React.FC = () => {
             </ErrorBoundary>
 
             {/* Breakdown */}
-            <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid gap-4 md:grid-cols-2">
                 <ErrorBoundary>
                     <Suspense
                         fallback={
